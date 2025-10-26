@@ -12,16 +12,31 @@ class EncryptionManager:
         encryption_key = os.environ.get('ENCRYPTION_KEY')
         
         if not encryption_key:
-            encryption_key = Fernet.generate_key()
-            print("=" * 80)
-            print("ATTENTION: Aucune clé de chiffrement trouvée!")
-            print(f"Clé générée automatiquement: {encryption_key.decode()}")
-            print("Pour la production, définissez ENCRYPTION_KEY dans les variables d'environnement")
-            print("=" * 80)
-            with open('.encryption_key', 'wb') as f:
-                f.write(encryption_key)
+            key_file = '.encryption_key'
+            
+            if os.path.exists(key_file):
+                with open(key_file, 'rb') as f:
+                    encryption_key = f.read()
+                print("=" * 80)
+                print("Clé de chiffrement chargée depuis .encryption_key")
+                print("Pour la production, définissez ENCRYPTION_KEY dans les variables d'environnement")
+                print("=" * 80)
+            else:
+                encryption_key = Fernet.generate_key()
+                print("=" * 80)
+                print("ATTENTION: Première initialisation - Nouvelle clé de chiffrement générée!")
+                print(f"Clé: {encryption_key.decode()}")
+                print(f"Clé sauvegardée dans {key_file}")
+                print("IMPORTANT: Sauvegardez cette clé en lieu sûr!")
+                print("Pour la production, définissez ENCRYPTION_KEY dans les variables d'environnement")
+                print("=" * 80)
+                with open(key_file, 'wb') as f:
+                    f.write(encryption_key)
         else:
             encryption_key = encryption_key.encode()
+            print("=" * 80)
+            print("Clé de chiffrement chargée depuis la variable d'environnement ENCRYPTION_KEY")
+            print("=" * 80)
         
         self.fernet = Fernet(encryption_key)
     

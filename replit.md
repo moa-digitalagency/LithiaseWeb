@@ -5,6 +5,7 @@ Application web mono-médecin pour la gestion des dossiers patients souffrant de
 
 ## Architecture
 - **Backend**: Flask (Python 3.11) avec SQLAlchemy ORM
+- **Chiffrement**: Cryptography (Fernet) pour données de santé
 - **Frontend**: HTML/CSS avec Tailwind CSS + JavaScript vanilla
 - **Base de données**: SQLite
 - **Exports**: PDF (ReportLab) et CSV
@@ -12,14 +13,29 @@ Application web mono-médecin pour la gestion des dossiers patients souffrant de
 ## Structure du projet
 ```
 /
-├── app.py              # Application Flask principale
-├── models.py           # Modèles de base de données SQLAlchemy
-├── inference.py        # Moteur d'inférence pour classification des calculs
-├── static/            # Fichiers statiques (CSS, JS)
-├── templates/         # Templates HTML
-├── uploads/           # Documents uploadés
-├── requirements.txt   # Dépendances Python
-└── lithiase.db       # Base de données SQLite
+├── app.py                     # Point d'entrée Flask
+├── backend/                   # Backend organisé
+│   ├── __init__.py           # Initialisation Flask + blueprints
+│   ├── inference.py          # Moteur d'inférence
+│   ├── models/               # Modèles avec chiffrement
+│   │   └── __init__.py      # Patient, Episode, Imagerie, Biologie
+│   ├── routes/               # Routes par domaine
+│   │   ├── auth.py          # Authentification
+│   │   ├── patients.py      # CRUD patients
+│   │   ├── episodes.py      # CRUD épisodes + inférence
+│   │   ├── imageries.py     # CRUD imageries
+│   │   ├── biologies.py     # CRUD biologies
+│   │   ├── search.py        # Recherche avancée
+│   │   └── exports.py       # Exports PDF/CSV
+│   └── utils/                # Utilitaires
+│       └── crypto.py         # Gestionnaire chiffrement Fernet
+├── templates/                # Templates HTML
+├── static/                   # Fichiers statiques
+├── uploads/                  # Documents uploadés
+├── requirements.txt          # Dépendances Python
+├── PROJECT_TRACKING.md       # Suivi complet du projet
+├── TESTS.md                  # Tests d'acceptation
+└── lithiase.db              # Base de données SQLite
 ```
 
 ## Fonctionnalités principales
@@ -48,8 +64,19 @@ Application web mono-médecin pour la gestion des dossiers patients souffrant de
 - Système d'export PDF et CSV
 - Authentification sécurisée avec variables d'environnement
 - Correction du bug de filtrage des patients (SQLAlchemy query filter)
+- **NOUVEAU**: Refactorisation backend en architecture modulaire (backend/routes, backend/models, backend/utils)
+- **NOUVEAU**: Chiffrement des données de santé (Fernet) - 17 champs sensibles chiffrés
+- **NOUVEAU**: Gestionnaire de chiffrement avec clé d'environnement (ENCRYPTION_KEY)
+- **NOUVEAU**: Properties Python pour chiffrement/déchiffrement transparent
+- **NOUVEAU**: Documentation complète (PROJECT_TRACKING.md avec 400+ lignes)
 
 ## Sécurité
-- Authentification simple mono-utilisateur
+- Authentification simple mono-utilisateur (Flask-Login)
+- Hachage des mots de passe (Werkzeug PBKDF2)
+- **Chiffrement des données de santé** (Fernet AES-128 + HMAC)
+- 17 champs sensibles chiffrés en base de données
+- Clé de chiffrement configurable via ENCRYPTION_KEY
+- Conformité RGPD pour la protection des données personnelles
 - Base de données SQLite
 - Session locale sécurisée
+- Variables d'environnement pour credentials (ADMIN_USERNAME, ADMIN_PASSWORD)
