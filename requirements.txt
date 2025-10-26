@@ -4,9 +4,4 @@ Flask-Login==0.6.3
 Werkzeug==3.0.1
 reportlab==4.0.7
 python-dateutil==2.8.2
-Flask
-Flask-Login
-Flask-SQLAlchemy
-python-dateutil
-reportlab
-Werkzeug
+cryptography
