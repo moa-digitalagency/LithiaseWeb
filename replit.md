@@ -70,7 +70,7 @@ Application web mono-médecin pour la gestion des dossiers patients souffrant de
 - **NOUVEAU**: Properties Python pour chiffrement/déchiffrement transparent
 - **NOUVEAU**: Documentation complète (PROJECT_TRACKING.md avec 400+ lignes)
 - **✅ COMPLÉTÉ**: Migration vers le système de design MyOneArt
-  - Centralization CSS complète dans static/css/myoneart.css
+  - Centralization CSS complète dans static/css/myoneart.css (renommé depuis mysindic.css)
   - Palette indigo-purple avec gradients (#667eea → #764ba2)
   - Bordures arrondies (1-2rem) et boutons transparents avec contours colorés
   - Utilisation d'emojis amicaux pour l'interface
@@ -79,6 +79,19 @@ Application web mono-médecin pour la gestion des dossiers patients souffrant de
   - Classes modales standardisées (modal-md, modal-lg, modal-sm)
   - Tables de données stylisées avec classe data-table
   - Design moderne et production-ready validé par architect
+- **✅ COMPLÉTÉ**: Formulaire patient complet dans le dashboard
+  - Tous les champs du cahier des charges implémentés
+  - Antécédents familiaux, chirurgicaux
+  - Traitements chroniques avec posologies
+  - Régime alimentaire
+  - Notes libres
+- **✅ COMPLÉTÉ**: Page patient avec dossier médical complet
+  - Section informations personnelles (identité, contacts, adresse)
+  - Section antécédents médicaux complets (personnels, familiaux, chirurgicaux, allergies, traitements)
+  - Section facteurs de risque & hygiène de vie (hydratation, régime)
+  - Section notes (affichage conditionnel)
+  - Affichage conditionnel de toutes les sections (ne montre que les champs remplis)
+  - Intégration harmonieuse avec les épisodes, imageries, biologies et moteur d'inférence
 
 ## Sécurité
 - Authentification simple mono-utilisateur (Flask-Login)
