@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord - Lithiase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-blue-900 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Lithiase</h1>
+            <div class="flex items-center space-x-4">
+                <a href="/search" class="hover:text-blue-200">Recherche avancée</a>
+                <a href="/logout" class="hover:text-blue-200">Déconnexion</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mx-auto p-6">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Patients</h2>
+                <button onclick="showNewPatientModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-200">
+                    + Nouveau Patient
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <input type="text" id="searchInput" placeholder="Rechercher un patient (nom, prénom, téléphone)..."
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    onkeyup="searchPatients()">
+            </div>
+            
+            <div id="patientsList" class="space-y-3">
+            </div>
+        </div>
+    </div>
+    
+    <div id="newPatientModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-3xl my-8">
+            <div class="p-6 border-b">
+                <h3 class="text-2xl font-bold text-gray-800">Nouveau Patient</h3>
+            </div>
+            <div class="p-6 max-h-[70vh] overflow-y-auto">
+                <form id="newPatientForm" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nom *</label>
+                            <input type="text" name="nom" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Prénom *</label>
+                            <input type="text" name="prenom" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Date de naissance *</label>
+                            <input type="date" name="date_naissance" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Sexe *</label>
+                            <select name="sexe" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <option value="M">Masculin</option>
+                                <option value="F">Féminin</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
+                            <input type="tel" name="telephone" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Adresse</label>
+                        <textarea name="adresse" rows="2" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Hydratation (L/jour)</label>
+                        <input type="number" step="0.1" name="hydratation_jour" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Antécédents personnels</label>
+                        <textarea name="antecedents_personnels" rows="2" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Allergies</label>
+                        <textarea name="allergies" rows="2" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" onclick="hideNewPatientModal()" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                            Annuler
+                        </button>
+                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Créer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        async function loadPatients(search = '') {
+            const response = await fetch(`/api/patients?search=${search}`);
+            const patients = await response.json();
+            
+            const container = document.getElementById('patientsList');
+            
+            if (patients.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">Aucun patient trouvé</p>';
+                return;
+            }
+            
+            container.innerHTML = patients.map(p => `
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-200 cursor-pointer"
+                     onclick="window.location.href='/patient/${p.id}'">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">${p.nom} ${p.prenom}</h3>
+                            <p class="text-gray-600 text-sm">Né(e) le ${new Date(p.date_naissance).toLocaleDateString('fr-FR')}</p>
+                            <p class="text-gray-600 text-sm">${p.telephone || 'Téléphone non renseigné'}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                                ${p.nb_episodes} épisode(s)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function searchPatients() {
+            const search = document.getElementById('searchInput').value;
+            loadPatients(search);
+        }
+        
+        function showNewPatientModal() {
+            document.getElementById('newPatientModal').classList.remove('hidden');
+        }
+        
+        function hideNewPatientModal() {
+            document.getElementById('newPatientModal').classList.add('hidden');
+            document.getElementById('newPatientForm').reset();
+        }
+        
+        document.getElementById('newPatientForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            const response = await fetch('/api/patients', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            
+            if (response.ok) {
+                hideNewPatientModal();
+                loadPatients();
+            } else {
+                alert('Erreur lors de la création du patient');
+            }
+        });
+        
+        loadPatients();
+    </script>
+</body>
+</html>

@@ -42,6 +42,12 @@ Application web mono-médecin pour la gestion des dossiers patients souffrant de
 - 2025-10-26: Création initiale du projet
 - Configuration de l'environnement Python 3.11
 - Structure de base du projet
+- Implémentation complète du backend Flask avec SQLAlchemy
+- Création du moteur d'inférence avec 8 types de calculs
+- Interface utilisateur complète avec Tailwind CSS
+- Système d'export PDF et CSV
+- Authentification sécurisée avec variables d'environnement
+- Correction du bug de filtrage des patients (SQLAlchemy query filter)
 
 ## Sécurité
 - Authentification simple mono-utilisateur

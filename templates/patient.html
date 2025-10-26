@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche Patient - Lithiase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-blue-900 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Lithiase</h1>
+            <div class="flex items-center space-x-4">
+                <a href="/" class="hover:text-blue-200">Tableau de bord</a>
+                <a href="/search" class="hover:text-blue-200">Recherche</a>
+                <a href="/logout" class="hover:text-blue-200">Déconnexion</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mx-auto p-6">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="patientName" class="text-3xl font-bold text-gray-800"></h2>
+                <button onclick="exportPDF()" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg">
+                    Exporter PDF
+                </button>
+            </div>
+            <div id="patientInfo" class="grid grid-cols-2 gap-4 text-gray-700"></div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-bold text-gray-800">Épisodes</h3>
+                <button onclick="showNewEpisodeModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg">
+                    + Nouvel Épisode
+                </button>
+            </div>
+            <div id="episodesList" class="space-y-4"></div>
+        </div>
+    </div>
+    
+    <div id="newEpisodeModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-3xl my-8">
+            <div class="p-6 border-b">
+                <h3 class="text-2xl font-bold text-gray-800">Nouvel Épisode</h3>
+            </div>
+            <div class="p-6 max-h-[70vh] overflow-y-auto">
+                <form id="newEpisodeForm" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Date *</label>
+                            <input type="date" name="date_episode" required class="w-full px-4 py-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Motif</label>
+                            <input type="text" name="motif" class="w-full px-4 py-2 border rounded-lg">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Diagnostic</label>
+                        <input type="text" name="diagnostic" class="w-full px-4 py-2 border rounded-lg">
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="flex items-center">
+                            <input type="checkbox" name="douleur" id="douleur" class="mr-2">
+                            <label for="douleur">Douleur</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" name="fievre" id="fievre" class="mr-2">
+                            <label for="fievre">Fièvre</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" name="infection_urinaire" id="infection" class="mr-2">
+                            <label for="infection">Infection urinaire</label>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" onclick="hideNewEpisodeModal()" class="px-6 py-2 border rounded-lg hover:bg-gray-50">Annuler</button>
+                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Créer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div id="episodeDetailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-6xl my-8">
+            <div class="p-6 border-b flex justify-between items-center">
+                <h3 class="text-2xl font-bold text-gray-800">Détails de l'épisode</h3>
+                <button onclick="hideEpisodeDetailModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            <div class="p-6 max-h-[80vh] overflow-y-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-4">Imagerie</h4>
+                        <button onclick="showNewImagingModal()" class="mb-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg">+ Ajouter Imagerie</button>
+                        <div id="imagingList" class="space-y-3"></div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-xl font-bold text-gray-800 mb-4">Biologie</h4>
+                        <button onclick="showNewBiologyModal()" class="mb-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg">+ Ajouter Biologie</button>
+                        <div id="biologyList" class="space-y-3"></div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-6 border-t">
+                    <button onclick="runInference()" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg">
+                        Calculer le type de calcul
+                    </button>
+                    <div id="inferenceResult" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="newImagingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl my-8">
+            <div class="p-6 border-b">
+                <h3 class="text-xl font-bold text-gray-800">Nouvelle Imagerie (Scanner)</h3>
+            </div>
+            <div class="p-6 max-h-[70vh] overflow-y-auto">
+                <form id="newImagingForm" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Date examen *</label>
+                            <input type="date" name="date_examen" required class="w-full px-4 py-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Taille (mm)</label>
+                            <input type="number" name="taille_mm" min="0" class="w-full px-4 py-2 border rounded-lg">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Densité (UH)</label>
+                            <input type="number" name="densite_uh" min="100" max="2200" class="w-full px-4 py-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Morphologie</label>
+                            <select name="morphologie" class="w-full px-4 py-2 border rounded-lg">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="spherique_lisse">Sphérique lisse</option>
+                                <option value="irreguliere_spiculee">Irrégulière spiculée</option>
+                                <option value="crayeuse">Crayeuse</option>
+                                <option value="coralliforme">Coralliforme</option>
+                                <option value="heterogene">Hétérogène</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Radio-opacité</label>
+                            <select name="radio_opacite" class="w-full px-4 py-2 border rounded-lg">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="opaque">Opaque</option>
+                                <option value="transparent">Transparent</option>
+                                <option value="inconnu">Inconnu</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Localisation</label>
+                            <input type="text" name="localisation" placeholder="Ex: Rein gauche, calice supérieur" class="w-full px-4 py-2 border rounded-lg">
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" onclick="hideNewImagingModal()" class="px-6 py-2 border rounded-lg">Annuler</button>
+                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Créer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div id="newBiologyModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl my-8">
+            <div class="p-6 border-b">
+                <h3 class="text-xl font-bold text-gray-800">Nouvelle Biologie</h3>
+            </div>
+            <div class="p-6 max-h-[70vh] overflow-y-auto">
+                <form id="newBiologyForm" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Date examen *</label>
+                            <input type="date" name="date_examen" required class="w-full px-4 py-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">pH urinaire (4.5-8.5)</label>
+                            <input type="number" name="ph_urinaire" step="0.1" min="4.5" max="8.5" class="w-full px-4 py-2 border rounded-lg">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Marqueurs métaboliques</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="flex items-center">
+                                <input type="checkbox" name="hyperoxalurie" id="hyperoxalurie" class="mr-2">
+                                <label for="hyperoxalurie">Hyperoxalurie</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="hypercalciurie" id="hypercalciurie" class="mr-2">
+                                <label for="hypercalciurie">Hypercalciurie</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="hyperuricurie" id="hyperuricurie" class="mr-2">
+                                <label for="hyperuricurie">Hyperuricurie</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="cystinurie" id="cystinurie" class="mr-2">
+                                <label for="cystinurie">Cystinurie</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <input type="checkbox" name="infection_urinaire" id="bio_infection" class="mr-2">
+                        <label for="bio_infection">Infection urinaire</label>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" onclick="hideNewBiologyModal()" class="px-6 py-2 border rounded-lg">Annuler</button>
+                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Créer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const patientId = {{ patient_id }};
+        let currentEpisodeId = null;
+        
+        async function loadPatient() {
+            const response = await fetch(`/api/patients/${patientId}`);
+            const patient = await response.json();
+            
+            document.getElementById('patientName').textContent = `${patient.nom} ${patient.prenom}`;
+            document.getElementById('patientInfo').innerHTML = `
+                <div><strong>Date de naissance:</strong> ${new Date(patient.date_naissance).toLocaleDateString('fr-FR')}</div>
+                <div><strong>Sexe:</strong> ${patient.sexe === 'M' ? 'Masculin' : 'Féminin'}</div>
+                <div><strong>Téléphone:</strong> ${patient.telephone || '-'}</div>
+                <div><strong>Email:</strong> ${patient.email || '-'}</div>
+            `;
+            
+            loadEpisodes();
+        }
+        
+        async function loadEpisodes() {
+            const response = await fetch(`/api/patients/${patientId}/episodes`);
+            const episodes = await response.json();
+            
+            const container = document.getElementById('episodesList');
+            
+            if (episodes.length === 0) {
+                container.innerHTML = '<p class="text-gray-500">Aucun épisode enregistré</p>';
+                return;
+            }
+            
+            container.innerHTML = episodes.map(e => `
+                <div class="border rounded-lg p-4 hover:shadow-md transition cursor-pointer" onclick="showEpisodeDetail(${e.id})">
+                    <div class="flex justify-between">
+                        <div>
+                            <h4 class="font-semibold text-lg">${e.motif || 'Épisode'}</h4>
+                            <p class="text-gray-600 text-sm">${new Date(e.date_episode).toLocaleDateString('fr-FR')}</p>
+                            <p class="text-gray-600 text-sm">${e.diagnostic || ''}</p>
+                        </div>
+                        <div class="text-sm text-gray-600">
+                            <span class="bg-blue-100 px-2 py-1 rounded">${e.nb_imageries} imagerie(s)</span>
+                            <span class="bg-green-100 px-2 py-1 rounded ml-1">${e.nb_biologies} biologie(s)</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        async function showEpisodeDetail(episodeId) {
+            currentEpisodeId = episodeId;
+            const response = await fetch(`/api/episodes/${episodeId}`);
+            const episode = await response.json();
+            
+            document.getElementById('imagingList').innerHTML = episode.imageries.map(i => `
+                <div class="border rounded p-3 text-sm">
+                    <div><strong>Date:</strong> ${new Date(i.date_examen).toLocaleDateString('fr-FR')}</div>
+                    <div><strong>Taille:</strong> ${i.taille_mm || '-'} mm</div>
+                    <div><strong>Densité:</strong> ${i.densite_uh || '-'} UH</div>
+                    <div><strong>Morphologie:</strong> ${i.morphologie || '-'}</div>
+                </div>
+            `).join('') || '<p class="text-gray-500">Aucune imagerie</p>';
+            
+            document.getElementById('biologyList').innerHTML = episode.biologies.map(b => `
+                <div class="border rounded p-3 text-sm">
+                    <div><strong>Date:</strong> ${new Date(b.date_examen).toLocaleDateString('fr-FR')}</div>
+                    <div><strong>pH:</strong> ${b.ph_urinaire || '-'}</div>
+                    <div><strong>Hyperoxalurie:</strong> ${b.hyperoxalurie ? 'Oui' : 'Non'}</div>
+                    <div><strong>Hypercalciurie:</strong> ${b.hypercalciurie ? 'Oui' : 'Non'}</div>
+                </div>
+            `).join('') || '<p class="text-gray-500">Aucune biologie</p>';
+            
+            document.getElementById('episodeDetailModal').classList.remove('hidden');
+        }
+        
+        async function runInference() {
+            const response = await fetch(`/api/episodes/${currentEpisodeId}/inference`, {
+                method: 'POST'
+            });
+            const result = await response.json();
+            
+            if (result.error) {
+                document.getElementById('inferenceResult').innerHTML = `<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">${result.error}</div>`;
+                return;
+            }
+            
+            document.getElementById('inferenceResult').innerHTML = `
+                <div class="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-300 rounded-lg p-6">
+                    <h4 class="text-2xl font-bold text-purple-900 mb-4">Résultat de l'inférence</h4>
+                    
+                    ${result.uncertain ? '<div class="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-2 rounded mb-4">⚠ Résultat incertain, compléter biologie/CT</div>' : ''}
+                    
+                    <div class="mb-4">
+                        <h5 class="font-bold text-lg mb-2">Type proposé: ${result.top_1}</h5>
+                        <p class="text-gray-700">Score: ${result.top_1_score}/20</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5 class="font-semibold mb-2">Justification:</h5>
+                        <ul class="list-disc list-inside space-y-1">
+                            ${result.top_1_reasons.map(r => `<li class="text-gray-700">${r}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5 class="font-semibold mb-2">Top 3:</h5>
+                        ${result.top_3.map(([type, score]) => `<div class="flex justify-between py-1"><span>${type}</span><span class="font-mono">${score}/20</span></div>`).join('')}
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="bg-white p-3 rounded">
+                            <strong>LEC éligible:</strong> <span class="font-semibold ${result.lec_eligible ? 'text-green-600' : 'text-red-600'}">${result.lec_eligible ? 'Oui' : 'Non'}</span>
+                        </div>
+                        <div class="bg-white p-3 rounded">
+                            <strong>Voie de traitement:</strong> ${result.voie_traitement}
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded">
+                        <h5 class="font-semibold mb-2">Prévention:</h5>
+                        <ul class="list-disc list-inside space-y-1">
+                            ${result.prevention.map(p => `<li class="text-gray-700">${p}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function showNewEpisodeModal() {
+            document.getElementById('newEpisodeModal').classList.remove('hidden');
+        }
+        
+        function hideNewEpisodeModal() {
+            document.getElementById('newEpisodeModal').classList.add('hidden');
+        }
+        
+        function hideEpisodeDetailModal() {
+            document.getElementById('episodeDetailModal').classList.add('hidden');
+            document.getElementById('inferenceResult').innerHTML = '';
+        }
+        
+        function showNewImagingModal() {
+            document.getElementById('newImagingModal').classList.remove('hidden');
+        }
+        
+        function hideNewImagingModal() {
+            document.getElementById('newImagingModal').classList.add('hidden');
+        }
+        
+        function showNewBiologyModal() {
+            document.getElementById('newBiologyModal').classList.remove('hidden');
+        }
+        
+        function hideNewBiologyModal() {
+            document.getElementById('newBiologyModal').classList.add('hidden');
+        }
+        
+        async function exportPDF() {
+            window.open(`/api/patients/${patientId}/export/pdf`, '_blank');
+        }
+        
+        document.getElementById('newEpisodeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            data.douleur = formData.has('douleur');
+            data.fievre = formData.has('fievre');
+            data.infection_urinaire = formData.has('infection_urinaire');
+            
+            await fetch(`/api/patients/${patientId}/episodes`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            
+            hideNewEpisodeModal();
+            loadEpisodes();
+        });
+        
+        document.getElementById('newImagingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            await fetch(`/api/episodes/${currentEpisodeId}/imageries`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            
+            hideNewImagingModal();
+            showEpisodeDetail(currentEpisodeId);
+        });
+        
+        document.getElementById('newBiologyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            data.hyperoxalurie = formData.has('hyperoxalurie');
+            data.hypercalciurie = formData.has('hypercalciurie');
+            data.hyperuricurie = formData.has('hyperuricurie');
+            data.cystinurie = formData.has('cystinurie');
+            data.infection_urinaire = formData.has('infection_urinaire');
+            
+            await fetch(`/api/episodes/${currentEpisodeId}/biologies`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            
+            hideNewBiologyModal();
+            showEpisodeDetail(currentEpisodeId);
+        });
+        
+        loadPatient();
+    </script>
+</body>
+</html>
