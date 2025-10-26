@@ -22,13 +22,36 @@
     <div class="container mx-auto p-6">
         <div class="card mb-6">
             <div class="flex justify-between items-center mb-6">
-                <div>
-                    <h2 id="patientName" class="text-3xl font-bold text-gray-800"></h2>
-                    <div id="patientInfo" class="grid grid-cols-2 gap-3 mt-4 text-gray-700"></div>
+                <div class="w-full">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 id="patientName" class="text-3xl font-bold text-gray-800"></h2>
+                        <button onclick="exportPDF()" class="btn btn-success py-3 px-6">
+                            📄 Exporter PDF
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">📋 Informations personnelles</h3>
+                            <div id="patientInfo" class="grid grid-cols-2 gap-3 text-gray-700"></div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">🏥 Antécédents médicaux</h3>
+                            <div id="patientMedicalHistory" class="grid grid-cols-1 gap-3 text-gray-700"></div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">💧 Facteurs de risque & Hygiène de vie</h3>
+                            <div id="patientRiskFactors" class="grid grid-cols-2 gap-3 text-gray-700"></div>
+                        </div>
+                        
+                        <div id="patientNotesSection" class="hidden">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">📝 Notes</h3>
+                            <div id="patientNotes" class="p-4 bg-gray-50 rounded-lg text-gray-700"></div>
+                        </div>
+                    </div>
                 </div>
-                <button onclick="exportPDF()" class="btn btn-success py-3 px-6">
-                    📄 Exporter PDF
-                </button>
             </div>
         </div>
         
@@ -248,12 +271,36 @@
             const patient = await response.json();
             
             document.getElementById('patientName').textContent = `👤 ${patient.nom} ${patient.prenom}`;
+            
+            // Informations personnelles
             document.getElementById('patientInfo').innerHTML = `
                 <div class="info-card"><strong>📅 Date de naissance:</strong> ${new Date(patient.date_naissance).toLocaleDateString('fr-FR')}</div>
                 <div class="info-card"><strong>⚧ Sexe:</strong> ${patient.sexe === 'M' ? 'Masculin' : 'Féminin'}</div>
                 <div class="info-card"><strong>📞 Téléphone:</strong> ${patient.telephone || '-'}</div>
                 <div class="info-card"><strong>📧 Email:</strong> ${patient.email || '-'}</div>
+                ${patient.adresse ? `<div class="info-card col-span-2"><strong>📍 Adresse:</strong> ${patient.adresse}</div>` : ''}
             `;
+            
+            // Antécédents médicaux
+            document.getElementById('patientMedicalHistory').innerHTML = `
+                ${patient.antecedents_personnels ? `<div class="info-card"><strong>📋 Antécédents personnels:</strong> ${patient.antecedents_personnels}</div>` : ''}
+                ${patient.antecedents_familiaux ? `<div class="info-card"><strong>👨‍👩‍👧‍👦 Antécédents familiaux:</strong> ${patient.antecedents_familiaux}</div>` : ''}
+                ${patient.antecedents_chirurgicaux ? `<div class="info-card"><strong>🏥 Antécédents chirurgicaux:</strong> ${patient.antecedents_chirurgicaux}</div>` : ''}
+                ${patient.allergies ? `<div class="info-card"><strong>⚠️ Allergies:</strong> ${patient.allergies}</div>` : ''}
+                ${patient.traitements_chroniques ? `<div class="info-card"><strong>💊 Traitements chroniques:</strong> ${patient.traitements_chroniques}</div>` : ''}
+            `;
+            
+            // Facteurs de risque & Hygiène de vie
+            document.getElementById('patientRiskFactors').innerHTML = `
+                ${patient.hydratation_jour ? `<div class="info-card"><strong>💧 Hydratation:</strong> ${patient.hydratation_jour} L/jour</div>` : ''}
+                ${patient.regime_alimentaire ? `<div class="info-card"><strong>🍽️ Régime alimentaire:</strong> ${patient.regime_alimentaire}</div>` : ''}
+            `;
+            
+            // Notes
+            if (patient.notes) {
+                document.getElementById('patientNotesSection').classList.remove('hidden');
+                document.getElementById('patientNotes').textContent = patient.notes;
+            }
             
             loadEpisodes();
         }
