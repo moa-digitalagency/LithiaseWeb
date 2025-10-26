@@ -1,0 +1,414 @@
+/* MySindic Design System - Lithiase Application */
+
+/* === Colors === */
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --bg-gradient: linear-gradient(to bottom right, #EFF6FF, #E0E7FF);
+    --primary-color: #667eea;
+    --primary-dark: #764ba2;
+    
+    --success-color: #10B981;
+    --success-bg: rgba(16, 185, 129, 0.08);
+    --success-border: #10B981;
+    
+    --danger-color: #EF4444;
+    --danger-bg: rgba(239, 68, 68, 0.08);
+    --danger-border: #EF4444;
+    
+    --info-color: #3B82F6;
+    --info-bg: rgba(59, 130, 246, 0.08);
+    --info-border: #3B82F6;
+    
+    --purple-color: #8B5CF6;
+    --purple-bg: rgba(139, 92, 246, 0.08);
+    --purple-border: #8B5CF6;
+    
+    --indigo-color: #6366F1;
+    --indigo-bg: rgba(99, 102, 241, 0.08);
+    --indigo-border: #6366F1;
+    
+    --gray-border: #E5E7EB;
+    --gray-light: #F9FAFB;
+    --gray-text: #6B7280;
+    --gray-dark: #374151;
+}
+
+/* === Layout === */
+body {
+    background: var(--gray-light);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.page-bg {
+    background: var(--bg-gradient);
+}
+
+.gradient-bg {
+    background: var(--primary-gradient);
+}
+
+.gradient-text {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* === Buttons === */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 1rem;
+    border: 2px solid;
+    background: transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.btn-primary {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background: rgba(102, 126, 234, 0.05);
+    border-color: var(--primary-dark);
+    color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    border-color: #6B7280;
+    color: var(--gray-dark);
+}
+
+.btn-secondary:hover {
+    background: rgba(107, 114, 128, 0.05);
+    border-color: var(--gray-dark);
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    border-color: var(--success-border);
+    color: var(--success-color);
+}
+
+.btn-success:hover {
+    background: var(--success-bg);
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    border-color: var(--danger-border);
+    color: var(--danger-color);
+}
+
+.btn-danger:hover {
+    background: var(--danger-bg);
+    transform: translateY(-2px);
+}
+
+.btn-purple {
+    border-color: var(--purple-border);
+    color: var(--purple-color);
+}
+
+.btn-purple:hover {
+    background: var(--purple-bg);
+    transform: translateY(-2px);
+}
+
+/* === Inputs === */
+.input-field {
+    display: block;
+    width: 100%;
+    border-radius: 1rem;
+    border: 2px solid var(--gray-border);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+}
+
+/* === Cards === */
+.card {
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-login {
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border-radius: 1.5rem;
+    padding: 2rem;
+}
+
+.patient-card {
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.patient-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    border-color: var(--primary-color);
+}
+
+.episode-card {
+    border: 2px dashed var(--info-border);
+    background: var(--info-bg);
+    border-radius: 1.5rem;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.episode-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.info-card {
+    border: 2px dashed var(--indigo-border);
+    background: var(--indigo-bg);
+    border-radius: 1rem;
+    padding: 0.75rem 1rem;
+}
+
+.default-access-card {
+    padding: 1rem;
+    background: var(--indigo-bg);
+    border: 2px dashed var(--indigo-border);
+    border-radius: 1rem;
+}
+
+/* === Badges === */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.badge-info {
+    background-color: var(--info-bg);
+    color: #1E40AF;
+    border: 1px solid var(--info-border);
+}
+
+.badge-success {
+    background-color: var(--success-bg);
+    color: #065F46;
+    border: 1px solid var(--success-border);
+}
+
+.badge-danger {
+    background-color: var(--danger-bg);
+    color: #991B1B;
+    border: 1px solid var(--danger-border);
+}
+
+/* === Modals === */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+
+.modal-content {
+    background-color: #FFFFFF;
+    border-radius: 2rem;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.12);
+    max-width: 48rem;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* === Alerts === */
+.alert-error {
+    background: var(--danger-bg);
+    border: 2px solid var(--danger-border);
+    color: #991B1B;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+}
+
+.alert-warning {
+    background: rgba(245, 158, 11, 0.08);
+    border: 2px solid #F59E0B;
+    color: #92400E;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+}
+
+/* === Animations === */
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === Utility Classes === */
+.shadow-sm {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-md {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.shadow-lg {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.rounded-sm {
+    border-radius: 0.5rem;
+}
+
+.rounded-md {
+    border-radius: 1rem;
+}
+
+.rounded-lg {
+    border-radius: 1.5rem;
+}
+
+.rounded-xl {
+    border-radius: 2rem;
+}
+
+/* === Navigation === */
+nav.gradient-bg {
+    padding: 1.5rem 0;
+}
+
+/* === Modal Variations === */
+.modal-md {
+    max-width: 48rem;
+}
+
+.modal-lg {
+    max-width: 72rem;
+}
+
+.modal-sm {
+    max-width: 42rem;
+}
+
+/* === Button Close === */
+.btn-close {
+    width: auto;
+    padding: 0.5rem 1rem;
+}
+
+/* === Table Styles === */
+table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.data-table thead {
+    background: #F9FAFB;
+}
+
+table.data-table th {
+    padding: 0.75rem;
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+table.data-table tbody {
+    background: #FFFFFF;
+}
+
+table.data-table tr {
+    border-bottom: 1px solid #E5E7EB;
+    transition: all 0.15s;
+}
+
+table.data-table td {
+    padding: 1rem 0.75rem;
+    font-size: 0.875rem;
+    color: #6B7280;
+}
+
+table.data-table td.primary {
+    font-weight: 500;
+    color: #111827;
+}
+
+table.data-table a {
+    color: var(--primary-color);
+    font-weight: 600;
+    transition: color 0.15s;
+}
+
+table.data-table a:hover {
+    color: var(--primary-dark);
+}
+
+.result-summary {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--gray-text);
+}
+
+/* === Inference Result Styles === */
+.inference-container {
+    border: 2px dashed var(--purple-border);
+    background: var(--purple-bg);
+    border-radius: 1.5rem;
+    padding: 2rem;
+}
+
+.inference-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}

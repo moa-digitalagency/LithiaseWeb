@@ -5,30 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de bord - Lithiase</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/mysindic.css">
 </head>
-<body class="bg-gray-50">
-    <nav class="bg-blue-900 text-white p-4 shadow-lg">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Lithiase</h1>
-            <div class="flex items-center space-x-4">
-                <a href="/search" class="hover:text-blue-200">Recherche avancée</a>
-                <a href="/logout" class="hover:text-blue-200">Déconnexion</a>
+<body class="page-bg">
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <h1 class="text-3xl font-bold">💊 Lithiase</h1>
+            <div class="flex items-center space-x-6">
+                <a href="/search" class="hover:text-indigo-200 transition-colors font-medium">🔍 Recherche avancée</a>
+                <a href="/logout" class="hover:text-indigo-200 transition-colors font-medium">🚪 Déconnexion</a>
             </div>
         </div>
     </nav>
     
     <div class="container mx-auto p-6">
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+        <div class="card mb-6">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Patients</h2>
-                <button onclick="showNewPatientModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-200">
-                    + Nouveau Patient
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-800">👥 Patients</h2>
+                    <p class="text-gray-600 mt-1">Gérez vos patients et leurs épisodes de lithiase</p>
+                </div>
+                <button onclick="showNewPatientModal()" class="btn btn-primary py-3 px-6">
+                    ➕ Nouveau Patient
                 </button>
             </div>
             
-            <div class="mb-4">
-                <input type="text" id="searchInput" placeholder="Rechercher un patient (nom, prénom, téléphone)..."
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            <div class="mb-6">
+                <input type="text" id="searchInput" placeholder="🔍 Rechercher un patient (nom, prénom, téléphone)..."
+                    class="input-field"
                     onkeyup="searchPatients()">
             </div>
             
@@ -37,32 +41,32 @@
         </div>
     </div>
     
-    <div id="newPatientModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto p-4">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-3xl my-8">
-            <div class="p-6 border-b">
-                <h3 class="text-2xl font-bold text-gray-800">Nouveau Patient</h3>
+    <div id="newPatientModal" class="hidden modal-backdrop">
+        <div class="modal-content modal-md my-8 mx-4">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-2xl font-bold text-gray-800">➕ Nouveau Patient</h3>
             </div>
             <div class="p-6 max-h-[70vh] overflow-y-auto">
                 <form id="newPatientForm" class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nom *</label>
-                            <input type="text" name="nom" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <input type="text" name="nom" required class="input-field">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Prénom *</label>
-                            <input type="text" name="prenom" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <input type="text" name="prenom" required class="input-field">
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Date de naissance *</label>
-                            <input type="date" name="date_naissance" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <input type="date" name="date_naissance" required class="input-field">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Sexe *</label>
-                            <select name="sexe" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <select name="sexe" required class="input-field">
                                 <option value="M">Masculin</option>
                                 <option value="F">Féminin</option>
                             </select>
@@ -71,40 +75,40 @@
                     
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
-                            <input type="tel" name="telephone" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📞 Téléphone</label>
+                            <input type="tel" name="telephone" class="input-field">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                            <input type="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📧 Email</label>
+                            <input type="email" name="email" class="input-field">
                         </div>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Adresse</label>
-                        <textarea name="adresse" rows="2" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">📍 Adresse</label>
+                        <textarea name="adresse" rows="2" class="input-field"></textarea>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Hydratation (L/jour)</label>
-                        <input type="number" step="0.1" name="hydratation_jour" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">💧 Hydratation (L/jour)</label>
+                        <input type="number" step="0.1" name="hydratation_jour" class="input-field">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Antécédents personnels</label>
-                        <textarea name="antecedents_personnels" rows="2" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">📋 Antécédents personnels</label>
+                        <textarea name="antecedents_personnels" rows="2" class="input-field"></textarea>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Allergies</label>
-                        <textarea name="allergies" rows="2" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">⚠️ Allergies</label>
+                        <textarea name="allergies" rows="2" class="input-field"></textarea>
                     </div>
                     
                     <div class="flex justify-end space-x-3 pt-4">
-                        <button type="button" onclick="hideNewPatientModal()" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <button type="button" onclick="hideNewPatientModal()" class="btn btn-secondary">
                             Annuler
                         </button>
-                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        <button type="submit" class="btn btn-primary">
                             Créer
                         </button>
                     </div>
@@ -121,22 +125,22 @@
             const container = document.getElementById('patientsList');
             
             if (patients.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 text-center py-8">Aucun patient trouvé</p>';
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">😔 Aucun patient trouvé</p>';
                 return;
             }
             
             container.innerHTML = patients.map(p => `
-                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-200 cursor-pointer"
+                <div class="patient-card"
                      onclick="window.location.href='/patient/${p.id}'">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-800">${p.nom} ${p.prenom}</h3>
-                            <p class="text-gray-600 text-sm">Né(e) le ${new Date(p.date_naissance).toLocaleDateString('fr-FR')}</p>
-                            <p class="text-gray-600 text-sm">${p.telephone || 'Téléphone non renseigné'}</p>
+                            <h3 class="text-lg font-semibold text-gray-800">👤 ${p.nom} ${p.prenom}</h3>
+                            <p class="text-gray-600 text-sm mt-1">📅 Né(e) le ${new Date(p.date_naissance).toLocaleDateString('fr-FR')}</p>
+                            <p class="text-gray-600 text-sm">📞 ${p.telephone || 'Téléphone non renseigné'}</p>
                         </div>
                         <div class="text-right">
-                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-                                ${p.nb_episodes} épisode(s)
+                            <span class="badge badge-info">
+                                📊 ${p.nb_episodes} épisode(s)
                             </span>
                         </div>
                     </div>
@@ -158,6 +162,12 @@
             document.getElementById('newPatientForm').reset();
         }
         
+        document.getElementById('newPatientModal').addEventListener('click', (e) => {
+            if (e.target.id === 'newPatientModal') {
+                hideNewPatientModal();
+            }
+        });
+        
         document.getElementById('newPatientForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -176,7 +186,7 @@
                 hideNewPatientModal();
                 loadPatients();
             } else {
-                alert('Erreur lors de la création du patient');
+                alert('❌ Erreur lors de la création du patient');
             }
         });
         

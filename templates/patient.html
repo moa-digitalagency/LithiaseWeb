@@ -5,112 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiche Patient - Lithiase</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/mysindic.css">
 </head>
-<body class="bg-gray-50">
-    <nav class="bg-blue-900 text-white p-4 shadow-lg">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Lithiase</h1>
-            <div class="flex items-center space-x-4">
-                <a href="/" class="hover:text-blue-200">Tableau de bord</a>
-                <a href="/search" class="hover:text-blue-200">Recherche</a>
-                <a href="/logout" class="hover:text-blue-200">Déconnexion</a>
+<body class="page-bg">
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <h1 class="text-3xl font-bold">💊 Lithiase</h1>
+            <div class="flex items-center space-x-6">
+                <a href="/" class="hover:text-indigo-200 transition-colors font-medium">🏠 Tableau de bord</a>
+                <a href="/search" class="hover:text-indigo-200 transition-colors font-medium">🔍 Recherche</a>
+                <a href="/logout" class="hover:text-indigo-200 transition-colors font-medium">🚪 Déconnexion</a>
             </div>
         </div>
     </nav>
     
     <div class="container mx-auto p-6">
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+        <div class="card mb-6">
             <div class="flex justify-between items-center mb-6">
-                <h2 id="patientName" class="text-3xl font-bold text-gray-800"></h2>
-                <button onclick="exportPDF()" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg">
-                    Exporter PDF
+                <div>
+                    <h2 id="patientName" class="text-3xl font-bold text-gray-800"></h2>
+                    <div id="patientInfo" class="grid grid-cols-2 gap-3 mt-4 text-gray-700"></div>
+                </div>
+                <button onclick="exportPDF()" class="btn btn-success py-3 px-6">
+                    📄 Exporter PDF
                 </button>
             </div>
-            <div id="patientInfo" class="grid grid-cols-2 gap-4 text-gray-700"></div>
         </div>
         
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-2xl font-bold text-gray-800">Épisodes</h3>
-                <button onclick="showNewEpisodeModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg">
-                    + Nouvel Épisode
+        <div class="card mb-6">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-800">📊 Épisodes</h3>
+                    <p class="text-gray-600 mt-1">Historique des épisodes lithiasiques</p>
+                </div>
+                <button onclick="showNewEpisodeModal()" class="btn btn-primary py-2 px-4">
+                    ➕ Nouvel Épisode
                 </button>
             </div>
             <div id="episodesList" class="space-y-4"></div>
         </div>
     </div>
     
-    <div id="newEpisodeModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto p-4">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-3xl my-8">
-            <div class="p-6 border-b">
-                <h3 class="text-2xl font-bold text-gray-800">Nouvel Épisode</h3>
+    <div id="newEpisodeModal" class="hidden modal-backdrop">
+        <div class="modal-content modal-md my-8 mx-4">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-2xl font-bold text-gray-800">➕ Nouvel Épisode</h3>
             </div>
             <div class="p-6 max-h-[70vh] overflow-y-auto">
                 <form id="newEpisodeForm" class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Date *</label>
-                            <input type="date" name="date_episode" required class="w-full px-4 py-2 border rounded-lg">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📅 Date *</label>
+                            <input type="date" name="date_episode" required class="input-field">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Motif</label>
-                            <input type="text" name="motif" class="w-full px-4 py-2 border rounded-lg">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📝 Motif</label>
+                            <input type="text" name="motif" class="input-field">
                         </div>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Diagnostic</label>
-                        <input type="text" name="diagnostic" class="w-full px-4 py-2 border rounded-lg">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">🩺 Diagnostic</label>
+                        <input type="text" name="diagnostic" class="input-field">
                     </div>
                     
                     <div class="grid grid-cols-3 gap-4">
                         <div class="flex items-center">
                             <input type="checkbox" name="douleur" id="douleur" class="mr-2">
-                            <label for="douleur">Douleur</label>
+                            <label for="douleur">😣 Douleur</label>
                         </div>
                         <div class="flex items-center">
                             <input type="checkbox" name="fievre" id="fievre" class="mr-2">
-                            <label for="fievre">Fièvre</label>
+                            <label for="fievre">🌡️ Fièvre</label>
                         </div>
                         <div class="flex items-center">
                             <input type="checkbox" name="infection_urinaire" id="infection" class="mr-2">
-                            <label for="infection">Infection urinaire</label>
+                            <label for="infection">🦠 Infection urinaire</label>
                         </div>
                     </div>
                     
                     <div class="flex justify-end space-x-3 pt-4">
-                        <button type="button" onclick="hideNewEpisodeModal()" class="px-6 py-2 border rounded-lg hover:bg-gray-50">Annuler</button>
-                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Créer</button>
+                        <button type="button" onclick="hideNewEpisodeModal()" class="btn btn-secondary">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Créer</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     
-    <div id="episodeDetailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto p-4">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-6xl my-8">
-            <div class="p-6 border-b flex justify-between items-center">
-                <h3 class="text-2xl font-bold text-gray-800">Détails de l'épisode</h3>
-                <button onclick="hideEpisodeDetailModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+    <div id="episodeDetailModal" class="hidden modal-backdrop">
+        <div class="modal-content modal-lg my-8 mx-4">
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-2xl font-bold text-gray-800">📋 Détails de l'épisode</h3>
+                <button onclick="hideEpisodeDetailModal()" class="btn btn-secondary btn-close">✕</button>
             </div>
             <div class="p-6 max-h-[80vh] overflow-y-auto">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div>
-                        <h4 class="text-xl font-bold text-gray-800 mb-4">Imagerie</h4>
-                        <button onclick="showNewImagingModal()" class="mb-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg">+ Ajouter Imagerie</button>
+                        <h4 class="text-xl font-bold text-gray-800 mb-4">🔬 Imagerie</h4>
+                        <button onclick="showNewImagingModal()" class="btn btn-primary mb-4">➕ Ajouter Imagerie</button>
                         <div id="imagingList" class="space-y-3"></div>
                     </div>
                     
                     <div>
-                        <h4 class="text-xl font-bold text-gray-800 mb-4">Biologie</h4>
-                        <button onclick="showNewBiologyModal()" class="mb-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg">+ Ajouter Biologie</button>
+                        <h4 class="text-xl font-bold text-gray-800 mb-4">🧪 Biologie</h4>
+                        <button onclick="showNewBiologyModal()" class="btn btn-primary mb-4">➕ Ajouter Biologie</button>
                         <div id="biologyList" class="space-y-3"></div>
                     </div>
                 </div>
                 
-                <div class="mt-6 pt-6 border-t">
-                    <button onclick="runInference()" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg">
-                        Calculer le type de calcul
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <button onclick="runInference()" class="btn btn-purple py-3 px-6 text-base">
+                        🤖 Calculer le type de calcul
                     </button>
                     <div id="inferenceResult" class="mt-4"></div>
                 </div>
@@ -118,32 +124,32 @@
         </div>
     </div>
     
-    <div id="newImagingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto p-4">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl my-8">
-            <div class="p-6 border-b">
-                <h3 class="text-xl font-bold text-gray-800">Nouvelle Imagerie (Scanner)</h3>
+    <div id="newImagingModal" class="hidden modal-backdrop">
+        <div class="modal-content modal-sm my-8 mx-4">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-xl font-bold text-gray-800">🔬 Nouvelle Imagerie (Scanner)</h3>
             </div>
             <div class="p-6 max-h-[70vh] overflow-y-auto">
                 <form id="newImagingForm" class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium mb-2">Date examen *</label>
-                            <input type="date" name="date_examen" required class="w-full px-4 py-2 border rounded-lg">
+                            <label class="block text-sm font-medium mb-2">📅 Date examen *</label>
+                            <input type="date" name="date_examen" required class="input-field">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-2">Taille (mm)</label>
-                            <input type="number" name="taille_mm" min="0" class="w-full px-4 py-2 border rounded-lg">
+                            <label class="block text-sm font-medium mb-2">📏 Taille (mm)</label>
+                            <input type="number" name="taille_mm" min="0" class="input-field">
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium mb-2">Densité (UH)</label>
-                            <input type="number" name="densite_uh" min="100" max="2200" class="w-full px-4 py-2 border rounded-lg">
+                            <label class="block text-sm font-medium mb-2">⚡ Densité (UH)</label>
+                            <input type="number" name="densite_uh" min="100" max="2200" class="input-field">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-2">Morphologie</label>
-                            <select name="morphologie" class="w-full px-4 py-2 border rounded-lg">
+                            <label class="block text-sm font-medium mb-2">🔍 Morphologie</label>
+                            <select name="morphologie" class="input-field">
                                 <option value="">-- Sélectionner --</option>
                                 <option value="spherique_lisse">Sphérique lisse</option>
                                 <option value="irreguliere_spiculee">Irrégulière spiculée</option>
@@ -156,8 +162,8 @@
                     
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium mb-2">Radio-opacité</label>
-                            <select name="radio_opacite" class="w-full px-4 py-2 border rounded-lg">
+                            <label class="block text-sm font-medium mb-2">📡 Radio-opacité</label>
+                            <select name="radio_opacite" class="input-field">
                                 <option value="">-- Sélectionner --</option>
                                 <option value="opaque">Opaque</option>
                                 <option value="transparent">Transparent</option>
@@ -165,40 +171,40 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-2">Localisation</label>
-                            <input type="text" name="localisation" placeholder="Ex: Rein gauche, calice supérieur" class="w-full px-4 py-2 border rounded-lg">
+                            <label class="block text-sm font-medium mb-2">📍 Localisation</label>
+                            <input type="text" name="localisation" placeholder="Ex: Rein gauche, calice supérieur" class="input-field">
                         </div>
                     </div>
                     
                     <div class="flex justify-end space-x-3 pt-4">
-                        <button type="button" onclick="hideNewImagingModal()" class="px-6 py-2 border rounded-lg">Annuler</button>
-                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Créer</button>
+                        <button type="button" onclick="hideNewImagingModal()" class="btn btn-secondary">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Créer</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     
-    <div id="newBiologyModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto p-4">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl my-8">
-            <div class="p-6 border-b">
-                <h3 class="text-xl font-bold text-gray-800">Nouvelle Biologie</h3>
+    <div id="newBiologyModal" class="hidden modal-backdrop">
+        <div class="modal-content modal-sm my-8 mx-4">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-xl font-bold text-gray-800">🧪 Nouvelle Biologie</h3>
             </div>
             <div class="p-6 max-h-[70vh] overflow-y-auto">
                 <form id="newBiologyForm" class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium mb-2">Date examen *</label>
-                            <input type="date" name="date_examen" required class="w-full px-4 py-2 border rounded-lg">
+                            <label class="block text-sm font-medium mb-2">📅 Date examen *</label>
+                            <input type="date" name="date_examen" required class="input-field">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-2">pH urinaire (4.5-8.5)</label>
-                            <input type="number" name="ph_urinaire" step="0.1" min="4.5" max="8.5" class="w-full px-4 py-2 border rounded-lg">
+                            <label class="block text-sm font-medium mb-2">🧪 pH urinaire (4.5-8.5)</label>
+                            <input type="number" name="ph_urinaire" step="0.1" min="4.5" max="8.5" class="input-field">
                         </div>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium mb-2">Marqueurs métaboliques</label>
+                        <label class="block text-sm font-medium mb-2">📊 Marqueurs métaboliques</label>
                         <div class="grid grid-cols-2 gap-2">
                             <div class="flex items-center">
                                 <input type="checkbox" name="hyperoxalurie" id="hyperoxalurie" class="mr-2">
@@ -221,12 +227,12 @@
                     
                     <div class="flex items-center">
                         <input type="checkbox" name="infection_urinaire" id="bio_infection" class="mr-2">
-                        <label for="bio_infection">Infection urinaire</label>
+                        <label for="bio_infection">🦠 Infection urinaire</label>
                     </div>
                     
                     <div class="flex justify-end space-x-3 pt-4">
-                        <button type="button" onclick="hideNewBiologyModal()" class="px-6 py-2 border rounded-lg">Annuler</button>
-                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Créer</button>
+                        <button type="button" onclick="hideNewBiologyModal()" class="btn btn-secondary">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Créer</button>
                     </div>
                 </form>
             </div>
@@ -241,12 +247,12 @@
             const response = await fetch(`/api/patients/${patientId}`);
             const patient = await response.json();
             
-            document.getElementById('patientName').textContent = `${patient.nom} ${patient.prenom}`;
+            document.getElementById('patientName').textContent = `👤 ${patient.nom} ${patient.prenom}`;
             document.getElementById('patientInfo').innerHTML = `
-                <div><strong>Date de naissance:</strong> ${new Date(patient.date_naissance).toLocaleDateString('fr-FR')}</div>
-                <div><strong>Sexe:</strong> ${patient.sexe === 'M' ? 'Masculin' : 'Féminin'}</div>
-                <div><strong>Téléphone:</strong> ${patient.telephone || '-'}</div>
-                <div><strong>Email:</strong> ${patient.email || '-'}</div>
+                <div class="info-card"><strong>📅 Date de naissance:</strong> ${new Date(patient.date_naissance).toLocaleDateString('fr-FR')}</div>
+                <div class="info-card"><strong>⚧ Sexe:</strong> ${patient.sexe === 'M' ? 'Masculin' : 'Féminin'}</div>
+                <div class="info-card"><strong>📞 Téléphone:</strong> ${patient.telephone || '-'}</div>
+                <div class="info-card"><strong>📧 Email:</strong> ${patient.email || '-'}</div>
             `;
             
             loadEpisodes();
@@ -259,21 +265,21 @@
             const container = document.getElementById('episodesList');
             
             if (episodes.length === 0) {
-                container.innerHTML = '<p class="text-gray-500">Aucun épisode enregistré</p>';
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">😔 Aucun épisode enregistré</p>';
                 return;
             }
             
             container.innerHTML = episodes.map(e => `
-                <div class="border rounded-lg p-4 hover:shadow-md transition cursor-pointer" onclick="showEpisodeDetail(${e.id})">
+                <div class="episode-card" onclick="showEpisodeDetail(${e.id})">
                     <div class="flex justify-between">
                         <div>
-                            <h4 class="font-semibold text-lg">${e.motif || 'Épisode'}</h4>
-                            <p class="text-gray-600 text-sm">${new Date(e.date_episode).toLocaleDateString('fr-FR')}</p>
-                            <p class="text-gray-600 text-sm">${e.diagnostic || ''}</p>
+                            <h4 class="font-semibold text-lg text-gray-800">📋 ${e.motif || 'Épisode'}</h4>
+                            <p class="text-gray-600 text-sm mt-1">📅 ${new Date(e.date_episode).toLocaleDateString('fr-FR')}</p>
+                            <p class="text-gray-700 text-sm mt-1">${e.diagnostic || ''}</p>
                         </div>
-                        <div class="text-sm text-gray-600">
-                            <span class="bg-blue-100 px-2 py-1 rounded">${e.nb_imageries} imagerie(s)</span>
-                            <span class="bg-green-100 px-2 py-1 rounded ml-1">${e.nb_biologies} biologie(s)</span>
+                        <div class="flex flex-col gap-2 text-sm">
+                            <span class="badge badge-info">🔬 ${e.nb_imageries} imagerie(s)</span>
+                            <span class="badge badge-success">🧪 ${e.nb_biologies} biologie(s)</span>
                         </div>
                     </div>
                 </div>
@@ -286,22 +292,22 @@
             const episode = await response.json();
             
             document.getElementById('imagingList').innerHTML = episode.imageries.map(i => `
-                <div class="border rounded p-3 text-sm">
-                    <div><strong>Date:</strong> ${new Date(i.date_examen).toLocaleDateString('fr-FR')}</div>
-                    <div><strong>Taille:</strong> ${i.taille_mm || '-'} mm</div>
-                    <div><strong>Densité:</strong> ${i.densite_uh || '-'} UH</div>
-                    <div><strong>Morphologie:</strong> ${i.morphologie || '-'}</div>
+                <div class="info-card">
+                    <div><strong>📅 Date:</strong> ${new Date(i.date_examen).toLocaleDateString('fr-FR')}</div>
+                    <div><strong>📏 Taille:</strong> ${i.taille_mm || '-'} mm</div>
+                    <div><strong>⚡ Densité:</strong> ${i.densite_uh || '-'} UH</div>
+                    <div><strong>🔍 Morphologie:</strong> ${i.morphologie || '-'}</div>
                 </div>
-            `).join('') || '<p class="text-gray-500">Aucune imagerie</p>';
+            `).join('') || '<p class="text-gray-500">😔 Aucune imagerie</p>';
             
             document.getElementById('biologyList').innerHTML = episode.biologies.map(b => `
-                <div class="border rounded p-3 text-sm">
-                    <div><strong>Date:</strong> ${new Date(b.date_examen).toLocaleDateString('fr-FR')}</div>
-                    <div><strong>pH:</strong> ${b.ph_urinaire || '-'}</div>
-                    <div><strong>Hyperoxalurie:</strong> ${b.hyperoxalurie ? 'Oui' : 'Non'}</div>
-                    <div><strong>Hypercalciurie:</strong> ${b.hypercalciurie ? 'Oui' : 'Non'}</div>
+                <div class="info-card">
+                    <div><strong>📅 Date:</strong> ${new Date(b.date_examen).toLocaleDateString('fr-FR')}</div>
+                    <div><strong>🧪 pH:</strong> ${b.ph_urinaire || '-'}</div>
+                    <div><strong>Hyperoxalurie:</strong> ${b.hyperoxalurie ? '✅ Oui' : '❌ Non'}</div>
+                    <div><strong>Hypercalciurie:</strong> ${b.hypercalciurie ? '✅ Oui' : '❌ Non'}</div>
                 </div>
-            `).join('') || '<p class="text-gray-500">Aucune biologie</p>';
+            `).join('') || '<p class="text-gray-500">😔 Aucune biologie</p>';
             
             document.getElementById('episodeDetailModal').classList.remove('hidden');
         }
@@ -313,44 +319,44 @@
             const result = await response.json();
             
             if (result.error) {
-                document.getElementById('inferenceResult').innerHTML = `<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">${result.error}</div>`;
+                document.getElementById('inferenceResult').innerHTML = `<div style="background: rgba(239, 68, 68, 0.08); border: 2px solid #EF4444; color: #991B1B; padding: 1rem; border-radius: 1rem;">❌ ${result.error}</div>`;
                 return;
             }
             
             document.getElementById('inferenceResult').innerHTML = `
-                <div class="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-300 rounded-lg p-6">
-                    <h4 class="text-2xl font-bold text-purple-900 mb-4">Résultat de l'inférence</h4>
+                <div style="border: 2px dashed #8B5CF6; background: rgba(139, 92, 246, 0.08); border-radius: 1.5rem; padding: 2rem;">
+                    <h4 class="text-2xl font-bold mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🤖 Résultat de l'inférence</h4>
                     
-                    ${result.uncertain ? '<div class="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-2 rounded mb-4">⚠ Résultat incertain, compléter biologie/CT</div>' : ''}
+                    ${result.uncertain ? '<div style="background: rgba(245, 158, 11, 0.08); border: 2px solid #F59E0B; color: #92400E; padding: 0.75rem 1rem; border-radius: 1rem; margin-bottom: 1rem;">⚠️ Résultat incertain, compléter biologie/CT</div>' : ''}
                     
                     <div class="mb-4">
-                        <h5 class="font-bold text-lg mb-2">Type proposé: ${result.top_1}</h5>
-                        <p class="text-gray-700">Score: ${result.top_1_score}/20</p>
+                        <h5 class="font-bold text-lg mb-2">🎯 Type proposé: ${result.top_1}</h5>
+                        <p class="text-gray-700">⭐ Score: ${result.top_1_score}/20</p>
                     </div>
                     
                     <div class="mb-4">
-                        <h5 class="font-semibold mb-2">Justification:</h5>
+                        <h5 class="font-semibold mb-2">📝 Justification:</h5>
                         <ul class="list-disc list-inside space-y-1">
                             ${result.top_1_reasons.map(r => `<li class="text-gray-700">${r}</li>`).join('')}
                         </ul>
                     </div>
                     
                     <div class="mb-4">
-                        <h5 class="font-semibold mb-2">Top 3:</h5>
-                        ${result.top_3.map(([type, score]) => `<div class="flex justify-between py-1"><span>${type}</span><span class="font-mono">${score}/20</span></div>`).join('')}
+                        <h5 class="font-semibold mb-2">📊 Top 3:</h5>
+                        ${result.top_3.map(([type, score]) => `<div class="flex justify-between py-1 px-2 bg-white rounded"><span>${type}</span><span class="font-mono font-bold">${score}/20</span></div>`).join('')}
                     </div>
                     
                     <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div class="bg-white p-3 rounded">
-                            <strong>LEC éligible:</strong> <span class="font-semibold ${result.lec_eligible ? 'text-green-600' : 'text-red-600'}">${result.lec_eligible ? 'Oui' : 'Non'}</span>
+                        <div class="bg-white p-3 rounded-lg">
+                            <strong>⚡ LEC éligible:</strong> <span class="font-semibold ${result.lec_eligible ? 'text-green-600' : 'text-red-600'}">${result.lec_eligible ? '✅ Oui' : '❌ Non'}</span>
                         </div>
-                        <div class="bg-white p-3 rounded">
-                            <strong>Voie de traitement:</strong> ${result.voie_traitement}
+                        <div class="bg-white p-3 rounded-lg">
+                            <strong>🔬 Voie de traitement:</strong> ${result.voie_traitement}
                         </div>
                     </div>
                     
-                    <div class="bg-white p-4 rounded">
-                        <h5 class="font-semibold mb-2">Prévention:</h5>
+                    <div class="bg-white p-4 rounded-lg">
+                        <h5 class="font-semibold mb-2">🛡️ Prévention:</h5>
                         <ul class="list-disc list-inside space-y-1">
                             ${result.prevention.map(p => `<li class="text-gray-700">${p}</li>`).join('')}
                         </ul>
@@ -391,6 +397,14 @@
         async function exportPDF() {
             window.open(`/api/patients/${patientId}/export/pdf`, '_blank');
         }
+        
+        ['newEpisodeModal', 'episodeDetailModal', 'newImagingModal', 'newBiologyModal'].forEach(modalId => {
+            document.getElementById(modalId).addEventListener('click', (e) => {
+                if (e.target.id === modalId) {
+                    document.getElementById(modalId).classList.add('hidden');
+                }
+            });
+        });
         
         document.getElementById('newEpisodeForm').addEventListener('submit', async (e) => {
             e.preventDefault();

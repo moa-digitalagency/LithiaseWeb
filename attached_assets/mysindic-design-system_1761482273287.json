@@ -1,0 +1,596 @@
+{
+  "name": "MySindic Design System",
+  "version": "1.0.0",
+  "description": "Système de design moderne et épuré pour applications de gestion avec un style friendly et professionnel",
+  
+  "brand": {
+    "name": "MySindic",
+    "tagline": "Gestion Moderne de Copropriété",
+    "emoji": "🏢",
+    "personality": "Moderne, accessible, professionnel avec une touche friendly"
+  },
+
+  "colors": {
+    "primary": {
+      "name": "Indigo-Purple Gradient",
+      "main": "#667eea",
+      "dark": "#764ba2",
+      "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      "usage": "Boutons principaux, titres importants, accents"
+    },
+    "secondary": {
+      "indigo": {
+        "50": "#F8F9FF",
+        "100": "#E0E7FF",
+        "500": "#6366F1",
+        "600": "#4F46E5",
+        "700": "#4338CA"
+      },
+      "purple": {
+        "500": "#8B5CF6",
+        "600": "#7C3AED"
+      }
+    },
+    "semantic": {
+      "success": {
+        "light": "#D1FAE5",
+        "main": "#10B981",
+        "dark": "#065F46",
+        "background": "rgba(16, 185, 129, 0.08)",
+        "usage": "Confirmations, validations, paiements réussis"
+      },
+      "warning": {
+        "light": "#FEF3C7",
+        "main": "#F59E0B",
+        "dark": "#92400E",
+        "background": "rgba(245, 158, 11, 0.08)",
+        "usage": "Alertes, actions à faire, rappels"
+      },
+      "danger": {
+        "light": "#FEE2E2",
+        "main": "#EF4444",
+        "dark": "#991B1B",
+        "background": "rgba(239, 68, 68, 0.08)",
+        "usage": "Erreurs, actions destructives, urgences"
+      },
+      "info": {
+        "light": "#DBEAFE",
+        "main": "#3B82F6",
+        "dark": "#1E40AF",
+        "background": "rgba(59, 130, 246, 0.08)",
+        "usage": "Informations, statistiques, détails"
+      }
+    },
+    "neutral": {
+      "50": "#F9FAFB",
+      "100": "#F3F4F6",
+      "200": "#E5E7EB",
+      "300": "#D1D5DB",
+      "400": "#9CA3AF",
+      "500": "#6B7280",
+      "600": "#4B5563",
+      "700": "#374151",
+      "800": "#1F2937",
+      "900": "#111827"
+    },
+    "backgrounds": {
+      "page": "#F9FAFB",
+      "gradient": "linear-gradient(to bottom right, #EFF6FF, #E0E7FF)",
+      "card": "#FFFFFF",
+      "hover": "rgba(102, 126, 234, 0.05)"
+    }
+  },
+
+  "typography": {
+    "fontFamily": {
+      "primary": "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+      "monospace": "'Courier New', monospace"
+    },
+    "fontSize": {
+      "xs": "0.75rem",
+      "sm": "0.875rem",
+      "base": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem",
+      "5xl": "3rem"
+    },
+    "fontWeight": {
+      "normal": "400",
+      "medium": "500",
+      "semibold": "600",
+      "bold": "700"
+    },
+    "lineHeight": {
+      "tight": "1.25",
+      "normal": "1.5",
+      "relaxed": "1.75"
+    }
+  },
+
+  "spacing": {
+    "xs": "0.25rem",
+    "sm": "0.5rem",
+    "md": "1rem",
+    "lg": "1.5rem",
+    "xl": "2rem",
+    "2xl": "3rem",
+    "3xl": "4rem",
+    "description": "Espacement généreux pour un look moderne et aéré"
+  },
+
+  "borderRadius": {
+    "sm": "0.5rem",
+    "md": "1rem",
+    "lg": "1.5rem",
+    "xl": "2rem",
+    "2xl": "3rem",
+    "full": "9999px",
+    "description": "Bordures arrondies prononcées pour un style moderne et doux"
+  },
+
+  "borders": {
+    "width": {
+      "thin": "1px",
+      "medium": "2px",
+      "thick": "4px"
+    },
+    "style": {
+      "solid": "solid",
+      "dashed": "dashed",
+      "none": "none"
+    },
+    "usage": {
+      "cards": "2px dashed pour les cartes statistiques",
+      "buttons": "2px solid pour tous les boutons",
+      "inputs": "2px solid pour les champs de formulaire",
+      "dividers": "1px solid pour les séparateurs"
+    }
+  },
+
+  "shadows": {
+    "sm": "0 2px 8px rgba(0, 0, 0, 0.04)",
+    "md": "0 4px 16px rgba(0, 0, 0, 0.08)",
+    "lg": "0 12px 24px rgba(0, 0, 0, 0.15)",
+    "xl": "0 24px 48px rgba(0, 0, 0, 0.12)",
+    "focus": "0 0 0 4px rgba(102, 126, 234, 0.1)",
+    "description": "Ombres douces et subtiles pour de la profondeur sans être agressif"
+  },
+
+  "animations": {
+    "fadeIn": {
+      "duration": "0.6s",
+      "easing": "ease-out",
+      "keyframes": {
+        "from": {
+          "opacity": 0,
+          "transform": "translateY(20px)"
+        },
+        "to": {
+          "opacity": 1,
+          "transform": "translateY(0)"
+        }
+      }
+    },
+    "slideIn": {
+      "duration": "0.3s",
+      "easing": "ease-out",
+      "keyframes": {
+        "from": {
+          "opacity": 0,
+          "transform": "translateX(100%)"
+        },
+        "to": {
+          "opacity": 1,
+          "transform": "translateX(0)"
+        }
+      }
+    },
+    "spin": {
+      "duration": "1.5s",
+      "easing": "linear",
+      "infinite": true,
+      "keyframes": {
+        "from": {
+          "transform": "rotate(0deg)"
+        },
+        "to": {
+          "transform": "rotate(360deg)"
+        }
+      }
+    },
+    "transitions": {
+      "fast": "all 0.15s ease-in-out",
+      "normal": "all 0.3s ease",
+      "slow": "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+    }
+  },
+
+  "components": {
+    "buttons": {
+      "base": {
+        "display": "inline-flex",
+        "alignItems": "center",
+        "justifyContent": "center",
+        "padding": "0.75rem 1.5rem",
+        "fontSize": "0.875rem",
+        "fontWeight": "600",
+        "borderRadius": "1rem",
+        "borderWidth": "2px",
+        "borderStyle": "solid",
+        "transition": "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+        "cursor": "pointer"
+      },
+      "variants": {
+        "primary": {
+          "borderColor": "#667eea",
+          "color": "#667eea",
+          "background": "transparent",
+          "hover": {
+            "background": "rgba(102, 126, 234, 0.05)",
+            "borderColor": "#764ba2",
+            "color": "#764ba2",
+            "transform": "translateY(-2px)"
+          },
+          "focus": {
+            "outline": "none",
+            "background": "rgba(102, 126, 234, 0.08)"
+          }
+        },
+        "secondary": {
+          "borderColor": "#6B7280",
+          "color": "#374151",
+          "background": "transparent",
+          "hover": {
+            "background": "rgba(107, 114, 128, 0.05)",
+            "borderColor": "#374151",
+            "transform": "translateY(-2px)"
+          }
+        },
+        "success": {
+          "borderColor": "#10B981",
+          "color": "#10B981",
+          "background": "transparent",
+          "hover": {
+            "background": "rgba(16, 185, 129, 0.08)",
+            "transform": "translateY(-2px)"
+          }
+        },
+        "danger": {
+          "borderColor": "#EF4444",
+          "color": "#EF4444",
+          "background": "transparent",
+          "hover": {
+            "background": "rgba(239, 68, 68, 0.08)",
+            "transform": "translateY(-2px)"
+          }
+        },
+        "warning": {
+          "borderColor": "#F59E0B",
+          "color": "#F59E0B",
+          "background": "transparent",
+          "hover": {
+            "background": "rgba(245, 158, 11, 0.08)",
+            "transform": "translateY(-2px)"
+          }
+        },
+        "info": {
+          "borderColor": "#3B82F6",
+          "color": "#3B82F6",
+          "background": "transparent",
+          "hover": {
+            "background": "rgba(59, 130, 246, 0.08)",
+            "transform": "translateY(-2px)"
+          }
+        }
+      }
+    },
+    "cards": {
+      "base": {
+        "backgroundColor": "#FFFFFF",
+        "boxShadow": "0 4px 16px rgba(0, 0, 0, 0.08)",
+        "borderRadius": "1.5rem",
+        "padding": "1.5rem",
+        "transition": "all 0.3s ease"
+      },
+      "stat": {
+        "borderWidth": "2px",
+        "borderStyle": "dashed",
+        "borderRadius": "1.5rem",
+        "padding": "1.5rem",
+        "transition": "all 0.3s ease",
+        "variants": {
+          "blue": {
+            "background": "rgba(59, 130, 246, 0.08)",
+            "borderColor": "#3B82F6"
+          },
+          "green": {
+            "background": "rgba(16, 185, 129, 0.08)",
+            "borderColor": "#10B981"
+          },
+          "purple": {
+            "background": "rgba(139, 92, 246, 0.08)",
+            "borderColor": "#8B5CF6"
+          },
+          "orange": {
+            "background": "rgba(245, 158, 11, 0.08)",
+            "borderColor": "#F59E0B"
+          },
+          "red": {
+            "background": "rgba(239, 68, 68, 0.08)",
+            "borderColor": "#EF4444"
+          },
+          "indigo": {
+            "background": "rgba(99, 102, 241, 0.08)",
+            "borderColor": "#6366F1"
+          }
+        }
+      },
+      "feature": {
+        "borderWidth": "2px",
+        "borderStyle": "dashed",
+        "borderRadius": "3rem",
+        "padding": "2rem",
+        "transition": "all 0.3s ease",
+        "hover": {
+          "transform": "translateY(-8px)",
+          "boxShadow": "0 12px 24px rgba(0, 0, 0, 0.15)"
+        }
+      },
+      "hover": {
+        "transform": "translateY(-4px)",
+        "boxShadow": "0 12px 24px rgba(0, 0, 0, 0.15)"
+      }
+    },
+    "inputs": {
+      "base": {
+        "display": "block",
+        "width": "100%",
+        "borderRadius": "1rem",
+        "borderWidth": "2px",
+        "borderStyle": "solid",
+        "borderColor": "#E5E7EB",
+        "padding": "0.75rem 1rem",
+        "fontSize": "0.875rem",
+        "boxShadow": "0 2px 8px rgba(0, 0, 0, 0.04)",
+        "transition": "all 0.3s ease"
+      },
+      "focus": {
+        "outline": "none",
+        "borderColor": "#667eea",
+        "boxShadow": "0 0 0 4px rgba(102, 126, 234, 0.1)",
+        "transform": "translateY(-1px)"
+      },
+      "label": {
+        "display": "block",
+        "fontSize": "0.875rem",
+        "fontWeight": "500",
+        "color": "#374151",
+        "marginBottom": "0.25rem"
+      }
+    },
+    "badges": {
+      "base": {
+        "display": "inline-flex",
+        "alignItems": "center",
+        "padding": "0.125rem 0.625rem",
+        "borderRadius": "9999px",
+        "fontSize": "0.75rem",
+        "fontWeight": "500"
+      },
+      "variants": {
+        "success": {
+          "backgroundColor": "#D1FAE5",
+          "color": "#065F46"
+        },
+        "warning": {
+          "backgroundColor": "#FEF3C7",
+          "color": "#92400E"
+        },
+        "danger": {
+          "backgroundColor": "#FEE2E2",
+          "color": "#991B1B"
+        },
+        "info": {
+          "backgroundColor": "#DBEAFE",
+          "color": "#1E40AF"
+        }
+      }
+    },
+    "modals": {
+      "backdrop": {
+        "position": "fixed",
+        "inset": 0,
+        "backgroundColor": "rgba(0, 0, 0, 0.5)",
+        "display": "flex",
+        "alignItems": "center",
+        "justifyContent": "center",
+        "zIndex": 50
+      },
+      "content": {
+        "backgroundColor": "#FFFFFF",
+        "borderRadius": "2rem",
+        "boxShadow": "0 24px 48px rgba(0, 0, 0, 0.12)",
+        "maxWidth": "42rem",
+        "width": "100%",
+        "maxHeight": "90vh",
+        "overflowY": "auto"
+      }
+    },
+    "tables": {
+      "base": {
+        "width": "100%",
+        "borderCollapse": "collapse"
+      },
+      "header": {
+        "backgroundColor": "#F9FAFB",
+        "padding": "0.75rem",
+        "textAlign": "left",
+        "fontSize": "0.875rem",
+        "fontWeight": "600",
+        "color": "#111827"
+      },
+      "row": {
+        "backgroundColor": "#FFFFFF",
+        "borderBottom": "1px solid #E5E7EB"
+      },
+      "cell": {
+        "padding": "1rem 0.75rem",
+        "fontSize": "0.875rem",
+        "color": "#6B7280"
+      }
+    },
+    "tabs": {
+      "list": {
+        "borderBottom": "1px solid #E5E7EB"
+      },
+      "button": {
+        "display": "inline-block",
+        "padding": "0.5rem 1rem",
+        "fontSize": "0.875rem",
+        "fontWeight": "500",
+        "borderBottom": "2px solid transparent",
+        "transition": "all 0.15s ease-in-out"
+      },
+      "active": {
+        "borderBottomColor": "#4F46E5",
+        "color": "#4F46E5"
+      },
+      "inactive": {
+        "color": "#6B7280",
+        "hover": {
+          "color": "#374151",
+          "borderBottomColor": "#D1D5DB"
+        }
+      }
+    }
+  },
+
+  "iconography": {
+    "style": "Emojis pour un look friendly et universel",
+    "examples": {
+      "finance": "💰",
+      "maintenance": "🔧",
+      "votes": "🗳️",
+      "documents": "📄",
+      "mobile": "📱",
+      "stats": "📊",
+      "building": "🏢",
+      "news": "📰",
+      "maintenance_log": "📓"
+    },
+    "fallback": "SVG icons depuis Feather Icons ou Font Awesome si besoin"
+  },
+
+  "layout": {
+    "maxWidth": {
+      "sm": "640px",
+      "md": "768px",
+      "lg": "1024px",
+      "xl": "1280px",
+      "container": "1280px"
+    },
+    "padding": {
+      "mobile": "1.5rem",
+      "tablet": "2rem",
+      "desktop": "1.5rem"
+    },
+    "grid": {
+      "columns": "12",
+      "gap": {
+        "sm": "1rem",
+        "md": "1.5rem",
+        "lg": "2rem"
+      }
+    }
+  },
+
+  "breakpoints": {
+    "sm": "640px",
+    "md": "768px",
+    "lg": "1024px",
+    "xl": "1280px",
+    "2xl": "1536px"
+  },
+
+  "accessibility": {
+    "focusRing": "0 0 0 4px rgba(102, 126, 234, 0.1)",
+    "tapHighlight": "transparent",
+    "minTouchTarget": "44px",
+    "textContrast": "WCAG AA minimum"
+  },
+
+  "designPrinciples": [
+    "Moderne et épuré avec des formes arrondies généreuses",
+    "Transparence et légèreté via rgba() avec faible opacité",
+    "Bordures variées: dashed pour les stats/features, solid pour les boutons",
+    "Animations douces et subtiles pour améliorer l'UX",
+    "Palette cohérente centrée sur indigo-purple gradient",
+    "Emojis pour humaniser l'interface",
+    "Espacement généreux pour respiration visuelle",
+    "Ombres douces pour de la profondeur sans agressivité",
+    "Hover effects avec translateY pour le feedback interactif",
+    "Mobile-first et responsive"
+  ],
+
+  "usageExamples": {
+    "primaryButton": {
+      "html": "<button class='btn-primary'>Action</button>",
+      "style": {
+        "padding": "0.75rem 1.5rem",
+        "border": "2px solid #667eea",
+        "borderRadius": "1rem",
+        "color": "#667eea",
+        "background": "transparent",
+        "fontWeight": "600"
+      }
+    },
+    "statCard": {
+      "html": "<div class='stat-card blue'>...</div>",
+      "style": {
+        "background": "rgba(59, 130, 246, 0.08)",
+        "border": "2px dashed #3B82F6",
+        "borderRadius": "1.5rem",
+        "padding": "1.5rem"
+      }
+    },
+    "featureCard": {
+      "html": "<div class='feature-card'>...</div>",
+      "style": {
+        "border": "2px dashed #6366F1",
+        "borderRadius": "3rem",
+        "padding": "2rem",
+        "background": "rgba(99, 102, 241, 0.05)",
+        "transition": "all 0.3s ease",
+        "hoverTransform": "translateY(-8px)"
+      }
+    },
+    "gradientTitle": {
+      "html": "<h1 class='gradient-text'>MySindic</h1>",
+      "style": {
+        "background": "linear-gradient(to right, #667eea, #764ba2)",
+        "backgroundClip": "text",
+        "textFillColor": "transparent"
+      }
+    }
+  },
+
+  "fileStructure": {
+    "recommended": [
+      "css/variables.css - Variables CSS personnalisées",
+      "css/components.css - Styles des composants",
+      "css/utilities.css - Classes utilitaires",
+      "css/animations.css - Animations et transitions"
+    ]
+  },
+
+  "implementationNotes": {
+    "framework": "Compatible avec Tailwind CSS, Bootstrap, ou CSS pur",
+    "browserSupport": "Navigateurs modernes (Chrome, Firefox, Safari, Edge)",
+    "performance": "Utiliser CSS custom properties pour faciliter les thèmes",
+    "darkMode": "Peut être étendu avec un thème sombre en inversant les couleurs neutres",
+    "customization": "Ajuster les valeurs de opacity et border-radius selon le projet"
+  }
+}
