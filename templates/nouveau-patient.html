@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau Patient - Lithiase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/myoneart.css">
+</head>
+<body class="page-bg">
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <h1 class="text-3xl font-bold">💊 Lithiase</h1>
+            <div class="flex items-center space-x-6">
+                <a href="/" class="hover:text-indigo-200 transition-colors font-medium">🏠 Tableau de bord</a>
+                <a href="/search" class="hover:text-indigo-200 transition-colors font-medium">🔍 Recherche avancée</a>
+                <a href="/logout" class="hover:text-indigo-200 transition-colors font-medium">🚪 Déconnexion</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mx-auto p-6 max-w-7xl">
+        <div class="card">
+            <div class="border-b border-gray-200 pb-4 mb-6">
+                <h2 class="text-3xl font-bold text-gray-800">➕ Nouveau Patient</h2>
+                <p class="text-gray-600 mt-2">Remplissez le formulaire ci-dessous pour enregistrer un nouveau patient</p>
+            </div>
+            
+            <form id="newPatientForm" class="space-y-8">
+                <!-- Section: Informations personnelles -->
+                <div class="border-2 border-gray-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">👤</span> Informations personnelles
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nom *</label>
+                            <input type="text" name="nom" required class="input-field">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Prénom *</label>
+                            <input type="text" name="prenom" required class="input-field">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Date de naissance *</label>
+                            <input type="date" name="date_naissance" required class="input-field">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Sexe *</label>
+                            <select name="sexe" required class="input-field">
+                                <option value="M">Masculin</option>
+                                <option value="F">Féminin</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📞 Téléphone</label>
+                            <input type="tel" name="telephone" class="input-field">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📧 Email</label>
+                            <input type="email" name="email" class="input-field">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📍 Adresse</label>
+                            <textarea name="adresse" rows="2" class="input-field"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Anthropométrie -->
+                <div class="border-2 border-gray-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">⚖️</span> Anthropométrie
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">⚖️ Poids (kg)</label>
+                            <input type="number" step="0.1" name="poids" class="input-field" placeholder="Ex: 75.5">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📏 Taille (cm)</label>
+                            <input type="number" step="0.1" name="taille" class="input-field" placeholder="Ex: 175">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">🌍 Groupe ethnique</label>
+                            <input type="text" name="groupe_ethnique" class="input-field" placeholder="Ex: Caucasien, Africain, Asiatique...">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">💧 Hydratation quotidienne (L/jour)</label>
+                        <input type="number" step="0.1" name="hydratation_jour" class="input-field" placeholder="Ex: 2.5">
+                    </div>
+                </div>
+
+                <!-- Section: Antécédents médicaux -->
+                <div class="border-2 border-gray-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">🏥</span> Antécédents médicaux
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📋 Antécédents personnels (Uro, métaboliques, endocrino...)</label>
+                            <textarea name="antecedents_personnels" rows="3" class="input-field" placeholder="Décrivez les antécédents urologiques, métaboliques, endocriniens..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">👨‍👩‍👧‍👦 Antécédents familiaux (lithiase)</label>
+                            <textarea name="antecedents_familiaux" rows="2" class="input-field" placeholder="Historique familial de lithiase..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">🏥 Antécédents chirurgicaux</label>
+                            <textarea name="antecedents_chirurgicaux" rows="2" class="input-field" placeholder="Chirurgies antérieures..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">⚠️ Allergies</label>
+                            <textarea name="allergies" rows="2" class="input-field" placeholder="Allergies médicamenteuses ou autres..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">💊 Traitements chroniques (liste + posologies)</label>
+                            <textarea name="traitements_chroniques" rows="3" class="input-field" placeholder="Médicaments pris régulièrement avec posologies..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Habitudes alimentaires -->
+                <div class="border-2 border-gray-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">🍽️</span> Habitudes alimentaires
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">🍴 Régime alimentaire général</label>
+                            <textarea name="regime_alimentaire" rows="2" class="input-field" placeholder="Régime riche en protéines/sel/oxalate... Précisez les caractéristiques générales"></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">🌅 Petit déjeuner</label>
+                                <textarea name="petit_dejeuner" rows="3" class="input-field" placeholder="Types d'aliments consommés au petit déjeuner..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">☀️ Déjeuner</label>
+                                <textarea name="dejeuner" rows="3" class="input-field" placeholder="Types d'aliments consommés au déjeuner..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">🌙 Dîner</label>
+                                <textarea name="diner" rows="3" class="input-field" placeholder="Types d'aliments consommés au dîner..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">🍪 Grignotage & goûters</label>
+                                <textarea name="grignotage" rows="3" class="input-field" placeholder="Grignotages, goûters, encas..."></textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">🍷 Autres consommations (apéritifs, boissons...)</label>
+                            <textarea name="autres_consommations" rows="2" class="input-field" placeholder="Apéritifs, boissons spécifiques, autres consommations..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Imagerie médicale -->
+                <div class="border-2 border-gray-200 rounded-lg p-6 bg-blue-50">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">🔬</span> Imagerie médicale
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📋 ASP (Abdomen Sans Préparation)</label>
+                            <textarea name="asp_resultats" rows="3" class="input-field" placeholder="Résultats de la radiographie standard (ASP)..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">🔊 Échographie</label>
+                            <textarea name="echographie_resultats" rows="3" class="input-field" placeholder="Résultats de l'échographie..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">💻 Uro-scanner</label>
+                            <textarea name="uroscanner_resultats" rows="3" class="input-field" placeholder="Résultats de l'uro-scanner..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Résultats de laboratoire -->
+                <div class="border-2 border-gray-200 rounded-lg p-6 bg-green-50">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">🧪</span> Résultats de laboratoire
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">🔬 Sédiment urinaire</label>
+                            <textarea name="sediment_urinaire" rows="2" class="input-field" placeholder="Résultats du sédiment urinaire..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">🦠 ECBU (Examen Cytobactériologique Urinaire)</label>
+                            <textarea name="ecbu_resultats" rows="2" class="input-field" placeholder="Résultats de l'ECBU..."></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">⚗️ pH urinaire</label>
+                                <input type="number" step="0.1" name="ph_urinaire" class="input-field" placeholder="Ex: 6.5">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">💧 Densité urinaire</label>
+                                <input type="number" step="0.001" name="densite_urinaire" class="input-field" placeholder="Ex: 1.020">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Détails des calculs -->
+                <div class="border-2 border-gray-200 rounded-lg p-6 bg-purple-50">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">💎</span> Détails des calculs rénaux
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">🔢 Nombre de calculs</label>
+                                <input type="number" name="nombre_calculs" class="input-field" placeholder="Ex: 2">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">📍 Situation du calcul</label>
+                                <input type="text" name="situation_calcul" class="input-field" placeholder="Ex: Rein droit, gauche, bilatéral...">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">🗺️ Topographie du calcul</label>
+                            <input type="text" name="topographie_calcul" class="input-field" placeholder="Ex: Calice supérieur, moyen, inférieur, pyélon, uretère...">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">📏 Diamètre longitudinal (mm)</label>
+                                <input type="number" step="0.1" name="diametre_longitudinal" class="input-field" placeholder="Ex: 12.5">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">📐 Diamètre transversal (mm)</label>
+                                <input type="number" step="0.1" name="diametre_transversal" class="input-field" placeholder="Ex: 8.3">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">🔶 Forme du calcul</label>
+                                <input type="text" name="forme_calcul" class="input-field" placeholder="Ex: Rond, ovale, irrégulier, coralliforme...">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">⭕ Contour du calcul</label>
+                                <input type="text" name="contour_calcul" class="input-field" placeholder="Ex: Régulier, irrégulier, lisse, spiculé...">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">💠 Densité du noyau (UH)</label>
+                                <input type="number" name="densite_noyau" class="input-field" placeholder="Ex: 800">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">🎨 Densités des différentes couches</label>
+                                <input type="text" name="densites_couches" class="input-field" placeholder="Ex: Noyau 800 UH, couche 1: 650 UH, couche 2: 550 UH...">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">🩺 Autres calcifications (paroi vasculaire, ganglions, score calcique coronaire...)</label>
+                            <textarea name="calcifications_autres" rows="2" class="input-field" placeholder="Décrivez les autres calcifications observées..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Notes -->
+                <div class="border-2 border-gray-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">📝</span> Notes complémentaires
+                    </h3>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Notes libres</label>
+                        <textarea name="notes" rows="4" class="input-field" placeholder="Informations complémentaires, observations particulières..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="flex justify-end space-x-4 pt-4 border-t border-gray-200">
+                    <a href="/" class="btn btn-secondary">
+                        Annuler
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        ✓ Créer le patient
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('newPatientForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                const response = await fetch('/api/patients', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    alert('✓ Patient créé avec succès!');
+                    window.location.href = '/patient/' + result.id;
+                } else {
+                    const error = await response.json();
+                    alert('❌ Erreur lors de la création du patient: ' + (error.error || 'Erreur inconnue'));
+                }
+            } catch (error) {
+                alert('❌ Erreur de connexion au serveur');
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

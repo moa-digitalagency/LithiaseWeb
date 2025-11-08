@@ -40,3 +40,8 @@ def patient_page(patient_id):
 @login_required
 def search_page():
     return render_template('search.html')
+
+@bp.route('/nouveau-patient')
+@login_required
+def nouveau_patient_page():
+    return render_template('nouveau-patient.html')

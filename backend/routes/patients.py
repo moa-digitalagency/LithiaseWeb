@@ -40,6 +40,23 @@ def patients():
         patient.diner = data.get('diner')
         patient.grignotage = data.get('grignotage')
         patient.autres_consommations = data.get('autres_consommations')
+        patient.asp_resultats = data.get('asp_resultats')
+        patient.echographie_resultats = data.get('echographie_resultats')
+        patient.uroscanner_resultats = data.get('uroscanner_resultats')
+        patient.sediment_urinaire = data.get('sediment_urinaire')
+        patient.ecbu_resultats = data.get('ecbu_resultats')
+        patient.ph_urinaire = data.get('ph_urinaire')
+        patient.densite_urinaire = data.get('densite_urinaire')
+        patient.nombre_calculs = data.get('nombre_calculs')
+        patient.situation_calcul = data.get('situation_calcul')
+        patient.topographie_calcul = data.get('topographie_calcul')
+        patient.diametre_longitudinal = data.get('diametre_longitudinal')
+        patient.diametre_transversal = data.get('diametre_transversal')
+        patient.forme_calcul = data.get('forme_calcul')
+        patient.contour_calcul = data.get('contour_calcul')
+        patient.densite_noyau = data.get('densite_noyau')
+        patient.densites_couches = data.get('densites_couches')
+        patient.calcifications_autres = data.get('calcifications_autres')
         patient.notes = data.get('notes')
         
         db.session.add(patient)
@@ -101,6 +118,23 @@ def patient_detail(patient_id):
             'diner': patient.diner,
             'grignotage': patient.grignotage,
             'autres_consommations': patient.autres_consommations,
+            'asp_resultats': patient.asp_resultats,
+            'echographie_resultats': patient.echographie_resultats,
+            'uroscanner_resultats': patient.uroscanner_resultats,
+            'sediment_urinaire': patient.sediment_urinaire,
+            'ecbu_resultats': patient.ecbu_resultats,
+            'ph_urinaire': patient.ph_urinaire,
+            'densite_urinaire': patient.densite_urinaire,
+            'nombre_calculs': patient.nombre_calculs,
+            'situation_calcul': patient.situation_calcul,
+            'topographie_calcul': patient.topographie_calcul,
+            'diametre_longitudinal': patient.diametre_longitudinal,
+            'diametre_transversal': patient.diametre_transversal,
+            'forme_calcul': patient.forme_calcul,
+            'contour_calcul': patient.contour_calcul,
+            'densite_noyau': patient.densite_noyau,
+            'densites_couches': patient.densites_couches,
+            'calcifications_autres': patient.calcifications_autres,
             'notes': patient.notes,
             'episodes': [{
                 'id': e.id,
@@ -161,6 +195,40 @@ def patient_detail(patient_id):
             patient.grignotage = data['grignotage']
         if 'autres_consommations' in data:
             patient.autres_consommations = data['autres_consommations']
+        if 'asp_resultats' in data:
+            patient.asp_resultats = data['asp_resultats']
+        if 'echographie_resultats' in data:
+            patient.echographie_resultats = data['echographie_resultats']
+        if 'uroscanner_resultats' in data:
+            patient.uroscanner_resultats = data['uroscanner_resultats']
+        if 'sediment_urinaire' in data:
+            patient.sediment_urinaire = data['sediment_urinaire']
+        if 'ecbu_resultats' in data:
+            patient.ecbu_resultats = data['ecbu_resultats']
+        if 'ph_urinaire' in data:
+            patient.ph_urinaire = data['ph_urinaire']
+        if 'densite_urinaire' in data:
+            patient.densite_urinaire = data['densite_urinaire']
+        if 'nombre_calculs' in data:
+            patient.nombre_calculs = data['nombre_calculs']
+        if 'situation_calcul' in data:
+            patient.situation_calcul = data['situation_calcul']
+        if 'topographie_calcul' in data:
+            patient.topographie_calcul = data['topographie_calcul']
+        if 'diametre_longitudinal' in data:
+            patient.diametre_longitudinal = data['diametre_longitudinal']
+        if 'diametre_transversal' in data:
+            patient.diametre_transversal = data['diametre_transversal']
+        if 'forme_calcul' in data:
+            patient.forme_calcul = data['forme_calcul']
+        if 'contour_calcul' in data:
+            patient.contour_calcul = data['contour_calcul']
+        if 'densite_noyau' in data:
+            patient.densite_noyau = data['densite_noyau']
+        if 'densites_couches' in data:
+            patient.densites_couches = data['densites_couches']
+        if 'calcifications_autres' in data:
+            patient.calcifications_autres = data['calcifications_autres']
         if 'notes' in data:
             patient.notes = data['notes']
         

@@ -47,6 +47,26 @@ class Patient(db.Model):
     _grignotage = db.Column('grignotage', db.Text)
     _autres_consommations = db.Column('autres_consommations', db.Text)
     
+    _asp_resultats = db.Column('asp_resultats', db.Text)
+    _echographie_resultats = db.Column('echographie_resultats', db.Text)
+    _uroscanner_resultats = db.Column('uroscanner_resultats', db.Text)
+    
+    _sediment_urinaire = db.Column('sediment_urinaire', db.Text)
+    _ecbu_resultats = db.Column('ecbu_resultats', db.Text)
+    ph_urinaire = db.Column(db.Float)
+    densite_urinaire = db.Column(db.Float)
+    
+    nombre_calculs = db.Column(db.Integer)
+    _situation_calcul = db.Column('situation_calcul', db.Text)
+    _topographie_calcul = db.Column('topographie_calcul', db.Text)
+    diametre_longitudinal = db.Column(db.Float)
+    diametre_transversal = db.Column(db.Float)
+    _forme_calcul = db.Column('forme_calcul', db.Text)
+    _contour_calcul = db.Column('contour_calcul', db.Text)
+    densite_noyau = db.Column(db.Integer)
+    _densites_couches = db.Column('densites_couches', db.Text)
+    _calcifications_autres = db.Column('calcifications_autres', db.Text)
+    
     _notes = db.Column('notes', db.Text)
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -189,6 +209,94 @@ class Patient(db.Model):
     @autres_consommations.setter
     def autres_consommations(self, value):
         self._autres_consommations = encryption_manager.encrypt(value)
+    
+    @property
+    def asp_resultats(self):
+        return encryption_manager.decrypt(self._asp_resultats)
+    
+    @asp_resultats.setter
+    def asp_resultats(self, value):
+        self._asp_resultats = encryption_manager.encrypt(value)
+    
+    @property
+    def echographie_resultats(self):
+        return encryption_manager.decrypt(self._echographie_resultats)
+    
+    @echographie_resultats.setter
+    def echographie_resultats(self, value):
+        self._echographie_resultats = encryption_manager.encrypt(value)
+    
+    @property
+    def uroscanner_resultats(self):
+        return encryption_manager.decrypt(self._uroscanner_resultats)
+    
+    @uroscanner_resultats.setter
+    def uroscanner_resultats(self, value):
+        self._uroscanner_resultats = encryption_manager.encrypt(value)
+    
+    @property
+    def sediment_urinaire(self):
+        return encryption_manager.decrypt(self._sediment_urinaire)
+    
+    @sediment_urinaire.setter
+    def sediment_urinaire(self, value):
+        self._sediment_urinaire = encryption_manager.encrypt(value)
+    
+    @property
+    def ecbu_resultats(self):
+        return encryption_manager.decrypt(self._ecbu_resultats)
+    
+    @ecbu_resultats.setter
+    def ecbu_resultats(self, value):
+        self._ecbu_resultats = encryption_manager.encrypt(value)
+    
+    @property
+    def situation_calcul(self):
+        return encryption_manager.decrypt(self._situation_calcul)
+    
+    @situation_calcul.setter
+    def situation_calcul(self, value):
+        self._situation_calcul = encryption_manager.encrypt(value)
+    
+    @property
+    def topographie_calcul(self):
+        return encryption_manager.decrypt(self._topographie_calcul)
+    
+    @topographie_calcul.setter
+    def topographie_calcul(self, value):
+        self._topographie_calcul = encryption_manager.encrypt(value)
+    
+    @property
+    def forme_calcul(self):
+        return encryption_manager.decrypt(self._forme_calcul)
+    
+    @forme_calcul.setter
+    def forme_calcul(self, value):
+        self._forme_calcul = encryption_manager.encrypt(value)
+    
+    @property
+    def contour_calcul(self):
+        return encryption_manager.decrypt(self._contour_calcul)
+    
+    @contour_calcul.setter
+    def contour_calcul(self, value):
+        self._contour_calcul = encryption_manager.encrypt(value)
+    
+    @property
+    def densites_couches(self):
+        return encryption_manager.decrypt(self._densites_couches)
+    
+    @densites_couches.setter
+    def densites_couches(self, value):
+        self._densites_couches = encryption_manager.encrypt(value)
+    
+    @property
+    def calcifications_autres(self):
+        return encryption_manager.decrypt(self._calcifications_autres)
+    
+    @calcifications_autres.setter
+    def calcifications_autres(self, value):
+        self._calcifications_autres = encryption_manager.encrypt(value)
 
 class Episode(db.Model):
     __tablename__ = 'episodes'
