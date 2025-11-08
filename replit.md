@@ -92,14 +92,24 @@ Application web mono-médecin pour la gestion des dossiers patients souffrant de
   - Section notes (affichage conditionnel)
   - Affichage conditionnel de toutes les sections (ne montre que les champs remplis)
   - Intégration harmonieuse avec les épisodes, imageries, biologies et moteur d'inférence
+- **✅ COMPLÉTÉ** (08/11/2025): Extensions pour analyse par IA des calculs rénaux
+  - **Modèle Patient étendu** : 9 nouveaux champs chiffrés (poids, taille, groupe ethnique, petit_dejeuner, dejeuner, diner, grignotage, autres_consommations)
+  - **Modèle Imagerie étendu** : 13 nouveaux champs (asp_resultats, echographie_resultats, uroscanner_resultats, nombre_calculs, situation_calculs, topographie_calculs, dimensions_calculs, forme_calculs, contours_calculs, densite_noyau, densite_couches, calcifications_autres)
+  - **Modèle Biologie étendu** : 3 nouveaux champs chiffrés (densite_urinaire, sediment_urinaire, ecbu_resultats)
+  - **Dashboard amélioré** : Statistiques temps réel (total patients, épisodes, IMC moyen, dossiers prêts pour IA)
+  - **Formulaire patient enrichi** : Intégration complète des nouvelles données anthropométriques et alimentaires
+  - **Page patient augmentée** : Affichage IMC automatique, détails alimentaires complets, informations imagerie détaillées
+  - **Système d'explication** : Documentation intégrée du système de notation de l'algorithme d'inférence (20 points)
+  - **Total champs chiffrés** : 25+ champs sensibles protégés par Fernet AES-128
+  - **Validation** : Architecture revue et approuvée par architect (PASS)
 
 ## Sécurité
 - Authentification simple mono-utilisateur (Flask-Login)
 - Hachage des mots de passe (Werkzeug PBKDF2)
 - **Chiffrement des données de santé** (Fernet AES-128 + HMAC)
-- 17 champs sensibles chiffrés en base de données
+- **25+ champs sensibles chiffrés** en base de données (données personnelles, médicales, anthropométriques, alimentaires)
 - Clé de chiffrement configurable via ENCRYPTION_KEY
 - Conformité RGPD pour la protection des données personnelles
-- Base de données SQLite
+- Base de données SQLite avec colonnes chiffrées
 - Session locale sécurisée
 - Variables d'environnement pour credentials (ADMIN_USERNAME, ADMIN_PASSWORD)
