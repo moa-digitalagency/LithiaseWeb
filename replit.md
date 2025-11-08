@@ -102,6 +102,16 @@ Application web mono-médecin pour la gestion des dossiers patients souffrant de
   - **Système d'explication** : Documentation intégrée du système de notation de l'algorithme d'inférence (20 points)
   - **Total champs chiffrés** : 25+ champs sensibles protégés par Fernet AES-128
   - **Validation** : Architecture revue et approuvée par architect (PASS)
+- **✅ COMPLÉTÉ** (08/11/2025): Transformation du formulaire patient en page complète
+  - **Page dédiée** : nouveau-patient.html - formulaire complet sur une page dédiée (plus de modal popup)
+  - **Navigation** : Lien "Nouveau Patient" dans le dashboard redirige vers /nouveau-patient
+  - **Extension modèle Patient** : Tous les champs imagerie et laboratoire directement dans le modèle Patient (asp_resultats, echographie_resultats, uroscanner_resultats, sediment_urinaire, ecbu_resultats, ph_urinaire, densite_urinaire, nombre_calculs, situation_calcul, topographie_calcul, diametre_longitudinal, diametre_transversal, forme_calcul, contour_calcul, densite_noyau, densites_couches, calcifications_autres)
+  - **Sections organisées** : Informations personnelles, anthropométrie, antécédents médicaux, habitudes alimentaires, imagerie médicale, résultats de laboratoire, détails des calculs
+  - **Styling** : Border-radius réduit à 0.5rem pour tous les champs de formulaire
+  - **Backend** : Routes /nouveau-patient (GET) et /api/patients (POST/GET/PUT) gèrent tous les nouveaux champs
+  - **Chiffrement** : Tous les champs sensibles sont chiffrés avec Fernet AES-128
+  - **Tests** : Création et récupération de patient avec tous les champs validés en end-to-end
+  - **Validation** : Architecture complète validée par architect (PASS)
 
 ## Sécurité
 - Authentification simple mono-utilisateur (Flask-Login)
