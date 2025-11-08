@@ -138,6 +138,19 @@
                 </div>
                 
                 <div class="mt-6 pt-6 border-t border-gray-200">
+                    <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <h5 class="font-bold text-blue-900 mb-2">ℹ️ À propos de l'algorithme d'inférence</h5>
+                        <p class="text-sm text-blue-800 mb-2">L'algorithme utilise un système de notation sur 20 points basé sur :</p>
+                        <ul class="text-sm text-blue-800 list-disc list-inside space-y-1">
+                            <li><strong>Densité scanner (max 6 pts)</strong> : Plage typique pour chaque type de calcul</li>
+                            <li><strong>Morphologie (max 3 pts)</strong> : Forme caractéristique ou compatible</li>
+                            <li><strong>pH urinaire (max 3 pts)</strong> : Plage préférentielle selon le type</li>
+                            <li><strong>Marqueurs métaboliques (max 4 pts)</strong> : Hyperoxalurie, hypercalciurie, etc.</li>
+                            <li><strong>Infection urinaire (max 3 pts)</strong> : Favorable ou défavorable selon le type</li>
+                            <li><strong>Radio-opacité (max 1 pt)</strong> : Opaque ou transparent</li>
+                        </ul>
+                        <p class="text-sm text-blue-800 mt-2">Le type de calcul avec le score le plus élevé est proposé, avec indication si le diagnostic est incertain.</p>
+                    </div>
                     <button onclick="runInference()" class="btn btn-purple py-3 px-6 text-base">
                         🤖 Calculer le type de calcul
                     </button>
@@ -273,11 +286,16 @@
             document.getElementById('patientName').textContent = `👤 ${patient.nom} ${patient.prenom}`;
             
             // Informations personnelles
+            const bmi = patient.poids && patient.taille ? (patient.poids / Math.pow(patient.taille / 100, 2)).toFixed(1) : null;
             document.getElementById('patientInfo').innerHTML = `
                 <div class="info-card"><strong>📅 Date de naissance:</strong> ${new Date(patient.date_naissance).toLocaleDateString('fr-FR')}</div>
                 <div class="info-card"><strong>⚧ Sexe:</strong> ${patient.sexe === 'M' ? 'Masculin' : 'Féminin'}</div>
                 <div class="info-card"><strong>📞 Téléphone:</strong> ${patient.telephone || '-'}</div>
                 <div class="info-card"><strong>📧 Email:</strong> ${patient.email || '-'}</div>
+                ${patient.poids ? `<div class="info-card"><strong>⚖️ Poids:</strong> ${patient.poids} kg</div>` : ''}
+                ${patient.taille ? `<div class="info-card"><strong>📏 Taille:</strong> ${patient.taille} cm</div>` : ''}
+                ${bmi ? `<div class="info-card"><strong>📊 IMC:</strong> ${bmi}</div>` : ''}
+                ${patient.groupe_ethnique ? `<div class="info-card"><strong>🌍 Groupe ethnique:</strong> ${patient.groupe_ethnique}</div>` : ''}
                 ${patient.adresse ? `<div class="info-card col-span-2"><strong>📍 Adresse:</strong> ${patient.adresse}</div>` : ''}
             `;
             
@@ -291,9 +309,18 @@
             `;
             
             // Facteurs de risque & Hygiène de vie
+            const dietaryHabitsHTML = [];
+            if (patient.petit_dejeuner) dietaryHabitsHTML.push(`<div class="info-card"><strong>🌅 Petit déjeuner:</strong> ${patient.petit_dejeuner}</div>`);
+            if (patient.dejeuner) dietaryHabitsHTML.push(`<div class="info-card"><strong>☀️ Déjeuner:</strong> ${patient.dejeuner}</div>`);
+            if (patient.diner) dietaryHabitsHTML.push(`<div class="info-card"><strong>🌙 Dîner:</strong> ${patient.diner}</div>`);
+            if (patient.grignotage) dietaryHabitsHTML.push(`<div class="info-card"><strong>🍪 Grignotage:</strong> ${patient.grignotage}</div>`);
+            if (patient.autres_consommations) dietaryHabitsHTML.push(`<div class="info-card"><strong>🍷 Autres consommations:</strong> ${patient.autres_consommations}</div>`);
+            
             document.getElementById('patientRiskFactors').innerHTML = `
                 ${patient.hydratation_jour ? `<div class="info-card"><strong>💧 Hydratation:</strong> ${patient.hydratation_jour} L/jour</div>` : ''}
-                ${patient.regime_alimentaire ? `<div class="info-card"><strong>🍽️ Régime alimentaire:</strong> ${patient.regime_alimentaire}</div>` : ''}
+                ${patient.regime_alimentaire ? `<div class="info-card col-span-2"><strong>🍽️ Régime alimentaire:</strong> ${patient.regime_alimentaire}</div>` : ''}
+                ${dietaryHabitsHTML.length > 0 ? '<div class="col-span-2 border-t pt-3 mt-3"><h4 class="font-semibold text-gray-800 mb-2">🍴 Habitudes alimentaires détaillées</h4></div>' : ''}
+                ${dietaryHabitsHTML.join('')}
             `;
             
             // Notes

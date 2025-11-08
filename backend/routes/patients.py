@@ -32,6 +32,14 @@ def patients():
         patient.traitements_chroniques = data.get('traitements_chroniques')
         patient.hydratation_jour = data.get('hydratation_jour')
         patient.regime_alimentaire = data.get('regime_alimentaire')
+        patient.poids = data.get('poids')
+        patient.taille = data.get('taille')
+        patient.groupe_ethnique = data.get('groupe_ethnique')
+        patient.petit_dejeuner = data.get('petit_dejeuner')
+        patient.dejeuner = data.get('dejeuner')
+        patient.diner = data.get('diner')
+        patient.grignotage = data.get('grignotage')
+        patient.autres_consommations = data.get('autres_consommations')
         patient.notes = data.get('notes')
         
         db.session.add(patient)
@@ -85,6 +93,14 @@ def patient_detail(patient_id):
             'traitements_chroniques': patient.traitements_chroniques,
             'hydratation_jour': patient.hydratation_jour,
             'regime_alimentaire': patient.regime_alimentaire,
+            'poids': patient.poids,
+            'taille': patient.taille,
+            'groupe_ethnique': patient.groupe_ethnique,
+            'petit_dejeuner': patient.petit_dejeuner,
+            'dejeuner': patient.dejeuner,
+            'diner': patient.diner,
+            'grignotage': patient.grignotage,
+            'autres_consommations': patient.autres_consommations,
             'notes': patient.notes,
             'episodes': [{
                 'id': e.id,
@@ -129,6 +145,22 @@ def patient_detail(patient_id):
             patient.hydratation_jour = data['hydratation_jour']
         if 'regime_alimentaire' in data:
             patient.regime_alimentaire = data['regime_alimentaire']
+        if 'poids' in data:
+            patient.poids = data['poids']
+        if 'taille' in data:
+            patient.taille = data['taille']
+        if 'groupe_ethnique' in data:
+            patient.groupe_ethnique = data['groupe_ethnique']
+        if 'petit_dejeuner' in data:
+            patient.petit_dejeuner = data['petit_dejeuner']
+        if 'dejeuner' in data:
+            patient.dejeuner = data['dejeuner']
+        if 'diner' in data:
+            patient.diner = data['diner']
+        if 'grignotage' in data:
+            patient.grignotage = data['grignotage']
+        if 'autres_consommations' in data:
+            patient.autres_consommations = data['autres_consommations']
         if 'notes' in data:
             patient.notes = data['notes']
         
