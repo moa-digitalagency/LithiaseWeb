@@ -23,13 +23,42 @@
         <div class="card">
             <div class="border-b border-gray-200 pb-4 mb-6">
                 <h2 class="text-3xl font-bold text-gray-800">➕ Nouveau Patient</h2>
-                <p class="text-gray-600 mt-2">Remplissez le formulaire ci-dessous pour enregistrer un nouveau patient</p>
+                <p class="text-gray-600 mt-2">Formulaire complet pour enregistrer un nouveau patient avec analyse morpho-constitutionnelle</p>
+            </div>
+            
+            <!-- Section: Objectifs de l'analyse -->
+            <div class="bg-gradient-to-r from-indigo-100 to-purple-100 border-2 border-indigo-300 rounded-lg p-6 mb-6">
+                <h3 class="text-xl font-bold text-indigo-900 mb-3 flex items-center">
+                    <span class="text-2xl mr-2">🎯</span> Objectifs de l'analyse
+                </h3>
+                <ul class="space-y-2 text-sm text-gray-800">
+                    <li class="flex items-start">
+                        <span class="text-indigo-600 mr-2">✓</span>
+                        <span>Déterminer la <strong>nature morpho-constitutionnelle</strong> du calcul selon la classification de Daudon</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-indigo-600 mr-2">✓</span>
+                        <span>Détecter les <strong>anomalies dans les habitudes</strong> du patient favorisant la formation des calculs</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-indigo-600 mr-2">✓</span>
+                        <span>Proposer un <strong>régime alimentaire adapté</strong> pour prévenir les récidives</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-indigo-600 mr-2">✓</span>
+                        <span>Recommander un <strong>traitement médical</strong> fondé sur les dernières données scientifiques</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-indigo-600 mr-2">✓</span>
+                        <span>En cas d'infection urinaire associée : proposer un traitement adapté selon la <strong>nature du germe</strong> isolé</span>
+                    </li>
+                </ul>
             </div>
             
             <form id="newPatientForm" class="space-y-8">
                 <!-- Section: Informations personnelles -->
-                <div class="border-2 border-gray-200 rounded-lg p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-blue-900 mb-4 flex items-center">
                         <span class="text-2xl mr-2">👤</span> Informations personnelles
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -53,6 +82,10 @@
                             </select>
                         </div>
                         <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">🌍 Groupe ethnique</label>
+                            <input type="text" name="groupe_ethnique" class="input-field" placeholder="Ex: Caucasien, Africain, Asiatique...">
+                        </div>
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">📞 Téléphone</label>
                             <input type="tel" name="telephone" class="input-field">
                         </div>
@@ -60,7 +93,7 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">📧 Email</label>
                             <input type="email" name="email" class="input-field">
                         </div>
-                        <div class="md:col-span-2">
+                        <div class="md:col-span-1">
                             <label class="block text-sm font-medium text-gray-700 mb-2">📍 Adresse</label>
                             <textarea name="adresse" rows="2" class="input-field"></textarea>
                         </div>
@@ -68,33 +101,29 @@
                 </div>
 
                 <!-- Section: Anthropométrie -->
-                <div class="border-2 border-gray-200 rounded-lg p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <div class="bg-green-50 border-2 border-green-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-green-900 mb-4 flex items-center">
                         <span class="text-2xl mr-2">⚖️</span> Anthropométrie
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">⚖️ Poids (kg)</label>
-                            <input type="number" step="0.1" name="poids" class="input-field" placeholder="Ex: 75.5">
+                            <input type="number" step="0.1" name="poids" id="poids" class="input-field" placeholder="Ex: 75.5">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">📏 Taille (cm)</label>
-                            <input type="number" step="0.1" name="taille" class="input-field" placeholder="Ex: 175">
+                            <input type="number" step="0.1" name="taille" id="taille" class="input-field" placeholder="Ex: 175">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">🌍 Groupe ethnique</label>
-                            <input type="text" name="groupe_ethnique" class="input-field" placeholder="Ex: Caucasien, Africain, Asiatique...">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📊 IMC (calculé automatiquement)</label>
+                            <input type="text" id="imc" class="input-field bg-gray-100" readonly placeholder="--">
                         </div>
-                    </div>
-                    <div class="mt-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">💧 Hydratation quotidienne (L/jour)</label>
-                        <input type="number" step="0.1" name="hydratation_jour" class="input-field" placeholder="Ex: 2.5">
                     </div>
                 </div>
 
                 <!-- Section: Antécédents médicaux -->
-                <div class="border-2 border-gray-200 rounded-lg p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <div class="bg-red-50 border-2 border-red-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-red-900 mb-4 flex items-center">
                         <span class="text-2xl mr-2">🏥</span> Antécédents médicaux
                     </h3>
                     <div class="space-y-4">
@@ -115,18 +144,22 @@
                             <textarea name="allergies" rows="2" class="input-field" placeholder="Allergies médicamenteuses ou autres..."></textarea>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">💊 Traitements chroniques (liste + posologies)</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">💊 Traitements en cours (liste + posologies)</label>
                             <textarea name="traitements_chroniques" rows="3" class="input-field" placeholder="Médicaments pris régulièrement avec posologies..."></textarea>
                         </div>
                     </div>
                 </div>
 
                 <!-- Section: Habitudes alimentaires -->
-                <div class="border-2 border-gray-200 rounded-lg p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-yellow-900 mb-4 flex items-center">
                         <span class="text-2xl mr-2">🍽️</span> Habitudes alimentaires
                     </h3>
                     <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">💧 Hydratation quotidienne (L/jour)</label>
+                            <input type="number" step="0.1" name="hydratation_jour" class="input-field" placeholder="Ex: 2.5">
+                        </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">🍴 Régime alimentaire général</label>
                             <textarea name="regime_alimentaire" rows="2" class="input-field" placeholder="Régime riche en protéines/sel/oxalate... Précisez les caractéristiques générales"></textarea>
@@ -157,8 +190,8 @@
                 </div>
 
                 <!-- Section: Imagerie médicale -->
-                <div class="border-2 border-gray-200 rounded-lg p-6 bg-blue-50">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <div class="bg-purple-50 border-2 border-purple-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-purple-900 mb-4 flex items-center">
                         <span class="text-2xl mr-2">🔬</span> Imagerie médicale
                     </h3>
                     <div class="space-y-4">
@@ -170,16 +203,81 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">🔊 Échographie</label>
                             <textarea name="echographie_resultats" rows="3" class="input-field" placeholder="Résultats de l'échographie..."></textarea>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">💻 Uro-scanner</label>
-                            <textarea name="uroscanner_resultats" rows="3" class="input-field" placeholder="Résultats de l'uro-scanner..."></textarea>
+                        
+                        <!-- Uro-scanner avec détails des calculs intégrés -->
+                        <div class="border-l-4 border-purple-400 pl-4">
+                            <h4 class="text-lg font-semibold text-purple-800 mb-3 flex items-center">
+                                <span class="text-xl mr-2">💻</span> Uro-scanner & détails des calculs rénaux
+                            </h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">📝 Résultats généraux de l'uro-scanner</label>
+                                    <textarea name="uroscanner_resultats" rows="3" class="input-field" placeholder="Résultats de l'uro-scanner..."></textarea>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">🔢 Nombre de calculs</label>
+                                        <input type="number" name="nombre_calculs" class="input-field" placeholder="Ex: 2">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">🗺️ Topographie du calcul</label>
+                                        <input type="text" name="topographie_calcul" class="input-field" placeholder="Ex: Rein droit, calice inférieur, uretère...">
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">📏 Diamètre longitudinal (mm)</label>
+                                        <input type="number" step="0.1" name="diametre_longitudinal" class="input-field" placeholder="Ex: 12.5">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">📐 Diamètre transversal (mm)</label>
+                                        <input type="number" step="0.1" name="diametre_transversal" class="input-field" placeholder="Ex: 8.3">
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">🔶 Forme du calcul</label>
+                                        <input type="text" name="forme_calcul" class="input-field" placeholder="Ex: Rond, ovale, irrégulier, coralliforme...">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">⭕ Contour du calcul</label>
+                                        <input type="text" name="contour_calcul" class="input-field" placeholder="Ex: Régulier, irrégulier, lisse, spiculé...">
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">💠 Densité du noyau (UH)</label>
+                                        <input type="number" name="densite_noyau" class="input-field" placeholder="Ex: 800">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">🎨 Densités des différentes couches</label>
+                                        <input type="text" name="densites_couches" class="input-field" placeholder="Ex: Noyau 800 UH, couche 1: 650 UH...">
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">🩺 Autres calcifications (paroi vasculaire, ganglions, score calcique...)</label>
+                                    <textarea name="calcifications_autres" rows="2" class="input-field" placeholder="Décrivez les autres calcifications observées..."></textarea>
+                                </div>
+                            </div>
                         </div>
+                        
+                        <!-- Pièce jointe imagerie (à implémenter) -->
+                        <!-- <div class="mt-4 pt-4 border-t border-purple-200">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📎 Pièce jointe : Résultats d'imagerie (facultatif)</label>
+                            <input type="file" name="fichier_imagerie" accept="image/*,.pdf" class="input-field">
+                            <p class="text-xs text-gray-500 mt-1">Formats acceptés : JPG, PNG, PDF (Max 10 Mo)</p>
+                        </div> -->
                     </div>
                 </div>
 
                 <!-- Section: Résultats de laboratoire -->
-                <div class="border-2 border-gray-200 rounded-lg p-6 bg-green-50">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <div class="bg-teal-50 border-2 border-teal-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-teal-900 mb-4 flex items-center">
                         <span class="text-2xl mr-2">🧪</span> Résultats de laboratoire
                     </h3>
                     <div class="space-y-4">
@@ -189,7 +287,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">🦠 ECBU (Examen Cytobactériologique Urinaire)</label>
-                            <textarea name="ecbu_resultats" rows="2" class="input-field" placeholder="Résultats de l'ECBU..."></textarea>
+                            <textarea name="ecbu_resultats" rows="2" class="input-field" placeholder="Résultats de l'ECBU (germe isolé si infection)..."></textarea>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
@@ -201,68 +299,30 @@
                                 <input type="number" step="0.001" name="densite_urinaire" class="input-field" placeholder="Ex: 1.020">
                             </div>
                         </div>
+                        
+                        <!-- Pièce jointe laboratoire (à implémenter) -->
+                        <!-- <div class="mt-4 pt-4 border-t border-teal-200">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📎 Pièce jointe : Résultats de laboratoire (facultatif)</label>
+                            <input type="file" name="fichier_laboratoire" accept="image/*,.pdf" class="input-field">
+                            <p class="text-xs text-gray-500 mt-1">Formats acceptés : JPG, PNG, PDF (Max 10 Mo)</p>
+                        </div> -->
                     </div>
                 </div>
 
-                <!-- Section: Détails des calculs -->
-                <div class="border-2 border-gray-200 rounded-lg p-6 bg-purple-50">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                        <span class="text-2xl mr-2">💎</span> Détails des calculs rénaux
+                <!-- Section: Ordonnances & documents (à implémenter) -->
+                <!-- <div class="bg-orange-50 border-2 border-orange-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-orange-900 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">📄</span> Ordonnances & documents antérieurs
                     </h3>
-                    <div class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">🔢 Nombre de calculs</label>
-                                <input type="number" name="nombre_calculs" class="input-field" placeholder="Ex: 2">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">📍 Situation du calcul</label>
-                                <input type="text" name="situation_calcul" class="input-field" placeholder="Ex: Rein droit, gauche, bilatéral...">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">🗺️ Topographie du calcul</label>
-                            <input type="text" name="topographie_calcul" class="input-field" placeholder="Ex: Calice supérieur, moyen, inférieur, pyélon, uretère...">
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">📏 Diamètre longitudinal (mm)</label>
-                                <input type="number" step="0.1" name="diametre_longitudinal" class="input-field" placeholder="Ex: 12.5">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">📐 Diamètre transversal (mm)</label>
-                                <input type="number" step="0.1" name="diametre_transversal" class="input-field" placeholder="Ex: 8.3">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">🔶 Forme du calcul</label>
-                                <input type="text" name="forme_calcul" class="input-field" placeholder="Ex: Rond, ovale, irrégulier, coralliforme...">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">⭕ Contour du calcul</label>
-                                <input type="text" name="contour_calcul" class="input-field" placeholder="Ex: Régulier, irrégulier, lisse, spiculé...">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">💠 Densité du noyau (UH)</label>
-                                <input type="number" name="densite_noyau" class="input-field" placeholder="Ex: 800">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">🎨 Densités des différentes couches</label>
-                                <input type="text" name="densites_couches" class="input-field" placeholder="Ex: Noyau 800 UH, couche 1: 650 UH, couche 2: 550 UH...">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">🩺 Autres calcifications (paroi vasculaire, ganglions, score calcique coronaire...)</label>
-                            <textarea name="calcifications_autres" rows="2" class="input-field" placeholder="Décrivez les autres calcifications observées..."></textarea>
-                        </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">📎 Pièce jointe : Ordonnance antérieure (facultatif)</label>
+                        <input type="file" name="fichier_ordonnance" accept="image/*,.pdf" class="input-field">
+                        <p class="text-xs text-gray-500 mt-1">Formats acceptés : JPG, PNG, PDF (Max 10 Mo)</p>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Section: Notes -->
-                <div class="border-2 border-gray-200 rounded-lg p-6">
+                <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-6">
                     <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
                         <span class="text-2xl mr-2">📝</span> Notes complémentaires
                     </h3>
@@ -286,11 +346,53 @@
     </div>
     
     <script>
+        // Calcul automatique de l'IMC
+        function calculerIMC() {
+            const poids = parseFloat(document.getElementById('poids').value);
+            const taille = parseFloat(document.getElementById('taille').value);
+            const imcField = document.getElementById('imc');
+            
+            if (poids > 0 && taille > 0) {
+                const tailleMetres = taille / 100;
+                const imc = (poids / (tailleMetres * tailleMetres)).toFixed(1);
+                imcField.value = imc + ' kg/m²';
+                
+                // Classification IMC avec couleurs
+                if (imc < 18.5) {
+                    imcField.className = 'input-field bg-blue-100 text-blue-800 font-semibold';
+                } else if (imc < 25) {
+                    imcField.className = 'input-field bg-green-100 text-green-800 font-semibold';
+                } else if (imc < 30) {
+                    imcField.className = 'input-field bg-yellow-100 text-yellow-800 font-semibold';
+                } else {
+                    imcField.className = 'input-field bg-red-100 text-red-800 font-semibold';
+                }
+            } else {
+                imcField.value = '--';
+                imcField.className = 'input-field bg-gray-100';
+            }
+        }
+        
+        document.getElementById('poids').addEventListener('input', calculerIMC);
+        document.getElementById('taille').addEventListener('input', calculerIMC);
+        
+        // Soumission du formulaire
         document.getElementById('newPatientForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData.entries());
+            const data = {};
+            
+            // Convertir FormData en objet JSON (sauf fichiers)
+            for (let [key, value] of formData.entries()) {
+                if (value instanceof File) {
+                    // TODO: Upload de fichiers à implémenter
+                    continue;
+                }
+                if (value !== '') {
+                    data[key] = value;
+                }
+            }
             
             try {
                 const response = await fetch('/api/patients', {

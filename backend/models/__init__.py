@@ -57,7 +57,6 @@ class Patient(db.Model):
     densite_urinaire = db.Column(db.Float)
     
     nombre_calculs = db.Column(db.Integer)
-    _situation_calcul = db.Column('situation_calcul', db.Text)
     _topographie_calcul = db.Column('topographie_calcul', db.Text)
     diametre_longitudinal = db.Column(db.Float)
     diametre_transversal = db.Column(db.Float)
@@ -66,6 +65,10 @@ class Patient(db.Model):
     densite_noyau = db.Column(db.Integer)
     _densites_couches = db.Column('densites_couches', db.Text)
     _calcifications_autres = db.Column('calcifications_autres', db.Text)
+    
+    fichier_imagerie = db.Column(db.String(255))
+    fichier_laboratoire = db.Column(db.String(255))
+    fichier_ordonnance = db.Column(db.String(255))
     
     _notes = db.Column('notes', db.Text)
     
@@ -249,14 +252,6 @@ class Patient(db.Model):
     @ecbu_resultats.setter
     def ecbu_resultats(self, value):
         self._ecbu_resultats = encryption_manager.encrypt(value)
-    
-    @property
-    def situation_calcul(self):
-        return encryption_manager.decrypt(self._situation_calcul)
-    
-    @situation_calcul.setter
-    def situation_calcul(self, value):
-        self._situation_calcul = encryption_manager.encrypt(value)
     
     @property
     def topographie_calcul(self):

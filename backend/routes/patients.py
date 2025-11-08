@@ -48,7 +48,6 @@ def patients():
         patient.ph_urinaire = data.get('ph_urinaire')
         patient.densite_urinaire = data.get('densite_urinaire')
         patient.nombre_calculs = data.get('nombre_calculs')
-        patient.situation_calcul = data.get('situation_calcul')
         patient.topographie_calcul = data.get('topographie_calcul')
         patient.diametre_longitudinal = data.get('diametre_longitudinal')
         patient.diametre_transversal = data.get('diametre_transversal')
@@ -126,7 +125,6 @@ def patient_detail(patient_id):
             'ph_urinaire': patient.ph_urinaire,
             'densite_urinaire': patient.densite_urinaire,
             'nombre_calculs': patient.nombre_calculs,
-            'situation_calcul': patient.situation_calcul,
             'topographie_calcul': patient.topographie_calcul,
             'diametre_longitudinal': patient.diametre_longitudinal,
             'diametre_transversal': patient.diametre_transversal,
@@ -211,8 +209,6 @@ def patient_detail(patient_id):
             patient.densite_urinaire = data['densite_urinaire']
         if 'nombre_calculs' in data:
             patient.nombre_calculs = data['nombre_calculs']
-        if 'situation_calcul' in data:
-            patient.situation_calcul = data['situation_calcul']
         if 'topographie_calcul' in data:
             patient.topographie_calcul = data['topographie_calcul']
         if 'diametre_longitudinal' in data:
