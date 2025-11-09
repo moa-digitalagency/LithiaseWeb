@@ -170,6 +170,47 @@ with app.app_context():
             "densites_couches": "Homogène, densité intermédiaire",
             "calcifications_autres": "Pas d'autres calcifications",
             "notes": "Cystinurie homozygote. Excellente observance thérapeutique et diététique. Malgré traitement optimal, récidives fréquentes dues à la nature génétique de la maladie. Surveillance rapprochée tous les 6 mois."
+        },
+        {
+            "nom": "Rousseau",
+            "prenom": "Pierre",
+            "date_naissance": datetime(1968, 9, 30).date(),
+            "sexe": "M",
+            "telephone": "0698765432",
+            "email": "p.rousseau@email.com",
+            "adresse": "56 rue Pasteur, 59000 Lille",
+            "groupe_ethnique": "Caucasien",
+            "poids": 78.0,
+            "taille": 175.0,
+            "antecedents_personnels": "Hyperparathyroïdie primaire diagnostiquée en 2020, Infections urinaires occasionnelles",
+            "antecedents_familiaux": "Mère avec lithiase calcique récidivante",
+            "antecedents_chirurgicaux": "Parathyroïdectomie partielle en 2021",
+            "allergies": "Aucune",
+            "traitements_chroniques": "Calcium + Vitamine D3 500mg/400UI, Surveillance PTH/calcémie trimestrielle",
+            "hydratation_jour": 1.5,
+            "regime_alimentaire": "Régime équilibré, consommation modérée de produits laitiers",
+            "petit_dejeuner": "Café, pain complet, fromage blanc, fruits",
+            "dejeuner": "Viande ou poisson, légumes verts, féculents complets",
+            "diner": "Salade composée, œufs ou volaille, yaourt",
+            "grignotage": "Fruits frais, noix",
+            "autres_consommations": "Eau minérale 1.5L/jour, thé vert",
+            "asp_resultats": "Calcul radio-opaque de 10mm au niveau de l'uretère proximal droit avec structure stratifiée",
+            "echographie_resultats": "Calcul de 10mm bloqué à la jonction pyélo-urétérale droite avec dilatation modérée des cavités",
+            "uroscanner_resultats": "Calcul de 10mm avec structure radiaire caractéristique: noyau dense 980 UH, couches périphériques de densité décroissante (720 et 640 UH), suggestif de composition mixte",
+            "sediment_urinaire": "Cristaux mixtes d'oxalate de calcium monohydraté et dihydraté, quelques cristaux de phosphate de calcium",
+            "ecbu_resultats": "Quelques leucocytes 15/mm3, culture négative",
+            "ph_urinaire": 6.2,
+            "densite_urinaire": 1.022,
+            "nombre_calculs": 1,
+            "topographie_calcul": "Jonction pyélo-urétérale droite",
+            "diametre_longitudinal": 10.5,
+            "diametre_transversal": 9.8,
+            "forme_calcul": "Ovoïde stratifiée",
+            "contour_calcul": "Régulier avec stratifications visibles",
+            "densite_noyau": 980,
+            "densites_couches": "Noyau 980 UH, couche 1: 720 UH, couche 2: 640 UH",
+            "calcifications_autres": "Discrètes calcifications médullaires bilatérales",
+            "notes": "Calcul mixte post-hyperparathyroïdie avec structure radiaire typique. Noyau probablement Whewellite pur formé en période d'hypercalciurie sévère, couches externes Weddellite formées après parathyroïdectomie. Infection urinaire subclinique possible favorisant formation de couche phosphatée externe."
         }
     ]
     
@@ -214,11 +255,20 @@ with app.app_context():
         imagerie.date_examen = episode_date
         imagerie.taille_mm = int(patient_data.get('diametre_longitudinal', 8))
         imagerie.densite_uh = patient_data.get('densite_noyau', 900)
+        imagerie.densite_noyau = patient_data.get('densite_noyau', 900)
+        imagerie.densites_couches = patient_data.get('densites_couches', '')
         imagerie.morphologie = patient_data.get('forme_calcul', 'Ronde')
         imagerie.radio_opacite = "Opaque" if patient_data.get('densite_noyau', 900) > 500 else "Faiblement opaque"
         imagerie.localisation = patient_data.get('topographie_calcul', 'Rein')
         imagerie.nombre = str(patient_data.get('nombre_calculs', 1))
         imagerie.nombre_estime = patient_data.get('nombre_calculs', 1)
+        imagerie.nombre_calculs = patient_data.get('nombre_calculs', 1)
+        imagerie.topographie_calcul = patient_data.get('topographie_calcul', '')
+        imagerie.diametre_longitudinal = patient_data.get('diametre_longitudinal', 0)
+        imagerie.diametre_transversal = patient_data.get('diametre_transversal', 0)
+        imagerie.forme_calcul = patient_data.get('forme_calcul', '')
+        imagerie.contour_calcul = patient_data.get('contour_calcul', '')
+        imagerie.calcifications_autres = patient_data.get('calcifications_autres', '')
         imagerie.asp_resultats = patient_data.get('asp_resultats', '')
         imagerie.echographie_resultats = patient_data.get('echographie_resultats', '')
         imagerie.uroscanner_resultats = patient_data.get('uroscanner_resultats', '')
