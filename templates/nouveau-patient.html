@@ -287,8 +287,53 @@
                     </h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">📋 Antécédents personnels (Uro, métaboliques, endocrino...)</label>
-                            <textarea name="antecedents_personnels" rows="3" class="input-field" placeholder="Décrivez les antécédents urologiques, métaboliques, endocriniens..."></textarea>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">📋 Antécédents personnels (sélectionner tous ceux qui s'appliquent)</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-white p-4 rounded border border-gray-200">
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" name="antecedents_medicaux" value="Hypertension" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm">Hypertension</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" name="antecedents_medicaux" value="Diabete" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm">Diabète</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" name="antecedents_medicaux" value="Obesite" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm">Obésité</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" name="antecedents_medicaux" value="Goutte" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm">Goutte</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" name="antecedents_medicaux" value="Hyperparathyroidie" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm">Hyperparathyroïdie</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" name="antecedents_medicaux" value="Maladie inflammatoire intestinale" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm">Maladie inflammatoire intestinale</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" name="antecedents_medicaux" value="Infection urinaire recurrente" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm">Infection urinaire récurrente</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" name="antecedents_medicaux" value="Malformation renale" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm">Malformation rénale</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" name="antecedents_medicaux" value="Chirurgie digestive" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm">Chirurgie digestive</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" name="antecedents_medicaux" value="Autre" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm">Autre</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📝 Détails des antécédents personnels</label>
+                            <textarea name="antecedents_personnels" rows="2" class="input-field" placeholder="Précisions sur les antécédents ci-dessus..."></textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">👨‍👩‍👧‍👦 Antécédents familiaux (lithiase)</label>
@@ -316,12 +361,27 @@
                     </h3>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">💧 Hydratation quotidienne (L/jour)</label>
-                            <input type="number" step="0.1" name="hydratation_jour" class="input-field" placeholder="Ex: 2.5">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">💧 Hydratation quotidienne</label>
+                            <select name="hydratation_jour" class="input-field">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="0.8">Moins de 1L (0,8L)</option>
+                                <option value="1.25">1 à 1,5L (1,25L)</option>
+                                <option value="1.75">1,5 à 2L (1,75L)</option>
+                                <option value="2.5">2 à 3L (2,5L)</option>
+                                <option value="3.5">Plus de 3L (3,5L)</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">🍴 Régime alimentaire général</label>
-                            <textarea name="regime_alimentaire" rows="2" class="input-field" placeholder="Régime riche en protéines/sel/oxalate... Précisez les caractéristiques générales"></textarea>
+                            <select name="regime_alimentaire" class="input-field">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="Omnivore">Omnivore</option>
+                                <option value="Vegetarien">Végétarien</option>
+                                <option value="Vegan">Vegan</option>
+                                <option value="Hyperproteine">Hyperprotéiné</option>
+                                <option value="Pauvre en sel">Pauvre en sel</option>
+                                <option value="Autre">Autre</option>
+                            </select>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>

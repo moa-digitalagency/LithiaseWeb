@@ -1,0 +1,19 @@
+- Faire appel à l'architecte uniquement en dernier recours, après avoir exécuté toutes les autres tâches. L'architecte doit intervenir une seule fois vers la fin pour vérifier l'ensemble.
+
+- Vérifier que tous les éléments contenus dans le PDF s'affichent correctement, en particulier dans les tableaux. S'assurer que le texte ne dépasse pas des cadres et forcer un retour à la ligne si nécessaire.
+
+- Nettoyer les scripts d'initialisation de la base de données pour ne garder qu’un seul script. Ce script doit commencer par effacer toutes les données existantes, puis créer de nouvelles données de zéro avec le nouveau système.
+
+- Faire de même pour les scripts de migration.
+
+- Créer un document expliquant l'algorithme de manière scientifique et médicale, afin qu'il puisse être répliqué et utilisé même de manière analogique, hors logiciel. Ce document doit être au format .md et également produit en PDF, bien mis en forme.
+
+- Dans le formulaire "nouveau patient", il manque des informations personnelles déjà présentes dans les constantes avec choix en liste déroulante. Il manque aussi ces choix dans les sections anthropométrie, antécédents médicaux, habitudes alimentaires, etc. Vérifier tout le formulaire pour intégrer des listes déroulantes visibles et fonctionnelles, côté backend et côté algorithme d'inférence.
+
+- Ajouter des champs à liste déroulante dans le formulaire, avec davantage de constantes pertinentes au bon fonctionnement de l’algorithme d’inférence. Ces constantes doivent être justifiées.
+
+- Vérifier que toutes les constantes sont bien chargées et accessibles dans la base de données.
+
+- Vérifier que toutes les données du formulaire sont bien enregistrées, que la page de modification fonctionne correctement, que l’algorithme marche comme prévu. Supprimer toutes les mentions "IA" dans la documentation (dossiers docs), tout mettre à jour avec "algorithme" et les nouvelles fonctionnalités.
+
+- S’assurer qu’il existe un seul script de migration de la base de données qui intègre tous les éléments, tables nécessaires et la mise en place des nouvelles données.

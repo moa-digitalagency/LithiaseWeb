@@ -271,9 +271,9 @@ def export_patient_pdf(patient_id):
             story.append(Paragraph(f"<b>Épisode du {episode.date_episode.strftime('%d/%m/%Y')}</b>", styles['Heading3']))
             story.append(Spacer(1, 0.2*cm))
             if episode.motif:
-                story.append(Paragraph(f"<b>Motif:</b> {episode.motif}", styles['Normal']))
+                story.append(wrap_text(f"<b>Motif:</b> {episode.motif}"))
             if episode.diagnostic:
-                story.append(Paragraph(f"<b>Diagnostic:</b> {episode.diagnostic}", styles['Normal']))
+                story.append(wrap_text(f"<b>Diagnostic:</b> {episode.diagnostic}"))
             
             if episode.douleur or episode.fievre or episode.infection_urinaire:
                 symptoms = []
@@ -283,58 +283,58 @@ def export_patient_pdf(patient_id):
                     symptoms.append("Fièvre")
                 if episode.infection_urinaire:
                     symptoms.append("Infection urinaire")
-                story.append(Paragraph(f"<b>Symptômes:</b> {', '.join(symptoms)}", styles['Normal']))
+                story.append(wrap_text(f"<b>Symptômes:</b> {', '.join(symptoms)}"))
             
             if episode.imageries:
-                story.append(Paragraph("<b>Imageries:</b>", styles['Normal']))
+                story.append(wrap_text("<b>Imageries:</b>"))
                 for imaging in episode.imageries:
-                    story.append(Paragraph(f"  • Date: {imaging.date_examen.strftime('%d/%m/%Y')}", styles['Normal']))
+                    story.append(wrap_text(f"  • Date: {imaging.date_examen.strftime('%d/%m/%Y')}"))
                     if imaging.asp_resultats:
-                        story.append(Paragraph(f"    ASP: {imaging.asp_resultats}", styles['Normal']))
+                        story.append(wrap_text(f"    ASP: {imaging.asp_resultats}"))
                     if imaging.echographie_resultats:
-                        story.append(Paragraph(f"    Échographie: {imaging.echographie_resultats}", styles['Normal']))
+                        story.append(wrap_text(f"    Échographie: {imaging.echographie_resultats}"))
                     if imaging.uroscanner_resultats:
-                        story.append(Paragraph(f"    Uro-scanner: {imaging.uroscanner_resultats}", styles['Normal']))
+                        story.append(wrap_text(f"    Uro-scanner: {imaging.uroscanner_resultats}"))
                     if imaging.nombre_calculs:
-                        story.append(Paragraph(f"    Nombre de calculs: {imaging.nombre_calculs}", styles['Normal']))
+                        story.append(wrap_text(f"    Nombre de calculs: {imaging.nombre_calculs}"))
                     if imaging.topographie_calcul:
-                        story.append(Paragraph(f"    Topographie: {imaging.topographie_calcul}", styles['Normal']))
+                        story.append(wrap_text(f"    Topographie: {imaging.topographie_calcul}"))
                     if imaging.diametre_longitudinal or imaging.diametre_transversal:
-                        story.append(Paragraph(f"    Dimensions: {imaging.diametre_longitudinal or '-'} x {imaging.diametre_transversal or '-'} mm", styles['Normal']))
+                        story.append(wrap_text(f"    Dimensions: {imaging.diametre_longitudinal or '-'} x {imaging.diametre_transversal or '-'} mm"))
                     if imaging.taille_mm:
-                        story.append(Paragraph(f"    Taille: {imaging.taille_mm} mm", styles['Normal']))
+                        story.append(wrap_text(f"    Taille: {imaging.taille_mm} mm"))
                     if imaging.forme_calcul:
-                        story.append(Paragraph(f"    Forme: {imaging.forme_calcul}", styles['Normal']))
+                        story.append(wrap_text(f"    Forme: {imaging.forme_calcul}"))
                     if imaging.contour_calcul:
-                        story.append(Paragraph(f"    Contour: {imaging.contour_calcul}", styles['Normal']))
+                        story.append(wrap_text(f"    Contour: {imaging.contour_calcul}"))
                     if imaging.densite_uh:
-                        story.append(Paragraph(f"    Densité: {imaging.densite_uh} UH", styles['Normal']))
+                        story.append(wrap_text(f"    Densité: {imaging.densite_uh} UH"))
                     if imaging.densite_noyau:
-                        story.append(Paragraph(f"    Densité noyau: {imaging.densite_noyau} UH", styles['Normal']))
+                        story.append(wrap_text(f"    Densité noyau: {imaging.densite_noyau} UH"))
                     if imaging.densites_couches:
-                        story.append(Paragraph(f"    Densités couches: {imaging.densites_couches}", styles['Normal']))
+                        story.append(wrap_text(f"    Densités couches: {imaging.densites_couches}"))
                     if imaging.morphologie:
-                        story.append(Paragraph(f"    Morphologie: {imaging.morphologie}", styles['Normal']))
+                        story.append(wrap_text(f"    Morphologie: {imaging.morphologie}"))
                     if imaging.radio_opacite:
-                        story.append(Paragraph(f"    Radio-opacité: {imaging.radio_opacite}", styles['Normal']))
+                        story.append(wrap_text(f"    Radio-opacité: {imaging.radio_opacite}"))
                     
                     if any([imaging.rein_gauche_cranio_caudal, imaging.rein_gauche_volume, imaging.rein_droit_cranio_caudal, imaging.rein_droit_volume, imaging.epaisseur_cortex_renal_gauche, imaging.epaisseur_cortex_renal_droit, imaging.diametre_pyelon_gauche, imaging.diametre_pyelon_droit, imaging.diametre_uretere_amont_gauche, imaging.diametre_uretere_amont_droit]):
-                        story.append(Paragraph("<b>    Mesures uroscanner - Retentissement haut appareil:</b>", styles['Normal']))
-                        reins_data = [['Paramètre', 'Rein gauche', 'Rein droit']]
+                        story.append(wrap_text("<b>    Mesures uroscanner - Retentissement haut appareil:</b>"))
+                        reins_data = [[wrap_text('Paramètre', table_cell_bold_style), wrap_text('Rein gauche', table_cell_bold_style), wrap_text('Rein droit', table_cell_bold_style)]]
                         if imaging.rein_gauche_cranio_caudal or imaging.rein_droit_cranio_caudal:
-                            reins_data.append(['Cranio-caudal', f"{imaging.rein_gauche_cranio_caudal or '-'} mm", f"{imaging.rein_droit_cranio_caudal or '-'} mm"])
+                            reins_data.append([wrap_text('Cranio-caudal'), wrap_text(f"{imaging.rein_gauche_cranio_caudal or '-'} mm"), wrap_text(f"{imaging.rein_droit_cranio_caudal or '-'} mm")])
                         if imaging.rein_gauche_antero_posterieur or imaging.rein_droit_antero_posterieur:
-                            reins_data.append(['Antéro-postérieur', f"{imaging.rein_gauche_antero_posterieur or '-'} mm", f"{imaging.rein_droit_antero_posterieur or '-'} mm"])
+                            reins_data.append([wrap_text('Antéro-postérieur'), wrap_text(f"{imaging.rein_gauche_antero_posterieur or '-'} mm"), wrap_text(f"{imaging.rein_droit_antero_posterieur or '-'} mm")])
                         if imaging.rein_gauche_transversal or imaging.rein_droit_transversal:
-                            reins_data.append(['Transversal', f"{imaging.rein_gauche_transversal or '-'} mm", f"{imaging.rein_droit_transversal or '-'} mm"])
+                            reins_data.append([wrap_text('Transversal'), wrap_text(f"{imaging.rein_gauche_transversal or '-'} mm"), wrap_text(f"{imaging.rein_droit_transversal or '-'} mm")])
                         if imaging.rein_gauche_volume or imaging.rein_droit_volume:
-                            reins_data.append(['Volume', f"{imaging.rein_gauche_volume or '-'} cm³", f"{imaging.rein_droit_volume or '-'} cm³"])
+                            reins_data.append([wrap_text('Volume'), wrap_text(f"{imaging.rein_gauche_volume or '-'} cm³"), wrap_text(f"{imaging.rein_droit_volume or '-'} cm³")])
                         if imaging.epaisseur_cortex_renal_gauche or imaging.epaisseur_cortex_renal_droit:
-                            reins_data.append(['Épaisseur cortex', f"{imaging.epaisseur_cortex_renal_gauche or '-'} mm", f"{imaging.epaisseur_cortex_renal_droit or '-'} mm"])
+                            reins_data.append([wrap_text('Épaisseur cortex'), wrap_text(f"{imaging.epaisseur_cortex_renal_gauche or '-'} mm"), wrap_text(f"{imaging.epaisseur_cortex_renal_droit or '-'} mm")])
                         if imaging.diametre_pyelon_gauche or imaging.diametre_pyelon_droit:
-                            reins_data.append(['Diamètre pyélon', f"{imaging.diametre_pyelon_gauche or '-'} mm", f"{imaging.diametre_pyelon_droit or '-'} mm"])
+                            reins_data.append([wrap_text('Diamètre pyélon'), wrap_text(f"{imaging.diametre_pyelon_gauche or '-'} mm"), wrap_text(f"{imaging.diametre_pyelon_droit or '-'} mm")])
                         if imaging.diametre_uretere_amont_gauche or imaging.diametre_uretere_amont_droit:
-                            reins_data.append(['Diamètre uretère amont', f"{imaging.diametre_uretere_amont_gauche or '-'} mm", f"{imaging.diametre_uretere_amont_droit or '-'} mm"])
+                            reins_data.append([wrap_text('Diamètre uretère amont'), wrap_text(f"{imaging.diametre_uretere_amont_gauche or '-'} mm"), wrap_text(f"{imaging.diametre_uretere_amont_droit or '-'} mm")])
                         
                         if len(reins_data) > 1:
                             t_reins = Table(reins_data, colWidths=[5*cm, 5*cm, 5*cm])
@@ -352,20 +352,20 @@ def export_patient_pdf(patient_id):
                             story.append(t_reins)
                         
                         if imaging.malformations_urinaires:
-                            story.append(Paragraph(f"    Malformations: {imaging.malformations_urinaires}", styles['Normal']))
+                            story.append(wrap_text(f"    Malformations: {imaging.malformations_urinaires}"))
             
             if episode.biologies:
-                story.append(Paragraph("<b>Biologies:</b>", styles['Normal']))
+                story.append(wrap_text("<b>Biologies:</b>"))
                 for biology in episode.biologies:
-                    story.append(Paragraph(f"  • Date: {biology.date_examen.strftime('%d/%m/%Y')}", styles['Normal']))
+                    story.append(wrap_text(f"  • Date: {biology.date_examen.strftime('%d/%m/%Y')}"))
                     if biology.ph_urinaire:
-                        story.append(Paragraph(f"    pH urinaire: {biology.ph_urinaire}", styles['Normal']))
+                        story.append(wrap_text(f"    pH urinaire: {biology.ph_urinaire}"))
                     if biology.densite_urinaire:
-                        story.append(Paragraph(f"    Densité urinaire: {biology.densite_urinaire}", styles['Normal']))
+                        story.append(wrap_text(f"    Densité urinaire: {biology.densite_urinaire}"))
                     if biology.sediment_urinaire:
-                        story.append(Paragraph(f"    Sédiment: {biology.sediment_urinaire}", styles['Normal']))
+                        story.append(wrap_text(f"    Sédiment: {biology.sediment_urinaire}"))
                     if biology.ecbu_resultats:
-                        story.append(Paragraph(f"    ECBU: {biology.ecbu_resultats}", styles['Normal']))
+                        story.append(wrap_text(f"    ECBU: {biology.ecbu_resultats}"))
                     
                     markers = []
                     if biology.hyperoxalurie:
@@ -379,7 +379,7 @@ def export_patient_pdf(patient_id):
                     if biology.hypercalcemie:
                         markers.append(f"Hypercalcémie{' (' + str(biology.calciemie_valeur) + ' mmol/L)' if biology.calciemie_valeur else ''}")
                     if markers:
-                        story.append(Paragraph(f"    Marqueurs métaboliques: {', '.join(markers)}", styles['Normal']))
+                        story.append(wrap_text(f"    Marqueurs métaboliques: {', '.join(markers)}"))
                     
                     thyroid = []
                     if biology.tsh is not None:
@@ -389,7 +389,7 @@ def export_patient_pdf(patient_id):
                     if biology.t4:
                         thyroid.append(f"T4: {biology.t4} ng/dL")
                     if thyroid:
-                        story.append(Paragraph(f"    Hormones thyroïdiennes: {', '.join(thyroid)}", styles['Normal']))
+                        story.append(wrap_text(f"    Hormones thyroïdiennes: {', '.join(thyroid)}"))
                     
                     renal = []
                     if biology.uree is not None:
@@ -397,7 +397,7 @@ def export_patient_pdf(patient_id):
                     if biology.creatinine is not None:
                         renal.append(f"Créatinine: {biology.creatinine} mg/L")
                     if renal:
-                        story.append(Paragraph(f"    Fonction rénale: {', '.join(renal)}", styles['Normal']))
+                        story.append(wrap_text(f"    Fonction rénale: {', '.join(renal)}"))
                     
                     if biology.infection_urinaire:
                         infection_text = "    Infection urinaire: Oui"
@@ -405,7 +405,7 @@ def export_patient_pdf(patient_id):
                             infection_text += f" (Germe: {biology.germe})"
                         if biology.germe_urease:
                             infection_text += f" (Germe à uréase: {biology.germe_urease})"
-                        story.append(Paragraph(infection_text, styles['Normal']))
+                        story.append(wrap_text(infection_text))
             
             if episode.calculated_stone_type and episode.calculated_stone_type_data:
                 import json
@@ -465,9 +465,9 @@ def export_patient_pdf(patient_id):
                 
                 if result.get('prevention'):
                     story.append(Spacer(1, 0.2*cm))
-                    story.append(Paragraph("<b>Conseils de prévention:</b>", styles['Normal']))
+                    story.append(wrap_text("<b>Conseils de prévention:</b>"))
                     for conseil in result['prevention'][:5]:
-                        story.append(Paragraph(f"  • {conseil}", styles['Normal']))
+                        story.append(wrap_text(f"  • {conseil}"))
             
             story.append(Spacer(1, 0.3*cm))
     

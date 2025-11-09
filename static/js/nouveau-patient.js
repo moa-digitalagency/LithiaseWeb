@@ -76,8 +76,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 continue;
             }
             if (value !== '') {
-                data[key] = value;
+                if (data[key]) {
+                    if (Array.isArray(data[key])) {
+                        data[key].push(value);
+                    } else {
+                        data[key] = [data[key], value];
+                    }
+                } else {
+                    data[key] = value;
+                }
             }
+        }
+        
+        if (data.antecedents_medicaux && Array.isArray(data.antecedents_medicaux)) {
+            data.antecedents_medicaux = data.antecedents_medicaux.join(', ');
         }
         
         try {
