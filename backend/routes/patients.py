@@ -4,6 +4,7 @@ from backend import db
 from backend.models import Patient, Episode, Biologie
 from backend.utils.biologies import calculate_metabolic_booleans
 from datetime import datetime, date
+import uuid
 
 bp = Blueprint('patients', __name__, url_prefix='/api/patients')
 
@@ -19,6 +20,7 @@ def patients():
             return jsonify({'error': 'Date de naissance invalide'}), 400
         
         patient = Patient()
+        patient.code_patient = str(uuid.uuid4())
         patient.nom = data['nom']
         patient.prenom = data['prenom']
         patient.date_naissance = date_naissance

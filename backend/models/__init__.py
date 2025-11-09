@@ -3,6 +3,7 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from backend.utils.crypto import encryption_manager
 from flask_login import UserMixin
+import uuid
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -19,6 +20,7 @@ class User(UserMixin, db.Model):
 class Patient(db.Model):
     __tablename__ = 'patients'
     id = db.Column(db.Integer, primary_key=True)
+    code_patient = db.Column(db.String(36), unique=True, nullable=True)
     
     _nom = db.Column('nom', db.Text, nullable=False)
     _prenom = db.Column('prenom', db.Text, nullable=False)
