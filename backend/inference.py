@@ -151,11 +151,11 @@ class InferenceEngine:
         
         delta = min(abs(uh - min_uh), abs(uh - max_uh))
         if delta <= 100:
-            return 4, f"Densité {uh} UH proche de la plage (±100 UH)"
+            return 4, ""
         elif delta <= 200:
-            return 2, f"Densité {uh} UH éloignée de la plage (±200 UH)"
+            return 2, ""
         else:
-            return 0, f"Densité {uh} UH hors plage typique"
+            return 0, ""
     
     @staticmethod
     def score_morphology(morphology, stone_type):
@@ -184,9 +184,9 @@ class InferenceEngine:
         
         delta = min(abs(ph - min_ph), abs(ph - max_ph))
         if delta <= 0.5:
-            return 1, f"pH {ph} proche de la plage (±0.5)"
+            return 1, ""
         else:
-            return 0, f"pH {ph} hors plage préférentielle"
+            return 0, ""
     
     @staticmethod
     def score_metabolic(markers, stone_type):
@@ -269,17 +269,17 @@ class InferenceEngine:
             
             density_score, density_reason = InferenceEngine.score_density(uh, stone_type)
             score += density_score
-            if density_score > 0:
+            if density_score > 0 and density_reason:
                 reasons.append(density_reason)
             
             morpho_score, morpho_reason = InferenceEngine.score_morphology(morphology, stone_type)
             score += morpho_score
-            if morpho_score > 0:
+            if morpho_score > 0 and morpho_reason:
                 reasons.append(morpho_reason)
             
             ph_score, ph_reason = InferenceEngine.score_ph(ph, stone_type)
             score += ph_score
-            if ph_score > 0:
+            if ph_score > 0 and ph_reason:
                 reasons.append(ph_reason)
             
             metabolic_score, metabolic_reason = InferenceEngine.score_metabolic(markers, stone_type)
