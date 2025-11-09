@@ -240,6 +240,8 @@ class InferenceEngine:
         
         # Extraction des données d'imagerie
         uh = imaging_data.get('densite_uh') or imaging_data.get('densite_noyau')
+        densite_noyau = imaging_data.get('densite_noyau')
+        densites_couches = imaging_data.get('densites_couches')
         morphology = imaging_data.get('morphologie')
         radio_opacity = imaging_data.get('radio_opacite')
         taille = imaging_data.get('taille_mm') or imaging_data.get('diametre_longitudinal')
@@ -321,6 +323,16 @@ class InferenceEngine:
             if top_3_type and top_3_data['score'] > 0 and score_diff < 3:
                 mixed_components.append(top_3_type)
             composition_detail = " + ".join(mixed_components) + " (mixte)"
+            
+            if densite_noyau or densites_couches:
+                structure_radiaire = "Structure radiaire détectée: "
+                if densite_noyau:
+                    structure_radiaire += f"noyau {densite_noyau} UH"
+                    if densites_couches:
+                        structure_radiaire += f", couches périphériques ({densites_couches})"
+                elif densites_couches:
+                    structure_radiaire += f"couches ({densites_couches})"
+                top_1_data['reasons'].append(structure_radiaire)
         
         lec_eligible = InferenceEngine.LEC_ELIGIBILITY.get(top_1_type, False)
         
