@@ -61,6 +61,29 @@ The application uses a Flask (Python 3.11) backend with SQLAlchemy ORM for datab
 - **Dashboard Statistics**: Added new "Hypercalciurie" statistic card showing number of patients with elevated urinary calcium
 - **Demo Data Enrichment**: All 5 demo patients now include complete thyroid and metabolic data with realistic clinical values
 
+#### Database & Form Enhancements (Nov 9 - Current Session)
+- **Database Migration Consolidation**: Consolidated multiple migration scripts into a single `init_db.py` that drops and recreates the entire schema with demo data
+  - Single command execution: `python init_db.py`
+  - Clears all existing tables and data
+  - Seeds 5 comprehensive demo patients with complete medical data
+  - Ensures clean development environment setup
+- **Ethnic Group Cleanup**: Removed "Rwanda" from ethnic group dropdown options in patient registration forms
+- **Enhanced Form Dropdowns**: Added consistent dropdown menus with predefined options for:
+  - Stone morphology (Ia, Ib, IIa, IIb, IIIa, IIIb, IVa, IVb)
+  - Stone contour (Lisse, Rugueux, Mamelonné, Hérissé)
+  - Radio-opacity levels (Faible, Modérée, Forte, Très forte)
+  - Malformation types (Rein en fer à cheval, Duplicité urétérale, Sténose jonction pyélo-urétérale, etc.)
+- **Flexible Topography Input**: Changed topography field from restrictive dropdown to text input with datalist suggestions
+  - Preserves legacy values like "Calice inférieur droit" that exist in demo data
+  - Suggests common anatomical locations while allowing free-text entry
+  - Prevents data loss during patient editing
+- **PDF Text Wrapping**: Applied comprehensive `wrap_text()` helper to all PDF table cells
+  - Personal information section with Paragraph wrapping
+  - Vital signs data with proper line breaks
+  - Medical history and lifestyle factors
+  - Analysis results and inference justifications
+  - Prevents text overflow in long addresses, medical narratives, and imaging descriptions
+
 ## External Dependencies
 - **Flask**: Web framework
 - **SQLAlchemy**: ORM for database interaction
