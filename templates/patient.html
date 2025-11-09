@@ -355,16 +355,45 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium mb-2">📊 Marqueurs métaboliques</label>
+                        <label class="block text-sm font-medium mb-2">📊 Marqueurs métaboliques (valeurs numériques)</label>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs text-gray-600 mb-1">Oxalurie (mg/24h)</label>
+                                <input type="number" name="oxalurie_valeur" step="0.1" class="input-field" placeholder="Ex: 40">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-600 mb-1">Calciurie (mg/24h)</label>
+                                <input type="number" name="calciurie_valeur" step="0.1" class="input-field" placeholder="Ex: 280">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-600 mb-1">Calciémie (mmol/L)</label>
+                                <input type="number" name="calciemie_valeur" step="0.01" class="input-field" placeholder="Ex: 2.5">
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">💡 Les marqueurs hyperoxalurie, hypercalciurie et hypercalcémie seront calculés automatiquement</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">🦋 Hormones thyroïdiennes</label>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs text-gray-600 mb-1">TSH (mUI/L)</label>
+                                <input type="number" name="tsh" step="0.01" class="input-field" placeholder="Ex: 1.5">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-600 mb-1">T3 (pg/mL)</label>
+                                <input type="number" name="t3" step="0.1" class="input-field" placeholder="Ex: 1.8">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-600 mb-1">T4 (ng/dL)</label>
+                                <input type="number" name="t4" step="0.1" class="input-field" placeholder="Ex: 10.5">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">📊 Autres marqueurs</label>
                         <div class="grid grid-cols-2 gap-2">
-                            <div class="flex items-center">
-                                <input type="checkbox" name="hyperoxalurie" id="hyperoxalurie" class="mr-2">
-                                <label for="hyperoxalurie">Hyperoxalurie</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" name="hypercalciurie" id="hypercalciurie" class="mr-2">
-                                <label for="hypercalciurie">Hypercalciurie</label>
-                            </div>
                             <div class="flex items-center">
                                 <input type="checkbox" name="hyperuricurie" id="hyperuricurie" class="mr-2">
                                 <label for="hyperuricurie">Hyperuricurie</label>
@@ -741,12 +770,21 @@
                     <div class="col-span-2 mt-2 border-t pt-2">
                         <strong>📊 Marqueurs métaboliques:</strong>
                         <div class="grid grid-cols-2 gap-2 mt-1">
-                            <span>Hyperoxalurie: ${b.hyperoxalurie ? '✅' : '❌'}</span>
-                            <span>Hypercalciurie: ${b.hypercalciurie ? '✅' : '❌'}</span>
+                            <span>Hyperoxalurie: ${b.hyperoxalurie ? '✅' : '❌'} ${b.oxalurie_valeur ? `(${b.oxalurie_valeur} mg/24h)` : ''}</span>
+                            <span>Hypercalciurie: ${b.hypercalciurie ? '✅' : '❌'} ${b.calciurie_valeur ? `(${b.calciurie_valeur} mg/24h)` : ''}</span>
                             <span>Hyperuricurie: ${b.hyperuricurie ? '✅' : '❌'}</span>
                             <span>Cystinurie: ${b.cystinurie ? '✅' : '❌'}</span>
+                            <span>Hypercalcémie: ${b.hypercalcemie ? '✅' : '❌'} ${b.calciemie_valeur ? `(${b.calciemie_valeur} mmol/L)` : ''}</span>
                         </div>
                     </div>
+                    ${(b.t3 || b.t4 || b.tsh) ? `<div class="col-span-2 mt-2 border-t pt-2">
+                        <strong>🦋 Hormones thyroïdiennes:</strong>
+                        <div class="grid grid-cols-3 gap-2 mt-1">
+                            ${b.tsh !== null && b.tsh !== undefined ? `<span>TSH: ${b.tsh} mUI/L</span>` : ''}
+                            ${b.t3 ? `<span>T3: ${b.t3} pg/mL</span>` : ''}
+                            ${b.t4 ? `<span>T4: ${b.t4} ng/dL</span>` : ''}
+                        </div>
+                    </div>` : ''}
                     ${b.infection_urinaire ? `<div class="col-span-2 mt-2"><strong>🦠 Infection:</strong> Oui ${b.germe ? `(${b.germe})` : ''}</div>` : ''}
                 </div>
             `).join('') || '<p class="text-gray-500">😔 Aucune biologie</p>';
@@ -896,11 +934,16 @@
             e.preventDefault();
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
-            data.hyperoxalurie = formData.has('hyperoxalurie');
-            data.hypercalciurie = formData.has('hypercalciurie');
             data.hyperuricurie = formData.has('hyperuricurie');
             data.cystinurie = formData.has('cystinurie');
             data.infection_urinaire = formData.has('infection_urinaire');
+            
+            if (data.oxalurie_valeur) data.oxalurie_valeur = parseFloat(data.oxalurie_valeur);
+            if (data.calciurie_valeur) data.calciurie_valeur = parseFloat(data.calciurie_valeur);
+            if (data.calciemie_valeur) data.calciemie_valeur = parseFloat(data.calciemie_valeur);
+            if (data.tsh) data.tsh = parseFloat(data.tsh);
+            if (data.t3) data.t3 = parseFloat(data.t3);
+            if (data.t4) data.t4 = parseFloat(data.t4);
             
             await fetch(`/api/episodes/${currentEpisodeId}/biologies`, {
                 method: 'POST',

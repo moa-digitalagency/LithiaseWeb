@@ -233,15 +233,27 @@ def export_patient_pdf(patient_id):
                     
                     markers = []
                     if biology.hyperoxalurie:
-                        markers.append("Hyperoxalurie")
+                        markers.append(f"Hyperoxalurie{' (' + str(biology.oxalurie_valeur) + ' mg/24h)' if biology.oxalurie_valeur else ''}")
                     if biology.hypercalciurie:
-                        markers.append("Hypercalciurie")
+                        markers.append(f"Hypercalciurie{' (' + str(biology.calciurie_valeur) + ' mg/24h)' if biology.calciurie_valeur else ''}")
                     if biology.hyperuricurie:
                         markers.append("Hyperuricurie")
                     if biology.cystinurie:
                         markers.append("Cystinurie")
+                    if biology.hypercalcemie:
+                        markers.append(f"Hypercalcémie{' (' + str(biology.calciemie_valeur) + ' mmol/L)' if biology.calciemie_valeur else ''}")
                     if markers:
                         story.append(Paragraph(f"    Marqueurs métaboliques: {', '.join(markers)}", styles['Normal']))
+                    
+                    thyroid = []
+                    if biology.tsh is not None:
+                        thyroid.append(f"TSH: {biology.tsh} mUI/L")
+                    if biology.t3:
+                        thyroid.append(f"T3: {biology.t3} pg/mL")
+                    if biology.t4:
+                        thyroid.append(f"T4: {biology.t4} ng/dL")
+                    if thyroid:
+                        story.append(Paragraph(f"    Hormones thyroïdiennes: {', '.join(thyroid)}", styles['Normal']))
                     
                     if biology.infection_urinaire:
                         story.append(Paragraph(f"    Infection urinaire: Oui{' (' + biology.germe + ')' if biology.germe else ''}", styles['Normal']))

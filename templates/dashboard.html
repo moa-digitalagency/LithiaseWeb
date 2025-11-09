@@ -21,7 +21,7 @@
     </nav>
     
     <div class="container mx-auto p-6">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
             <div class="card bg-gradient-to-br from-blue-50 to-indigo-50">
                 <div class="flex items-center justify-between">
                     <div>
@@ -47,6 +47,15 @@
                         <p id="avgBMI" class="text-3xl font-bold text-purple-600">-</p>
                     </div>
                     <div class="text-4xl">⚖️</div>
+                </div>
+            </div>
+            <div class="card bg-gradient-to-br from-yellow-50 to-amber-50">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Hypercalciurie</p>
+                        <p id="hypercalciuriaCount" class="text-3xl font-bold text-amber-600">0</p>
+                    </div>
+                    <div class="text-4xl">⚡</div>
                 </div>
             </div>
             <div class="card bg-gradient-to-br from-orange-50 to-red-50">
@@ -139,6 +148,23 @@
             } else {
                 document.getElementById('avgBMI').textContent = '-';
             }
+            
+            let hypercalciuriaCount = 0;
+            for (const patient of patientsWithBMI) {
+                const episodesResponse = await fetch(`/api/patients/${patient.id}/episodes`);
+                const episodes = await episodesResponse.json();
+                
+                for (const episode of episodes) {
+                    if (episode.biologies && episode.biologies.length > 0) {
+                        const hasHypercalciuria = episode.biologies.some(b => b.hypercalciurie);
+                        if (hasHypercalciuria) {
+                            hypercalciuriaCount++;
+                            break;
+                        }
+                    }
+                }
+            }
+            document.getElementById('hypercalciuriaCount').textContent = hypercalciuriaCount;
             
             const aiReadyCount = patientsWithBMI.filter(p => 
                 p.poids && p.taille && (p.petit_dejeuner || p.dejeuner || p.diner)

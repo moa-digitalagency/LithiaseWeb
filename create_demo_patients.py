@@ -291,14 +291,45 @@ with app.app_context():
         if 'Benali' in patient_data.get('nom', ''):
             biologie.hyperuricurie = True
             biologie.uricurie_valeur = 850.0
+            biologie.calciurie_valeur = 280.0
+            biologie.oxalurie_valeur = 35.0
+            biologie.calciemie_valeur = 2.45
+            biologie.tsh = 1.8
+            biologie.t3 = 1.5
+            biologie.t4 = 9.5
         elif 'Martin' in patient_data.get('nom', ''):
             biologie.hyperoxalurie = True
             biologie.oxalurie_valeur = 65.0
+            biologie.calciurie_valeur = 220.0
+            biologie.calciemie_valeur = 2.3
+            biologie.tsh = 2.1
+            biologie.t3 = 1.6
+            biologie.t4 = 10.2
         elif 'Dupont' in patient_data.get('nom', ''):
             biologie.hypercalciurie = True
             biologie.calciurie_valeur = 320.0
+            biologie.oxalurie_valeur = 38.0
+            biologie.calciemie_valeur = 2.55
+            biologie.tsh = 1.2
+            biologie.t3 = 1.7
+            biologie.t4 = 11.0
         elif 'Lefebvre' in patient_data.get('nom', ''):
             biologie.cystinurie = True
+            biologie.oxalurie_valeur = 30.0
+            biologie.calciurie_valeur = 180.0
+            biologie.calciemie_valeur = 2.35
+            biologie.tsh = 3.5
+            biologie.t3 = 1.2
+            biologie.t4 = 8.5
+        elif 'Rousseau' in patient_data.get('nom', ''):
+            biologie.hypercalciurie = True
+            biologie.hypercalcemie = True
+            biologie.calciurie_valeur = 340.0
+            biologie.oxalurie_valeur = 42.0
+            biologie.calciemie_valeur = 2.75
+            biologie.tsh = 1.6
+            biologie.t3 = 1.8
+            biologie.t4 = 11.5
         
         db.session.add(biologie)
         
