@@ -115,6 +115,7 @@ def episode_detail(episode_id):
                 'forme_calcul': i.forme_calcul,
                 'contour_calcul': i.contour_calcul,
                 'calcifications_autres': i.calcifications_autres,
+                'malformations_urinaires': i.malformations_urinaires,
                 'asp_resultats': i.asp_resultats,
                 'echographie_resultats': i.echographie_resultats,
                 'uroscanner_resultats': i.uroscanner_resultats,
@@ -217,7 +218,8 @@ def infer(episode_id):
         'contour_calcul': latest_imaging.contour_calcul,
         'nombre_calculs': latest_imaging.nombre_calculs,
         'topographie_calcul': latest_imaging.topographie_calcul,
-        'calcifications_autres': latest_imaging.calcifications_autres
+        'calcifications_autres': latest_imaging.calcifications_autres,
+        'malformations_urinaires': latest_imaging.malformations_urinaires
     }
     
     biology_data = {}

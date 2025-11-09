@@ -2,7 +2,7 @@
 
 ## 📊 Vue d'ensemble
 
-Le moteur d'inférence de l'application **Algorithme Lithiase KALONJI** est basé sur la **classification morpho-constitutionnelle de Daudon**, référence internationale pour l'analyse des calculs rénaux. L'algorithme utilise un système de notation sur **20 points** pour déterminer le type de calcul le plus probable parmi 8 types couverts.
+Le moteur d'inférence de l'application **Algorithme Lithiase KALONJI** est basé sur la **classification morpho-constitutionnelle de Daudon**, référence internationale pour l'analyse des calculs rénaux. L'algorithme utilise un système de notation sur **21 points maximum** (incluant 1 point bonus pour les malformations urinaires) pour déterminer le type de calcul le plus probable parmi 8 types couverts.
 
 ## 🎯 Objectifs médicaux
 
@@ -12,7 +12,7 @@ Le moteur d'inférence de l'application **Algorithme Lithiase KALONJI** est bas�
 4. Détecter les calculs éligibles à la lithotripsie extracorporelle (LEC)
 5. Identifier les infections lithogènes (Struvite, Carbapatite)
 
-## 🧮 Système de notation (20 points)
+## 🧮 Système de notation (21 points)
 
 ### Distribution des points
 
@@ -24,7 +24,8 @@ Le moteur d'inférence de l'application **Algorithme Lithiase KALONJI** est bas�
 | **Marqueurs métaboliques** | 4 | Hyperoxalurie, hypercalciurie, etc. |
 | **Infection urinaire** | 3 | Favorable ou défavorable selon le type |
 | **Radio-opacité** | 1 | Opaque ou transparent |
-| **TOTAL** | 20 | Score maximum |
+| **Malformations urinaires** | 1 | Facteur de risque lithogène |
+| **TOTAL** | 21 | Score maximum (20 + 1 bonus) |
 
 ### 1. Densité scanner (6 points)
 
@@ -121,6 +122,31 @@ Visibilité du calcul à la radiographie simple (ASP).
 - **Opaques** : Oxalate de calcium, Phosphates calciques
 - **Transparents** : Acide urique, Cystine, Struvite, Urate d'ammonium
 
+### 7. Malformations urinaires (1 point bonus)
+
+Les malformations des voies urinaires favorisent la stase urinaire et les infections récurrentes, augmentant le risque de calculs infectieux.
+
+**Attribution des points :**
+- **+1 point** : Présence d'une malformation lithogène ET calcul de type infectieux (Struvite, Carbapatite, Urate d'ammonium)
+- **0 point** : Absence de malformation ou type de calcul non infectieux
+
+**Malformations lithogènes reconnues :**
+- Sténose de la jonction pyélo-urétérale (JPU)
+- Syndrome de la jonction urétéro-vésicale (JUV)
+- Mégauretère
+- Reflux vésico-urétéral
+- Duplicité urétérale
+- Urétérocèle
+- Valve de l'urètre postérieur
+- Diverticule caliciel
+
+**Justification médicale :**
+Les malformations urinaires créent des zones de stase où l'urine stagne, favorisant :
+1. La concentration des sels minéraux
+2. Le développement de biofilms bactériens
+3. Les infections urinaires récidivantes
+4. La formation de calculs infectieux (Struvite notamment)
+
 ## 🔀 Détermination : Calcul Pur ou Mixte
 
 Après le calcul du score pour chaque type de calcul, l'algorithme détermine si la composition est **Pure** ou **Mixte** :
@@ -133,9 +159,12 @@ Un calcul est considéré comme **Pur** lorsqu'un type domine clairement :
 
 **Exemple :**
 ```
-Score Whewellite : 14/20
-Score Weddellite : 8/20
+Score de base Whewellite : 14/20
+Score de base Weddellite : 8/20
 Différence : 6 points → Calcul PUR (Whewellite pur)
+
+Note: Scores de base (hors bonus malformations)
+Avec bonus malformations si applicable: +1 point possible
 ```
 
 ### Calcul Mixte
@@ -146,10 +175,13 @@ Un calcul est considéré comme **Mixte** lorsque plusieurs types ont des scores
 
 **Exemple :**
 ```
-Score Whewellite : 12/20
-Score Weddellite : 10/20
-Score Brushite : 9/20
+Score de base Whewellite : 12/20
+Score de base Weddellite : 10/20
+Score de base Brushite : 9/20
 Différence : 2 points → Calcul MIXTE (Whewellite + Weddellite + Brushite)
+
+Note: Scores de base (hors bonus malformations)
+Avec bonus malformations si applicable: +1 point possible pour types infectieux
 ```
 
 ### Signification clinique
@@ -331,14 +363,16 @@ Pour chaque type de calcul, l'algorithme calcule un score en additionnant les po
 
 ```python
 score_total = (
-    score_densite +      # 0-6 points
-    score_morphologie +  # 0-3 points
-    score_ph +           # 0-3 points
-    score_metabolique +  # 0-6 points (base 0-4 + bonus 0-2)
-    score_infection +    # -1 à +3 points
-    score_radio_opacite  # 0-1 point
+    score_densite +       # 0-6 points
+    score_morphologie +   # 0-3 points
+    score_ph +            # 0-3 points
+    score_metabolique +   # 0-6 points (base 0-4 + bonus 0-2)
+    score_infection +     # -1 à +3 points
+    score_radio_opacite + # 0-1 point
+    score_malformations   # 0-1 point (bonus pour calculs infectieux)
 )
-# Score maximum théorique : 22 points
+# Score maximum de base : 21 points (20 + 1 bonus malformations)
+# Score maximum théorique avec tous les bonus métaboliques : 23 points
 ```
 
 ### Étape 3 : Classement
@@ -393,6 +427,8 @@ En fonction du type proposé et de la taille :
 
 ### Calcul des scores
 
+**Note:** Les scores ci-dessous sont des scores de base (sur 20 points). Le bonus malformations (+1 point) s'applique uniquement aux calculs de type infectieux (Struvite, Carbapatite, Urate d'ammonium) en présence de malformations urinaires lithogènes.
+
 #### Whewellite
 - Densité : **6 pts** (1250 dans [1200-1700])
 - Morphologie : **3 pts** (sphérique lisse = signature)
@@ -400,7 +436,8 @@ En fonction du type proposé et de la taille :
 - Métabolique : **4 pts** (hyperoxalurie présente)
 - Infection : **0 pt** (non favorable, absence OK)
 - Radio-opacité : **1 pt** (opaque = OK)
-- **TOTAL : 17/20** ✅
+- Malformations : **0 pt** (non applicable pour calcul non infectieux)
+- **TOTAL : 17/20** (score de base) ✅
 
 #### Weddellite
 - Densité : **4 pts** (1250 proche de [1000-1450])
@@ -409,7 +446,8 @@ En fonction du type proposé et de la taille :
 - Métabolique : **0 pt** (hypercalciurie absente)
 - Infection : **0 pt**
 - Radio-opacité : **1 pt**
-- **TOTAL : 9/20**
+- Malformations : **0 pt** (non applicable pour calcul non infectieux)
+- **TOTAL : 9/20** (score de base)
 
 #### Acide urique
 - Densité : **0 pt** (1250 hors [350-650])
@@ -418,13 +456,14 @@ En fonction du type proposé et de la taille :
 - Métabolique : **0 pt** (hyperuricurie absente)
 - Infection : **0 pt**
 - Radio-opacité : **0 pt** (opaque ≠ transparent)
-- **TOTAL : 6/20**
+- Malformations : **0 pt** (non applicable pour calcul non infectieux)
+- **TOTAL : 6/20** (score de base)
 
 ### Résultat
 
 ```
 🎯 Type proposé : Whewellite
-⭐ Score : 17/20
+⭐ Score : 17/20 (score de base, bonus malformations non applicable)
 📝 Justification :
    - Densité 1250 UH dans la plage typique [1200-1700]
    - Morphologie signature (sphérique lisse)
@@ -432,7 +471,7 @@ En fonction du type proposé et de la taille :
    - Marqueur signature présent (hyperoxalurie)
    - Radio-opacité concordante (opaque)
 
-📊 Top 3 :
+📊 Top 3 (scores de base sur 20) :
    1. Whewellite : 17/20
    2. Weddellite : 9/20
    3. Acide urique : 6/20

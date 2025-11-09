@@ -279,6 +279,31 @@ class InferenceEngine:
             return 0, f"Radio-opacité non concordante"
     
     @staticmethod
+    def score_malformations(malformations, stone_type):
+        if not malformations or malformations in ['Aucune', 'None', '']:
+            return 0, None
+        
+        config = InferenceEngine.STONE_TYPES[stone_type]
+        
+        malformations_lithogenes = [
+            'Sténose JPU', 'Stenose JPU',
+            'Syndrome JUV', 
+            'Mégauretère', 'Megauretere',
+            'Reflux vésico-urétéral', 'Reflux vesico-ureteral',
+            'Duplicité urétérale', 'Duplicite ureterale',
+            'Urétérocèle', 'Ureterocele',
+            'Valve urètre postérieur', 'Valve uretre posterieur',
+            'Diverticule caliciel'
+        ]
+        
+        has_malformation = any(m in malformations for m in malformations_lithogenes)
+        
+        if has_malformation and config['infection_favorable']:
+            return 1, f"Malformation urinaire détectée ({malformations}) → favorise stase et infections"
+        
+        return 0, None
+    
+    @staticmethod
     def infer_stone_type(imaging_data, biology_data):
         results = {}
         
@@ -293,6 +318,7 @@ class InferenceEngine:
         contour_calcul = imaging_data.get('contour_calcul')
         nombre_calculs = imaging_data.get('nombre_calculs')
         topographie = imaging_data.get('topographie_calcul')
+        malformations = imaging_data.get('malformations_urinaires')
         
         # Extraction des données biologiques
         ph = biology_data.get('ph_urinaire')
@@ -349,6 +375,11 @@ class InferenceEngine:
             score += opacity_score
             if opacity_score > 0:
                 reasons.append(opacity_reason)
+            
+            malformation_score, malformation_reason = InferenceEngine.score_malformations(malformations, stone_type)
+            score += malformation_score
+            if malformation_score > 0 and malformation_reason:
+                reasons.append(malformation_reason)
             
             results[stone_type] = {
                 'score': score,

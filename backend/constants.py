@@ -100,7 +100,6 @@ GROUPE_ETHNIQUE_CHOICES = [
     ('Luba', 'Luba'),
     ('Mongo', 'Mongo'),
     ('Kongo', 'Kongo'),
-    ('Rwanda', 'Rwanda'),
     ('Azande', 'Azande'),
     ('Bangi', 'Bangi et Ngale'),
     ('Rundi', 'Rundi'),
