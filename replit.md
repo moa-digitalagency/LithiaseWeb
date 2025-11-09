@@ -55,6 +55,34 @@ Application web mono-médecin pour la gestion des dossiers patients souffrant de
 - Urate d'ammonium
 
 ## Changements récents
+- **✅ COMPLÉTÉ** (09/11/2025): Enrichissement complet de l'algorithme d'inférence et documentation
+  - **Type de calcul persistant** : Le résultat de l'inférence est maintenant sauvegardé dans la base de données
+    - Nouveaux champs dans Episode : `calculated_stone_type`, `calculated_stone_type_data` (JSON), `calculated_at`
+    - Plus besoin de recalculer le type à chaque affichage ou export
+    - Migration SQLite automatique pour ajouter les colonnes
+  - **Algorithme d'inférence enrichi** : Intégration de tous les nouveaux champs
+    - Forme du calcul (sphérique lisse, irrégulière spiculée, crayeuse, coralliforme)
+    - Contour du calcul (régulier, irrégulier)
+    - Nombre de calculs
+    - Topographie précise
+    - Sédiment urinaire
+    - Résultats ECBU
+  - **Affichage enrichi** : Toutes les pages patient affichent maintenant les données détaillées
+    - Nombre de calculs, topographie, forme, contour
+    - Sédiment urinaire, ECBU
+    - Détails ASP, échographie, uro-scanner
+  - **Export PDF amélioré** : Rapport complet avec toutes les données
+    - Utilisation du type de calcul persistant (pas de recalcul)
+    - Affichage de la date de calcul
+    - Top 3 des types de calculs avec scores
+    - Nouveaux champs d'imagerie et biologie
+  - **Documentation complète** : Dossier docs/ créé avec 3 fichiers
+    - **README.md** : Vue d'ensemble, fonctionnalités, cas d'usage
+    - **TECHNIQUE.md** : Architecture, technologies, modèle de données, API, sécurité
+    - **ALGORITHME.md** : Explication détaillée du moteur d'inférence (système de notation, types de calculs, exemples)
+  - **Navigation améliorée** : Lien "➕ Nouveau Patient" ajouté dans tous les menus
+  - **Validation** : Architecture complète validée par architect (PASS)
+
 - **✅ COMPLÉTÉ** (09/11/2025): Patients de démonstration et page de paramètres
   - **Script de démonstration** : create_demo_patients.py crée 4 patients avec données complètes
     - Jean Dupont (M, 48 ans) : Oxalate de calcium, récidivant, mauvaise observance
