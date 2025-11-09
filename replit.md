@@ -11,7 +11,22 @@ Do not make changes to the folder `Z`.
 Do not make changes to the file `Y`.
 
 ## System Architecture
-The application uses a Flask (Python 3.11) backend with SQLAlchemy ORM for database interactions. The frontend is built with HTML/CSS, styled using Tailwind CSS, and enhanced with vanilla JavaScript. Data security is paramount, employing Cryptography (Fernet AES-128 + HMAC) for encrypting over 25 sensitive health data fields. The system integrates a sophisticated inference engine capable of classifying 8 types of kidney stones, distinguishing between "Pure" and "Mixed" compositions based on detailed scoring. UI/UX follows the MyOneArt design system, featuring an indigo-purple palette, rounded borders, and friendly emojis for a modern and professional appearance. Key features include comprehensive patient management, medical episode tracking, advanced search capabilities, and PDF/CSV export functionalities. The system also includes an automatic IMC calculation with color-coded classification and an integrated explanation system for the inference algorithm.
+The application uses a Flask (Python 3.11) backend with SQLAlchemy ORM for database interactions. The frontend is built with HTML/CSS, styled using Tailwind CSS, and enhanced with vanilla JavaScript. Data security is paramount, employing Cryptography (Fernet AES-128 + HMAC) for encrypting over 25 sensitive health data fields. The system integrates a sophisticated inference engine capable of classifying 8 types of kidney stones, distinguishing between "Pure" and "Mixed" compositions based on detailed scoring. UI/UX follows the MyOneArt design system, featuring an indigo-purple palette, rounded borders, and friendly emojis for a modern and professional appearance.
+
+### Key Features
+- **Complete Patient CRUD**: Full create, read, update, and delete operations for patient records with comprehensive data management
+- **Medical Episode Tracking**: Ability to create and manage multiple medical episodes per patient
+- **Advanced Search**: Search functionality across patient data
+- **PDF/CSV Export**: Generate detailed PDF reports and CSV exports
+- **Automatic IMC Calculation**: Body Mass Index calculation with color-coded classification
+- **Inference Algorithm**: Integrated explanation system for kidney stone type classification
+
+### Recent Changes (November 2025)
+- Application renamed from "Lithiase" to "Algorithme Lithiase KALONJI" across all templates and documentation
+- Implemented complete patient editing functionality with modal containing ALL patient fields (~30+ attributes)
+- Added patient deletion functionality with confirmation modal and cascade deletion of related data
+- Enhanced patient detail page (patient.html) with Edit and Delete buttons
+- Validated full data persistence in edit operations with no field loss
 
 ## External Dependencies
 - **Flask**: Web framework
