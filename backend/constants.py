@@ -274,6 +274,55 @@ ANTECEDENTS_MEDICAUX_CHOICES = [
     ('Aucun', 'Aucun')
 ]
 
+# Constantes additionnelles pour l'algorithme d'inférence
+# Justification: Le niveau d'activité physique influence le métabolisme calcique et le risque lithiasique
+
+ACTIVITE_PHYSIQUE_CHOICES = [
+    ('Sedentaire', 'Sédentaire (< 30 min/semaine)'),
+    ('Legere', 'Légère (30 min à 2h/semaine)'),
+    ('Moderee', 'Modérée (2-4h/semaine)'),
+    ('Active', 'Active (4-7h/semaine)'),
+    ('Tres active', 'Très active (> 7h/semaine)')
+]
+
+# Justification: Les habitudes de consommation de sel influencent la calciurie et la natriurie
+
+CONSOMMATION_SEL_CHOICES = [
+    ('Faible', 'Faible (< 5g/jour)'),
+    ('Normale', 'Normale (5-10g/jour)'),
+    ('Elevee', 'Élevée (> 10g/jour)'),
+    ('Non precise', 'Non précisé')
+]
+
+# Justification: La consommation de protéines animales augmente l'excrétion d'acide urique et de calcium
+
+CONSOMMATION_PROTEINES_CHOICES = [
+    ('Faible', 'Faible (< 0.8g/kg/jour)'),
+    ('Normale', 'Normale (0.8-1.2g/kg/jour)'),
+    ('Elevee', 'Élevée (> 1.2g/kg/jour)'),
+    ('Non precise', 'Non précisé')
+]
+
+# Justification: Le statut IMC corrèle avec le risque lithiasique (syndrome métabolique)
+
+CATEGORIE_IMC_CHOICES = [
+    ('Insuffisance ponderale', 'Insuffisance pondérale (< 18.5)'),
+    ('Poids normal', 'Poids normal (18.5-24.9)'),
+    ('Surpoids', 'Surpoids (25-29.9)'),
+    ('Obesite classe I', 'Obésité classe I (30-34.9)'),
+    ('Obesite classe II', 'Obésité classe II (35-39.9)'),
+    ('Obesite classe III', 'Obésité classe III (≥ 40)')
+]
+
+# Justification: L'exposition professionnelle à la chaleur augmente le risque de déshydratation
+
+EXPOSITION_CHALEUR_CHOICES = [
+    ('Aucune', 'Aucune'),
+    ('Occasionnelle', 'Occasionnelle'),
+    ('Reguliere', 'Régulière (travail extérieur)'),
+    ('Intensive', 'Intensive (four, fonderie, etc.)')
+]
+
 def get_choice_label(choices, value):
     for choice_value, choice_label in choices:
         if choice_value == value:
