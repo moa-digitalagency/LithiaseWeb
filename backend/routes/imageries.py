@@ -45,6 +45,19 @@ def imageries(episode_id):
         imagerie.echographie_resultats = data.get('echographie_resultats')
         imagerie.uroscanner_resultats = data.get('uroscanner_resultats')
         
+        imagerie.rein_gauche_cranio_caudal = data.get('rein_gauche_cranio_caudal')
+        imagerie.rein_gauche_antero_posterieur = data.get('rein_gauche_antero_posterieur')
+        imagerie.rein_gauche_transversal = data.get('rein_gauche_transversal')
+        imagerie.rein_gauche_volume = data.get('rein_gauche_volume')
+        imagerie.rein_droit_cranio_caudal = data.get('rein_droit_cranio_caudal')
+        imagerie.rein_droit_antero_posterieur = data.get('rein_droit_antero_posterieur')
+        imagerie.rein_droit_transversal = data.get('rein_droit_transversal')
+        imagerie.rein_droit_volume = data.get('rein_droit_volume')
+        imagerie.epaisseur_cortex_renal = data.get('epaisseur_cortex_renal')
+        imagerie.diametre_pyelon = data.get('diametre_pyelon')
+        imagerie.diametre_uretere_amont = data.get('diametre_uretere_amont')
+        imagerie.malformations_urinaires = data.get('malformations_urinaires')
+        
         db.session.add(imagerie)
         db.session.commit()
         
@@ -73,7 +86,19 @@ def imageries(episode_id):
             'calcifications_autres': i.calcifications_autres,
             'asp_resultats': i.asp_resultats,
             'echographie_resultats': i.echographie_resultats,
-            'uroscanner_resultats': i.uroscanner_resultats
+            'uroscanner_resultats': i.uroscanner_resultats,
+            'rein_gauche_cranio_caudal': i.rein_gauche_cranio_caudal,
+            'rein_gauche_antero_posterieur': i.rein_gauche_antero_posterieur,
+            'rein_gauche_transversal': i.rein_gauche_transversal,
+            'rein_gauche_volume': i.rein_gauche_volume,
+            'rein_droit_cranio_caudal': i.rein_droit_cranio_caudal,
+            'rein_droit_antero_posterieur': i.rein_droit_antero_posterieur,
+            'rein_droit_transversal': i.rein_droit_transversal,
+            'rein_droit_volume': i.rein_droit_volume,
+            'epaisseur_cortex_renal': i.epaisseur_cortex_renal,
+            'diametre_pyelon': i.diametre_pyelon,
+            'diametre_uretere_amont': i.diametre_uretere_amont,
+            'malformations_urinaires': i.malformations_urinaires
         } for i in episode.imageries])
 
 @bp.route('/api/imageries/<int:imagerie_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -106,7 +131,19 @@ def imagerie_detail(imagerie_id):
             'calcifications_autres': imagerie.calcifications_autres,
             'asp_resultats': imagerie.asp_resultats,
             'echographie_resultats': imagerie.echographie_resultats,
-            'uroscanner_resultats': imagerie.uroscanner_resultats
+            'uroscanner_resultats': imagerie.uroscanner_resultats,
+            'rein_gauche_cranio_caudal': imagerie.rein_gauche_cranio_caudal,
+            'rein_gauche_antero_posterieur': imagerie.rein_gauche_antero_posterieur,
+            'rein_gauche_transversal': imagerie.rein_gauche_transversal,
+            'rein_gauche_volume': imagerie.rein_gauche_volume,
+            'rein_droit_cranio_caudal': imagerie.rein_droit_cranio_caudal,
+            'rein_droit_antero_posterieur': imagerie.rein_droit_antero_posterieur,
+            'rein_droit_transversal': imagerie.rein_droit_transversal,
+            'rein_droit_volume': imagerie.rein_droit_volume,
+            'epaisseur_cortex_renal': imagerie.epaisseur_cortex_renal,
+            'diametre_pyelon': imagerie.diametre_pyelon,
+            'diametre_uretere_amont': imagerie.diametre_uretere_amont,
+            'malformations_urinaires': imagerie.malformations_urinaires
         })
     
     elif request.method == 'PUT':
@@ -160,6 +197,30 @@ def imagerie_detail(imagerie_id):
             imagerie.echographie_resultats = data['echographie_resultats']
         if 'uroscanner_resultats' in data:
             imagerie.uroscanner_resultats = data['uroscanner_resultats']
+        if 'rein_gauche_cranio_caudal' in data:
+            imagerie.rein_gauche_cranio_caudal = data['rein_gauche_cranio_caudal']
+        if 'rein_gauche_antero_posterieur' in data:
+            imagerie.rein_gauche_antero_posterieur = data['rein_gauche_antero_posterieur']
+        if 'rein_gauche_transversal' in data:
+            imagerie.rein_gauche_transversal = data['rein_gauche_transversal']
+        if 'rein_gauche_volume' in data:
+            imagerie.rein_gauche_volume = data['rein_gauche_volume']
+        if 'rein_droit_cranio_caudal' in data:
+            imagerie.rein_droit_cranio_caudal = data['rein_droit_cranio_caudal']
+        if 'rein_droit_antero_posterieur' in data:
+            imagerie.rein_droit_antero_posterieur = data['rein_droit_antero_posterieur']
+        if 'rein_droit_transversal' in data:
+            imagerie.rein_droit_transversal = data['rein_droit_transversal']
+        if 'rein_droit_volume' in data:
+            imagerie.rein_droit_volume = data['rein_droit_volume']
+        if 'epaisseur_cortex_renal' in data:
+            imagerie.epaisseur_cortex_renal = data['epaisseur_cortex_renal']
+        if 'diametre_pyelon' in data:
+            imagerie.diametre_pyelon = data['diametre_pyelon']
+        if 'diametre_uretere_amont' in data:
+            imagerie.diametre_uretere_amont = data['diametre_uretere_amont']
+        if 'malformations_urinaires' in data:
+            imagerie.malformations_urinaires = data['malformations_urinaires']
         
         db.session.commit()
         return jsonify({'message': 'Imagerie mise à jour avec succès'})

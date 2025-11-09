@@ -38,6 +38,11 @@ def patients():
         patient.poids = data.get('poids')
         patient.taille = data.get('taille')
         patient.groupe_ethnique = data.get('groupe_ethnique')
+        patient.tension_arterielle_systolique = data.get('tension_arterielle_systolique')
+        patient.tension_arterielle_diastolique = data.get('tension_arterielle_diastolique')
+        patient.frequence_cardiaque = data.get('frequence_cardiaque')
+        patient.temperature = data.get('temperature')
+        patient.frequence_respiratoire = data.get('frequence_respiratoire')
         patient.petit_dejeuner = data.get('petit_dejeuner')
         patient.dejeuner = data.get('dejeuner')
         patient.diner = data.get('diner')
@@ -67,6 +72,7 @@ def patients():
         has_biological_data = any([
             data.get('t3'), data.get('t4'), data.get('tsh'),
             data.get('calciurie'), data.get('calciemie'), data.get('oxalurie'),
+            data.get('uree'), data.get('creatinine'),
             data.get('infection_urinaire')
         ])
         
@@ -92,6 +98,9 @@ def patients():
             biologie.oxalurie_valeur = data.get('oxalurie')
             biologie.calciurie_valeur = data.get('calciurie')
             biologie.calciemie_valeur = data.get('calciemie')
+            
+            biologie.uree = data.get('uree')
+            biologie.creatinine = data.get('creatinine')
             
             calculate_metabolic_booleans(biologie, data.get('sexe', 'M'))
             

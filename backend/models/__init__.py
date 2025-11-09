@@ -43,6 +43,12 @@ class Patient(db.Model):
     taille = db.Column(db.Float)
     _groupe_ethnique = db.Column('groupe_ethnique', db.Text)
     
+    tension_arterielle_systolique = db.Column(db.Float)
+    tension_arterielle_diastolique = db.Column(db.Float)
+    frequence_cardiaque = db.Column(db.Float)
+    temperature = db.Column(db.Float)
+    frequence_respiratoire = db.Column(db.Float)
+    
     province = db.Column(db.String(100))
     ville = db.Column(db.String(100))
     profession = db.Column(db.String(100))

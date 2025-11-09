@@ -36,6 +36,8 @@ def biologies(episode_id):
         biologie.t3 = data.get('t3')
         biologie.t4 = data.get('t4')
         biologie.tsh = data.get('tsh')
+        biologie.uree = data.get('uree')
+        biologie.creatinine = data.get('creatinine')
         biologie.infection_urinaire = data.get('infection_urinaire', False)
         biologie.germe = data.get('germe')
         biologie.urease_positif = data.get('urease_positif')
@@ -70,6 +72,8 @@ def biologies(episode_id):
             't3': b.t3,
             't4': b.t4,
             'tsh': b.tsh,
+            'uree': b.uree,
+            'creatinine': b.creatinine,
             'infection_urinaire': b.infection_urinaire,
             'germe': b.germe,
             'urease_positif': b.urease_positif
@@ -98,6 +102,8 @@ def biologie_detail(biologie_id):
             't3': biologie.t3,
             't4': biologie.t4,
             'tsh': biologie.tsh,
+            'uree': biologie.uree,
+            'creatinine': biologie.creatinine,
             'infection_urinaire': biologie.infection_urinaire,
             'germe': biologie.germe,
             'urease_positif': biologie.urease_positif,
@@ -139,6 +145,10 @@ def biologie_detail(biologie_id):
             biologie.t4 = data['t4']
         if 'tsh' in data:
             biologie.tsh = data['tsh']
+        if 'uree' in data:
+            biologie.uree = data['uree']
+        if 'creatinine' in data:
+            biologie.creatinine = data['creatinine']
         if 'infection_urinaire' in data:
             biologie.infection_urinaire = data['infection_urinaire']
         if 'germe' in data:

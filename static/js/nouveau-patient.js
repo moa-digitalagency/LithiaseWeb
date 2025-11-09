@@ -23,9 +23,47 @@ function calculerIMC() {
     }
 }
 
+function calculerVolumeRein(cote) {
+    const cranioCaudalInput = document.querySelector(`input[name="rein_${cote}_cranio_caudal"]`);
+    const anteroPosterieurInput = document.querySelector(`input[name="rein_${cote}_antero_posterieur"]`);
+    const transversalInput = document.querySelector(`input[name="rein_${cote}_transversal"]`);
+    const volumeField = document.getElementById(`rein_${cote}_volume`);
+    
+    if (!cranioCaudalInput || !anteroPosterieurInput || !transversalInput || !volumeField) {
+        return;
+    }
+    
+    const cranioCaudal = parseFloat(cranioCaudalInput.value);
+    const anteroPosterieur = parseFloat(anteroPosterieurInput.value);
+    const transversal = parseFloat(transversalInput.value);
+    
+    if (cranioCaudal > 0 && anteroPosterieur > 0 && transversal > 0) {
+        const volume = (0.523 * cranioCaudal * anteroPosterieur * transversal) / 1000;
+        volumeField.value = volume.toFixed(1);
+        volumeField.className = 'input-field bg-gray-100 text-purple-800 font-semibold';
+    } else {
+        volumeField.value = '';
+        volumeField.className = 'input-field bg-gray-100';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('poids').addEventListener('input', calculerIMC);
     document.getElementById('taille').addEventListener('input', calculerIMC);
+    
+    const reinGaucheInputs = document.querySelectorAll('input[name^="rein_gauche_"]');
+    reinGaucheInputs.forEach(input => {
+        if (!input.name.includes('volume')) {
+            input.addEventListener('input', () => calculerVolumeRein('gauche'));
+        }
+    });
+    
+    const reinDroitInputs = document.querySelectorAll('input[name^="rein_droit_"]');
+    reinDroitInputs.forEach(input => {
+        if (!input.name.includes('volume')) {
+            input.addEventListener('input', () => calculerVolumeRein('droit'));
+        }
+    });
     
     document.getElementById('newPatientForm').addEventListener('submit', async (e) => {
         e.preventDefault();

@@ -158,6 +158,41 @@ def export_patient_pdf(patient_id):
     story.append(t)
     story.append(Spacer(1, 0.5*cm))
     
+    if any([patient.tension_arterielle_systolique, patient.tension_arterielle_diastolique, patient.frequence_cardiaque, patient.temperature, patient.frequence_respiratoire]):
+        story.append(Paragraph("🩺 CONSTANTES VITALES", section_title_style))
+        constantes_data = []
+        if patient.tension_arterielle_systolique or patient.tension_arterielle_diastolique:
+            ta_value = ''
+            if patient.tension_arterielle_systolique and patient.tension_arterielle_diastolique:
+                ta_value = f"{patient.tension_arterielle_systolique}/{patient.tension_arterielle_diastolique} mmHg"
+            elif patient.tension_arterielle_systolique:
+                ta_value = f"{patient.tension_arterielle_systolique} mmHg (systolique)"
+            elif patient.tension_arterielle_diastolique:
+                ta_value = f"{patient.tension_arterielle_diastolique} mmHg (diastolique)"
+            constantes_data.append(['Tension artérielle', ta_value])
+        if patient.frequence_cardiaque:
+            constantes_data.append(['Fréquence cardiaque', f"{patient.frequence_cardiaque} bpm"])
+        if patient.temperature:
+            constantes_data.append(['Température', f"{patient.temperature} °C"])
+        if patient.frequence_respiratoire:
+            constantes_data.append(['Fréquence respiratoire', f"{patient.frequence_respiratoire} /min"])
+        
+        t = Table(constantes_data, colWidths=[6*cm, 11*cm])
+        t.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#E0F2FE')),
+            ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor('#075985')),
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+            ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+            ('FONTSIZE', (0, 0), (-1, -1), 10),
+            ('TOPPADDING', (0, 0), (-1, -1), 10),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#7DD3FC')),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')
+        ]))
+        story.append(t)
+        story.append(Spacer(1, 0.5*cm))
+    
     if any([patient.antecedents_personnels, patient.antecedents_familiaux, patient.antecedents_chirurgicaux, patient.allergies, patient.traitements_chroniques]):
         story.append(Paragraph("🏥 ANTÉCÉDENTS MÉDICAUX", section_title_style))
         medical_data = []
@@ -276,6 +311,42 @@ def export_patient_pdf(patient_id):
                         story.append(Paragraph(f"    Morphologie: {imaging.morphologie}", styles['Normal']))
                     if imaging.radio_opacite:
                         story.append(Paragraph(f"    Radio-opacité: {imaging.radio_opacite}", styles['Normal']))
+                    
+                    if any([imaging.rein_gauche_cranio_caudal, imaging.rein_gauche_volume, imaging.rein_droit_cranio_caudal, imaging.rein_droit_volume, imaging.epaisseur_cortex_renal, imaging.diametre_pyelon, imaging.diametre_uretere_amont]):
+                        story.append(Paragraph("<b>    Mesures uroscanner - Retentissement haut appareil:</b>", styles['Normal']))
+                        reins_data = [['Paramètre', 'Rein gauche', 'Rein droit']]
+                        if imaging.rein_gauche_cranio_caudal or imaging.rein_droit_cranio_caudal:
+                            reins_data.append(['Cranio-caudal', f"{imaging.rein_gauche_cranio_caudal or '-'} mm", f"{imaging.rein_droit_cranio_caudal or '-'} mm"])
+                        if imaging.rein_gauche_antero_posterieur or imaging.rein_droit_antero_posterieur:
+                            reins_data.append(['Antéro-postérieur', f"{imaging.rein_gauche_antero_posterieur or '-'} mm", f"{imaging.rein_droit_antero_posterieur or '-'} mm"])
+                        if imaging.rein_gauche_transversal or imaging.rein_droit_transversal:
+                            reins_data.append(['Transversal', f"{imaging.rein_gauche_transversal or '-'} mm", f"{imaging.rein_droit_transversal or '-'} mm"])
+                        if imaging.rein_gauche_volume or imaging.rein_droit_volume:
+                            reins_data.append(['Volume', f"{imaging.rein_gauche_volume or '-'} cm³", f"{imaging.rein_droit_volume or '-'} cm³"])
+                        
+                        if len(reins_data) > 1:
+                            t_reins = Table(reins_data, colWidths=[5*cm, 5*cm, 5*cm])
+                            t_reins.setStyle(TableStyle([
+                                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#A78BFA')),
+                                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                                ('TOPPADDING', (0, 0), (-1, -1), 6),
+                                ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                                ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#C4B5FD'))
+                            ]))
+                            story.append(Spacer(1, 0.1*cm))
+                            story.append(t_reins)
+                        
+                        if imaging.epaisseur_cortex_renal:
+                            story.append(Paragraph(f"    Épaisseur cortex rénal: {imaging.epaisseur_cortex_renal} mm", styles['Normal']))
+                        if imaging.diametre_pyelon:
+                            story.append(Paragraph(f"    Diamètre pyelon: {imaging.diametre_pyelon} mm", styles['Normal']))
+                        if imaging.diametre_uretere_amont:
+                            story.append(Paragraph(f"    Diamètre uretère en amont: {imaging.diametre_uretere_amont} mm", styles['Normal']))
+                        if imaging.malformations_urinaires:
+                            story.append(Paragraph(f"    Malformations: {imaging.malformations_urinaires}", styles['Normal']))
             
             if episode.biologies:
                 story.append(Paragraph("<b>Biologies:</b>", styles['Normal']))
@@ -313,6 +384,14 @@ def export_patient_pdf(patient_id):
                         thyroid.append(f"T4: {biology.t4} ng/dL")
                     if thyroid:
                         story.append(Paragraph(f"    Hormones thyroïdiennes: {', '.join(thyroid)}", styles['Normal']))
+                    
+                    renal = []
+                    if biology.uree is not None:
+                        renal.append(f"Urée: {biology.uree} g/L")
+                    if biology.creatinine is not None:
+                        renal.append(f"Créatinine: {biology.creatinine} mg/L")
+                    if renal:
+                        story.append(Paragraph(f"    Fonction rénale: {', '.join(renal)}", styles['Normal']))
                     
                     if biology.infection_urinaire:
                         story.append(Paragraph(f"    Infection urinaire: Oui{' (' + biology.germe + ')' if biology.germe else ''}", styles['Normal']))

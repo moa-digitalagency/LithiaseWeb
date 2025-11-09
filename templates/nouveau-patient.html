@@ -124,6 +124,35 @@
                     </div>
                 </div>
 
+                <!-- Section: Constantes vitales -->
+                <div class="bg-cyan-50 border-2 border-cyan-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-cyan-900 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">🩺</span> Constantes vitales
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">💉 Tension artérielle systolique (mmHg)</label>
+                            <input type="number" step="0.1" name="tension_arterielle_systolique" class="input-field" placeholder="Ex: 120">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">💉 Tension artérielle diastolique (mmHg)</label>
+                            <input type="number" step="0.1" name="tension_arterielle_diastolique" class="input-field" placeholder="Ex: 80">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">❤️ Fréquence cardiaque (bpm)</label>
+                            <input type="number" step="0.1" name="frequence_cardiaque" class="input-field" placeholder="Ex: 72">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">🌡️ Température (°C)</label>
+                            <input type="number" step="0.1" name="temperature" class="input-field" placeholder="Ex: 37.0">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">🫁 Fréquence respiratoire (/min)</label>
+                            <input type="number" step="0.1" name="frequence_respiratoire" class="input-field" placeholder="Ex: 16">
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Section: Antécédents médicaux -->
                 <div class="bg-red-50 border-2 border-red-200 rounded-lg p-6">
                     <h3 class="text-xl font-bold text-red-900 mb-4 flex items-center">
@@ -266,6 +295,85 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-2">🩺 Autres calcifications (paroi vasculaire, ganglions, score calcique...)</label>
                                     <textarea name="calcifications_autres" rows="2" class="input-field" placeholder="Décrivez les autres calcifications observées..."></textarea>
                                 </div>
+                                
+                                <!-- Retentissement sur le haut appareil -->
+                                <div class="mt-6 pt-6 border-t-2 border-purple-300">
+                                    <h5 class="text-md font-semibold text-purple-700 mb-4">🫘 Retentissement sur le haut appareil</h5>
+                                    
+                                    <!-- Mesures rein gauche -->
+                                    <div class="mb-4">
+                                        <h6 class="text-sm font-semibold text-gray-700 mb-3 bg-purple-100 p-2 rounded">Rein gauche</h6>
+                                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-2">Diamètre cranio-caudal (mm)</label>
+                                                <input type="number" step="0.1" name="rein_gauche_cranio_caudal" class="input-field" placeholder="Ex: 110">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-2">Diamètre antéro-postérieur (mm)</label>
+                                                <input type="number" step="0.1" name="rein_gauche_antero_posterieur" class="input-field" placeholder="Ex: 55">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-2">Diamètre transversal (mm)</label>
+                                                <input type="number" step="0.1" name="rein_gauche_transversal" class="input-field" placeholder="Ex: 50">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-2">Volume calculé</label>
+                                                <div class="flex items-center gap-2">
+                                                    <input type="number" step="0.1" name="rein_gauche_volume" id="rein_gauche_volume" class="input-field bg-gray-100" readonly placeholder="Auto">
+                                                    <span class="text-gray-600 text-xs">cm³</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Mesures rein droit -->
+                                    <div class="mb-4">
+                                        <h6 class="text-sm font-semibold text-gray-700 mb-3 bg-purple-100 p-2 rounded">Rein droit</h6>
+                                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-2">Diamètre cranio-caudal (mm)</label>
+                                                <input type="number" step="0.1" name="rein_droit_cranio_caudal" class="input-field" placeholder="Ex: 105">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-2">Diamètre antéro-postérieur (mm)</label>
+                                                <input type="number" step="0.1" name="rein_droit_antero_posterieur" class="input-field" placeholder="Ex: 52">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-2">Diamètre transversal (mm)</label>
+                                                <input type="number" step="0.1" name="rein_droit_transversal" class="input-field" placeholder="Ex: 48">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-2">Volume calculé</label>
+                                                <div class="flex items-center gap-2">
+                                                    <input type="number" step="0.1" name="rein_droit_volume" id="rein_droit_volume" class="input-field bg-gray-100" readonly placeholder="Auto">
+                                                    <span class="text-gray-600 text-xs">cm³</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Autres mesures -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-700 mb-2">Épaisseur minimale cortex rénal (mm)</label>
+                                            <input type="number" step="0.1" name="epaisseur_cortex_renal" class="input-field" placeholder="Ex: 7">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-700 mb-2">Diamètre du pyelon (mm)</label>
+                                            <input type="number" step="0.1" name="diametre_pyelon" class="input-field" placeholder="Ex: 10">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-medium text-gray-700 mb-2">Diamètre uretère en amont (mm)</label>
+                                            <input type="number" step="0.1" name="diametre_uretere_amont" class="input-field" placeholder="Ex: 5">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Malformations -->
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-700 mb-2">🏗️ Malformations urinaires ou obstacles</label>
+                                        <textarea name="malformations_urinaires" rows="2" class="input-field" placeholder="Décrivez les malformations ou obstacles éventuels..."></textarea>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -300,6 +408,23 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">💧 Densité urinaire</label>
                                 <input type="number" step="0.001" name="densite_urinaire" class="input-field" placeholder="Ex: 1.020">
+                            </div>
+                        </div>
+                        
+                        <!-- Nouveau: Fonction rénale -->
+                        <div class="border-l-4 border-teal-400 pl-4 mt-4">
+                            <h4 class="text-lg font-semibold text-teal-800 mb-3">🫘 Fonction rénale</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Urée (g/L ou mmol/L)</label>
+                                    <input type="number" step="0.01" name="uree" class="input-field" placeholder="Ex: 0.35 g/L ou 5.8 mmol/L">
+                                    <p class="text-xs text-gray-500 mt-1">Normale: 0.15-0.45 g/L (2.5-7.5 mmol/L)</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Créatinine (mg/L ou µmol/L)</label>
+                                    <input type="number" step="0.1" name="creatinine" class="input-field" placeholder="Ex: 10 mg/L ou 88 µmol/L">
+                                    <p class="text-xs text-gray-500 mt-1">Normale H: 7-13 mg/L, F: 6-11 mg/L</p>
+                                </div>
                             </div>
                         </div>
                         

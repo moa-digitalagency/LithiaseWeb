@@ -19,6 +19,11 @@ with app.app_context():
             "groupe_ethnique": "Caucasien",
             "poids": 82.5,
             "taille": 178.0,
+            "tension_arterielle_systolique": 145,
+            "tension_arterielle_diastolique": 92,
+            "frequence_cardiaque": 78,
+            "temperature": 37.2,
+            "frequence_respiratoire": 16,
             "antecedents_personnels": "Hypertension artérielle depuis 2015, Diabète de type 2 depuis 2018",
             "antecedents_familiaux": "Père ayant eu des calculs rénaux récidivants, Mère hypertendue",
             "antecedents_chirurgicaux": "Appendicectomie en 2000",
@@ -60,6 +65,11 @@ with app.app_context():
             "groupe_ethnique": "Caucasienne",
             "poids": 58.0,
             "taille": 165.0,
+            "tension_arterielle_systolique": 118,
+            "tension_arterielle_diastolique": 75,
+            "frequence_cardiaque": 72,
+            "temperature": 37.8,
+            "frequence_respiratoire": 18,
             "antecedents_personnels": "Infections urinaires récidivantes (5-6 par an), Maladie de Crohn diagnostiquée en 2015",
             "antecedents_familiaux": "Mère avec lithiase urinaire",
             "antecedents_chirurgicaux": "Résection intestinale partielle en 2016 pour maladie de Crohn",
@@ -101,6 +111,11 @@ with app.app_context():
             "groupe_ethnique": "Nord-Africain",
             "poids": 95.0,
             "taille": 172.0,
+            "tension_arterielle_systolique": 138,
+            "tension_arterielle_diastolique": 88,
+            "frequence_cardiaque": 85,
+            "temperature": 36.9,
+            "frequence_respiratoire": 17,
             "antecedents_personnels": "Obésité (IMC 32), Goutte depuis 2019, Stéatose hépatique",
             "antecedents_familiaux": "Père diabétique, oncle maternel avec lithiase",
             "antecedents_chirurgicaux": "Aucune chirurgie",
@@ -275,6 +290,24 @@ with app.app_context():
         imagerie.echographie_resultats = patient_data.get('echographie_resultats', '')
         imagerie.uroscanner_resultats = patient_data.get('uroscanner_resultats', '')
         
+        imagerie.rein_gauche_cranio_caudal = random.randint(95, 120)
+        imagerie.rein_gauche_antero_posterieur = random.randint(45, 60)
+        imagerie.rein_gauche_transversal = random.randint(40, 55)
+        imagerie.rein_gauche_volume = round((imagerie.rein_gauche_cranio_caudal * imagerie.rein_gauche_antero_posterieur * imagerie.rein_gauche_transversal * 0.523) / 1000, 1)
+        
+        imagerie.rein_droit_cranio_caudal = random.randint(95, 120)
+        imagerie.rein_droit_antero_posterieur = random.randint(45, 60)
+        imagerie.rein_droit_transversal = random.randint(40, 55)
+        imagerie.rein_droit_volume = round((imagerie.rein_droit_cranio_caudal * imagerie.rein_droit_antero_posterieur * imagerie.rein_droit_transversal * 0.523) / 1000, 1)
+        
+        imagerie.epaisseur_cortex_renal = round(random.uniform(8.0, 12.0), 1)
+        imagerie.diametre_pyelon = random.randint(3, 8)
+        imagerie.diametre_uretere_amont = random.randint(2, 6)
+        
+        if random.random() < 0.2:
+            malformations = ["Ectasie pyélocalicielle modérée", "Rein en fer à cheval", "Atrophie corticale localisée"]
+            imagerie.malformations_urinaires = random.choice(malformations)
+        
         db.session.add(imagerie)
         
         biologie = Biologie()
@@ -299,6 +332,8 @@ with app.app_context():
             biologie.tsh = 1.8
             biologie.t3 = 1.5
             biologie.t4 = 9.5
+            biologie.uree = 0.35
+            biologie.creatinine = 9.5
         elif 'Martin' in patient_data.get('nom', ''):
             biologie.hyperoxalurie = True
             biologie.oxalurie_valeur = 65.0
@@ -307,6 +342,8 @@ with app.app_context():
             biologie.tsh = 2.1
             biologie.t3 = 1.6
             biologie.t4 = 10.2
+            biologie.uree = 0.28
+            biologie.creatinine = 7.8
         elif 'Dupont' in patient_data.get('nom', ''):
             biologie.hypercalciurie = True
             biologie.calciurie_valeur = 320.0
@@ -315,6 +352,8 @@ with app.app_context():
             biologie.tsh = 1.2
             biologie.t3 = 1.7
             biologie.t4 = 11.0
+            biologie.uree = 0.42
+            biologie.creatinine = 11.2
         elif 'Lefebvre' in patient_data.get('nom', ''):
             biologie.cystinurie = True
             biologie.oxalurie_valeur = 30.0
@@ -323,6 +362,8 @@ with app.app_context():
             biologie.tsh = 3.5
             biologie.t3 = 1.2
             biologie.t4 = 8.5
+            biologie.uree = 0.38
+            biologie.creatinine = 8.9
         elif 'Rousseau' in patient_data.get('nom', ''):
             biologie.hypercalciurie = True
             biologie.hypercalcemie = True
@@ -332,6 +373,8 @@ with app.app_context():
             biologie.tsh = 0.3
             biologie.t3 = 2.4
             biologie.t4 = 13.5
+            biologie.uree = 0.45
+            biologie.creatinine = 12.3
         
         db.session.add(biologie)
         
