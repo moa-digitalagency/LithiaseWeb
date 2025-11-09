@@ -422,6 +422,10 @@
                                 </select>
                             </div>
                             <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Groupe ethnique</label>
+                                <input type="text" name="groupe_ethnique" id="edit_groupe_ethnique" class="input-field">
+                            </div>
+                            <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
                                 <input type="tel" name="telephone" id="edit_telephone" class="input-field">
                             </div>
@@ -431,7 +435,7 @@
                             </div>
                             <div class="col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Adresse</label>
-                                <input type="text" name="adresse" id="edit_adresse" class="input-field">
+                                <textarea name="adresse" id="edit_adresse" rows="2" class="input-field"></textarea>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Poids (kg)</label>
@@ -457,6 +461,10 @@
                                 <textarea name="antecedents_familiaux" id="edit_antecedents_familiaux" rows="2" class="input-field"></textarea>
                             </div>
                             <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Antécédents chirurgicaux</label>
+                                <textarea name="antecedents_chirurgicaux" id="edit_antecedents_chirurgicaux" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Allergies</label>
                                 <textarea name="allergies" id="edit_allergies" rows="2" class="input-field"></textarea>
                             </div>
@@ -467,7 +475,7 @@
                         </div>
                     </div>
                     
-                    <!-- Hygiène de vie -->
+                    <!-- Hygiène de vie et alimentation -->
                     <div class="bg-purple-50 border-2 border-purple-200 rounded-lg p-4">
                         <h4 class="text-lg font-bold text-purple-900 mb-3">💧 Hygiène de vie</h4>
                         <div class="space-y-3">
@@ -477,9 +485,110 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Régime alimentaire</label>
-                                <input type="text" name="regime_alimentaire" id="edit_regime_alimentaire" class="input-field">
+                                <textarea name="regime_alimentaire" id="edit_regime_alimentaire" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Petit déjeuner</label>
+                                <textarea name="petit_dejeuner" id="edit_petit_dejeuner" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Déjeuner</label>
+                                <textarea name="dejeuner" id="edit_dejeuner" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Dîner</label>
+                                <textarea name="diner" id="edit_diner" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Grignotage</label>
+                                <textarea name="grignotage" id="edit_grignotage" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Autres consommations</label>
+                                <textarea name="autres_consommations" id="edit_autres_consommations" rows="2" class="input-field"></textarea>
                             </div>
                         </div>
+                    </div>
+                    
+                    <!-- Données médicales supplémentaires -->
+                    <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4">
+                        <h4 class="text-lg font-bold text-yellow-900 mb-3">📋 Données médicales</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Résultats ASP</label>
+                                <textarea name="asp_resultats" id="edit_asp_resultats" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Résultats échographie</label>
+                                <textarea name="echographie_resultats" id="edit_echographie_resultats" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Résultats uro-scanner</label>
+                                <textarea name="uroscanner_resultats" id="edit_uroscanner_resultats" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Nombre de calculs</label>
+                                    <input type="number" name="nombre_calculs" id="edit_nombre_calculs" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Topographie</label>
+                                    <input type="text" name="topographie_calcul" id="edit_topographie_calcul" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Diamètre longitudinal (mm)</label>
+                                    <input type="number" name="diametre_longitudinal" id="edit_diametre_longitudinal" step="0.1" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Diamètre transversal (mm)</label>
+                                    <input type="number" name="diametre_transversal" id="edit_diametre_transversal" step="0.1" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Forme du calcul</label>
+                                    <input type="text" name="forme_calcul" id="edit_forme_calcul" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Contour du calcul</label>
+                                    <input type="text" name="contour_calcul" id="edit_contour_calcul" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Densité noyau (UH)</label>
+                                    <input type="number" name="densite_noyau" id="edit_densite_noyau" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Densités couches</label>
+                                    <input type="text" name="densites_couches" id="edit_densites_couches" class="input-field">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Autres calcifications</label>
+                                <textarea name="calcifications_autres" id="edit_calcifications_autres" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Sédiment urinaire</label>
+                                <textarea name="sediment_urinaire" id="edit_sediment_urinaire" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Résultats ECBU</label>
+                                <textarea name="ecbu_resultats" id="edit_ecbu_resultats" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">pH urinaire</label>
+                                    <input type="number" name="ph_urinaire" id="edit_ph_urinaire" step="0.1" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Densité urinaire</label>
+                                    <input type="number" name="densite_urinaire" id="edit_densite_urinaire" step="0.001" class="input-field">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Notes -->
+                    <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-4">
+                        <h4 class="text-lg font-bold text-gray-900 mb-3">📝 Notes</h4>
+                        <textarea name="notes" id="edit_notes" rows="3" class="input-field"></textarea>
                     </div>
                     
                     <div class="flex justify-end space-x-3 pt-4">
@@ -801,22 +910,54 @@
             const response = await fetch(`/api/patients/${patientId}`);
             const patient = await response.json();
             
-            // Remplir le formulaire avec les données actuelles
+            // Remplir le formulaire avec TOUTES les données actuelles
             document.getElementById('edit_nom').value = patient.nom || '';
             document.getElementById('edit_prenom').value = patient.prenom || '';
             document.getElementById('edit_date_naissance').value = patient.date_naissance || '';
             document.getElementById('edit_sexe').value = patient.sexe || 'M';
+            document.getElementById('edit_groupe_ethnique').value = patient.groupe_ethnique || '';
             document.getElementById('edit_telephone').value = patient.telephone || '';
             document.getElementById('edit_email').value = patient.email || '';
             document.getElementById('edit_adresse').value = patient.adresse || '';
             document.getElementById('edit_poids').value = patient.poids || '';
             document.getElementById('edit_taille').value = patient.taille || '';
+            
+            // Antécédents médicaux
             document.getElementById('edit_antecedents_personnels').value = patient.antecedents_personnels || '';
             document.getElementById('edit_antecedents_familiaux').value = patient.antecedents_familiaux || '';
+            document.getElementById('edit_antecedents_chirurgicaux').value = patient.antecedents_chirurgicaux || '';
             document.getElementById('edit_allergies').value = patient.allergies || '';
             document.getElementById('edit_traitements_chroniques').value = patient.traitements_chroniques || '';
+            
+            // Hygiène de vie et alimentation
             document.getElementById('edit_hydratation_jour').value = patient.hydratation_jour || '';
             document.getElementById('edit_regime_alimentaire').value = patient.regime_alimentaire || '';
+            document.getElementById('edit_petit_dejeuner').value = patient.petit_dejeuner || '';
+            document.getElementById('edit_dejeuner').value = patient.dejeuner || '';
+            document.getElementById('edit_diner').value = patient.diner || '';
+            document.getElementById('edit_grignotage').value = patient.grignotage || '';
+            document.getElementById('edit_autres_consommations').value = patient.autres_consommations || '';
+            
+            // Données médicales supplémentaires
+            document.getElementById('edit_asp_resultats').value = patient.asp_resultats || '';
+            document.getElementById('edit_echographie_resultats').value = patient.echographie_resultats || '';
+            document.getElementById('edit_uroscanner_resultats').value = patient.uroscanner_resultats || '';
+            document.getElementById('edit_nombre_calculs').value = patient.nombre_calculs || '';
+            document.getElementById('edit_topographie_calcul').value = patient.topographie_calcul || '';
+            document.getElementById('edit_diametre_longitudinal').value = patient.diametre_longitudinal || '';
+            document.getElementById('edit_diametre_transversal').value = patient.diametre_transversal || '';
+            document.getElementById('edit_forme_calcul').value = patient.forme_calcul || '';
+            document.getElementById('edit_contour_calcul').value = patient.contour_calcul || '';
+            document.getElementById('edit_densite_noyau').value = patient.densite_noyau || '';
+            document.getElementById('edit_densites_couches').value = patient.densites_couches || '';
+            document.getElementById('edit_calcifications_autres').value = patient.calcifications_autres || '';
+            document.getElementById('edit_sediment_urinaire').value = patient.sediment_urinaire || '';
+            document.getElementById('edit_ecbu_resultats').value = patient.ecbu_resultats || '';
+            document.getElementById('edit_ph_urinaire').value = patient.ph_urinaire || '';
+            document.getElementById('edit_densite_urinaire').value = patient.densite_urinaire || '';
+            
+            // Notes
+            document.getElementById('edit_notes').value = patient.notes || '';
             
             document.getElementById('editPatientModal').classList.remove('hidden');
         }
