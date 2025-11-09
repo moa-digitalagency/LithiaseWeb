@@ -92,17 +92,37 @@ def episode_detail(episode_id):
                 'date_examen': i.date_examen.isoformat(),
                 'taille_mm': i.taille_mm,
                 'densite_uh': i.densite_uh,
+                'densite_noyau': i.densite_noyau,
+                'densites_couches': i.densites_couches,
                 'morphologie': i.morphologie,
-                'localisation': i.localisation
+                'localisation': i.localisation,
+                'radio_opacite': i.radio_opacite,
+                'nombre_calculs': i.nombre_calculs,
+                'topographie_calcul': i.topographie_calcul,
+                'diametre_longitudinal': i.diametre_longitudinal,
+                'diametre_transversal': i.diametre_transversal,
+                'forme_calcul': i.forme_calcul,
+                'contour_calcul': i.contour_calcul,
+                'calcifications_autres': i.calcifications_autres,
+                'asp_resultats': i.asp_resultats,
+                'echographie_resultats': i.echographie_resultats,
+                'uroscanner_resultats': i.uroscanner_resultats,
+                'nombre': i.nombre
             } for i in episode.imageries],
             'biologies': [{
                 'id': b.id,
                 'date_examen': b.date_examen.isoformat(),
                 'ph_urinaire': b.ph_urinaire,
+                'densite_urinaire': b.densite_urinaire,
+                'sediment_urinaire': b.sediment_urinaire,
+                'ecbu_resultats': b.ecbu_resultats,
                 'hyperoxalurie': b.hyperoxalurie,
                 'hypercalciurie': b.hypercalciurie,
                 'hyperuricurie': b.hyperuricurie,
-                'cystinurie': b.cystinurie
+                'cystinurie': b.cystinurie,
+                'infection_urinaire': b.infection_urinaire,
+                'germe': b.germe,
+                'urease_positif': b.urease_positif
             } for b in episode.biologies]
         })
     
