@@ -93,6 +93,13 @@ def export_patient_pdf(patient_id):
     section_title_style = ParagraphStyle('SectionTitle', parent=styles['Heading2'], fontSize=14, textColor=colors.HexColor('#1F2937'), spaceAfter=8, spaceBefore=12, leftIndent=10)
     code_style = ParagraphStyle('CodeStyle', parent=styles['Normal'], fontSize=9, textColor=colors.HexColor('#6B7280'), alignment=TA_CENTER, spaceAfter=4)
     table_cell_style = ParagraphStyle('TableCell', parent=styles['Normal'], fontSize=9, leading=11, wordWrap='CJK')
+    table_cell_bold_style = ParagraphStyle('TableCellBold', parent=styles['Normal'], fontSize=9, leading=11, fontName='Helvetica-Bold', wordWrap='CJK')
+    
+    def wrap_text(text, style=table_cell_style):
+        """Helper function to wrap text in Paragraph for proper word wrapping in tables"""
+        if text is None or text == '':
+            return Paragraph('-', style)
+        return Paragraph(str(text), style)
     
     story.append(Paragraph("DOSSIER MÉDICAL PATIENT", title_style))
     story.append(Paragraph(f"{patient.nom} {patient.prenom}", subtitle_style))
@@ -123,23 +130,23 @@ def export_patient_pdf(patient_id):
     
     story.append(Paragraph("📋 INFORMATIONS PERSONNELLES", section_title_style))
     patient_data = [
-        ['Nom complet', f"{patient.nom} {patient.prenom}"],
-        ['Date de naissance', patient.date_naissance.strftime('%d/%m/%Y')],
-        ['Sexe', 'Masculin' if patient.sexe == 'M' else 'Féminin'],
-        ['Téléphone', patient.telephone or '-'],
-        ['Email', patient.email or '-'],
-        ['Adresse', patient.adresse or '-']
+        [wrap_text('Nom complet', table_cell_bold_style), wrap_text(f"{patient.nom} {patient.prenom}")],
+        [wrap_text('Date de naissance', table_cell_bold_style), wrap_text(patient.date_naissance.strftime('%d/%m/%Y'))],
+        [wrap_text('Sexe', table_cell_bold_style), wrap_text('Masculin' if patient.sexe == 'M' else 'Féminin')],
+        [wrap_text('Téléphone', table_cell_bold_style), wrap_text(patient.telephone or '-')],
+        [wrap_text('Email', table_cell_bold_style), wrap_text(patient.email or '-')],
+        [wrap_text('Adresse', table_cell_bold_style), wrap_text(patient.adresse or '-')]
     ]
     
     if patient.poids:
-        patient_data.append(['Poids', f"{patient.poids} kg"])
+        patient_data.append([wrap_text('Poids', table_cell_bold_style), wrap_text(f"{patient.poids} kg")])
     if patient.taille:
-        patient_data.append(['Taille', f"{patient.taille} cm"])
+        patient_data.append([wrap_text('Taille', table_cell_bold_style), wrap_text(f"{patient.taille} cm")])
         if patient.poids:
             bmi = patient.poids / ((patient.taille/100) ** 2)
-            patient_data.append(['IMC', f"{bmi:.1f}"])
+            patient_data.append([wrap_text('IMC', table_cell_bold_style), wrap_text(f"{bmi:.1f}")])
     if patient.groupe_ethnique:
-        patient_data.append(['Groupe ethnique', patient.groupe_ethnique])
+        patient_data.append([wrap_text('Groupe ethnique', table_cell_bold_style), wrap_text(patient.groupe_ethnique)])
     
     t = Table(patient_data, colWidths=[6*cm, 11*cm])
     t.setStyle(TableStyle([
@@ -168,13 +175,13 @@ def export_patient_pdf(patient_id):
                 ta_value = f"{patient.tension_arterielle_systolique} mmHg (systolique)"
             elif patient.tension_arterielle_diastolique:
                 ta_value = f"{patient.tension_arterielle_diastolique} mmHg (diastolique)"
-            constantes_data.append(['Tension artérielle', ta_value])
+            constantes_data.append([wrap_text('Tension artérielle', table_cell_bold_style), wrap_text(ta_value)])
         if patient.frequence_cardiaque:
-            constantes_data.append(['Fréquence cardiaque', f"{patient.frequence_cardiaque} bpm"])
+            constantes_data.append([wrap_text('Fréquence cardiaque', table_cell_bold_style), wrap_text(f"{patient.frequence_cardiaque} bpm")])
         if patient.temperature:
-            constantes_data.append(['Température', f"{patient.temperature} °C"])
+            constantes_data.append([wrap_text('Température', table_cell_bold_style), wrap_text(f"{patient.temperature} °C")])
         if patient.frequence_respiratoire:
-            constantes_data.append(['Fréquence respiratoire', f"{patient.frequence_respiratoire} /min"])
+            constantes_data.append([wrap_text('Fréquence respiratoire', table_cell_bold_style), wrap_text(f"{patient.frequence_respiratoire} /min")])
         
         t = Table(constantes_data, colWidths=[6*cm, 11*cm])
         t.setStyle(TableStyle([
@@ -196,15 +203,15 @@ def export_patient_pdf(patient_id):
         story.append(Paragraph("🏥 ANTÉCÉDENTS MÉDICAUX", section_title_style))
         medical_data = []
         if patient.antecedents_personnels:
-            medical_data.append(['Antécédents personnels', patient.antecedents_personnels])
+            medical_data.append([wrap_text('Antécédents personnels', table_cell_bold_style), wrap_text(patient.antecedents_personnels)])
         if patient.antecedents_familiaux:
-            medical_data.append(['Antécédents familiaux', patient.antecedents_familiaux])
+            medical_data.append([wrap_text('Antécédents familiaux', table_cell_bold_style), wrap_text(patient.antecedents_familiaux)])
         if patient.antecedents_chirurgicaux:
-            medical_data.append(['Antécédents chirurgicaux', patient.antecedents_chirurgicaux])
+            medical_data.append([wrap_text('Antécédents chirurgicaux', table_cell_bold_style), wrap_text(patient.antecedents_chirurgicaux)])
         if patient.allergies:
-            medical_data.append(['Allergies', patient.allergies])
+            medical_data.append([wrap_text('Allergies', table_cell_bold_style), wrap_text(patient.allergies)])
         if patient.traitements_chroniques:
-            medical_data.append(['Traitements chroniques', patient.traitements_chroniques])
+            medical_data.append([wrap_text('Traitements chroniques', table_cell_bold_style), wrap_text(patient.traitements_chroniques)])
         
         t = Table(medical_data, colWidths=[6*cm, 11*cm])
         t.setStyle(TableStyle([
@@ -226,19 +233,19 @@ def export_patient_pdf(patient_id):
         story.append(Paragraph("🍽️ HABITUDES DE VIE & ALIMENTATION", section_title_style))
         lifestyle_data = []
         if patient.hydratation_jour:
-            lifestyle_data.append(['Hydratation', f"{patient.hydratation_jour} L/jour"])
+            lifestyle_data.append([wrap_text('Hydratation', table_cell_bold_style), wrap_text(f"{patient.hydratation_jour} L/jour")])
         if patient.regime_alimentaire:
-            lifestyle_data.append(['Régime alimentaire', patient.regime_alimentaire])
+            lifestyle_data.append([wrap_text('Régime alimentaire', table_cell_bold_style), wrap_text(patient.regime_alimentaire)])
         if patient.petit_dejeuner:
-            lifestyle_data.append(['Petit déjeuner', patient.petit_dejeuner])
+            lifestyle_data.append([wrap_text('Petit déjeuner', table_cell_bold_style), wrap_text(patient.petit_dejeuner)])
         if patient.dejeuner:
-            lifestyle_data.append(['Déjeuner', patient.dejeuner])
+            lifestyle_data.append([wrap_text('Déjeuner', table_cell_bold_style), wrap_text(patient.dejeuner)])
         if patient.diner:
-            lifestyle_data.append(['Dîner', patient.diner])
+            lifestyle_data.append([wrap_text('Dîner', table_cell_bold_style), wrap_text(patient.diner)])
         if patient.grignotage:
-            lifestyle_data.append(['Grignotage', patient.grignotage])
+            lifestyle_data.append([wrap_text('Grignotage', table_cell_bold_style), wrap_text(patient.grignotage)])
         if patient.autres_consommations:
-            lifestyle_data.append(['Autres consommations', patient.autres_consommations])
+            lifestyle_data.append([wrap_text('Autres consommations', table_cell_bold_style), wrap_text(patient.autres_consommations)])
         
         t = Table(lifestyle_data, colWidths=[6*cm, 11*cm])
         t.setStyle(TableStyle([
@@ -408,12 +415,12 @@ def export_patient_pdf(patient_id):
                 composition_detail = result.get('composition_detail', result['top_1'])
                 
                 result_data = [
-                    ['RÉSULTAT D\'ANALYSE (ALGORITHME KALONJI)', ''],
-                    ['Nature morpho-constitutionnelle', composition_detail],
-                    ['Type de composition', composition_type],
-                    ['Score de confiance', f"{result['top_1_score']}/20"],
-                    ['LEC éligible', 'Oui' if result.get('lec_eligible') else 'Non'],
-                    ['Voie de traitement', result.get('voie_traitement', '-')],
+                    [wrap_text('RÉSULTAT D\'ANALYSE (ALGORITHME KALONJI)', table_cell_bold_style), wrap_text('')],
+                    [wrap_text('Nature morpho-constitutionnelle', table_cell_bold_style), wrap_text(composition_detail)],
+                    [wrap_text('Type de composition', table_cell_bold_style), wrap_text(composition_type)],
+                    [wrap_text('Score de confiance', table_cell_bold_style), wrap_text(f"{result['top_1_score']}/20")],
+                    [wrap_text('LEC éligible', table_cell_bold_style), wrap_text('Oui' if result.get('lec_eligible') else 'Non')],
+                    [wrap_text('Voie de traitement', table_cell_bold_style), wrap_text(result.get('voie_traitement', '-'))],
                 ]
                 
                 t = Table(result_data, colWidths=[7*cm, 10*cm])
@@ -438,9 +445,9 @@ def export_patient_pdf(patient_id):
                 story.append(Spacer(1, 0.2*cm))
                 
                 if result.get('top_3'):
-                    top3_data = [['Top 3 types probables', 'Score']]
+                    top3_data = [[wrap_text('Top 3 types probables', table_cell_bold_style), wrap_text('Score', table_cell_bold_style)]]
                     for type_calcul, score, reasons in result['top_3']:
-                        top3_data.append([type_calcul, f"{score}/20"])
+                        top3_data.append([wrap_text(type_calcul), wrap_text(f"{score}/20")])
                     
                     t2 = Table(top3_data, colWidths=[12*cm, 5*cm])
                     t2.setStyle(TableStyle([

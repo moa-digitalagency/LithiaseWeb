@@ -235,7 +235,26 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium mb-2">📍 Topographie du calcul</label>
-                            <input type="text" name="topographie_calcul" placeholder="Ex: Rein droit, calice inférieur" class="input-field">
+                            <input type="text" name="topographie_calcul" list="topographie_suggestions" placeholder="Ex: Rein droit, calice inférieur" class="input-field">
+                            <datalist id="topographie_suggestions">
+                                <option value="Rein droit">
+                                <option value="Rein gauche">
+                                <option value="Calice inférieur droit">
+                                <option value="Calice inférieur gauche">
+                                <option value="Calice moyen droit">
+                                <option value="Calice moyen gauche">
+                                <option value="Calice supérieur droit">
+                                <option value="Calice supérieur gauche">
+                                <option value="Bassinet droit">
+                                <option value="Bassinet gauche">
+                                <option value="Uretère droit">
+                                <option value="Uretère gauche">
+                                <option value="Uretère pelvien droit">
+                                <option value="Uretère pelvien gauche">
+                                <option value="Vessie">
+                                <option value="Urètre">
+                                <option value="Bilatérale">
+                            </datalist>
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-2">📍 Localisation</label>
@@ -645,7 +664,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Topographie</label>
-                                    <input type="text" name="topographie_calcul" id="edit_topographie_calcul" class="input-field">
+                                    <input type="text" name="topographie_calcul" id="edit_topographie_calcul" list="topographie_suggestions" class="input-field">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Diamètre longitudinal (mm)</label>
@@ -657,11 +676,23 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Forme du calcul</label>
-                                    <input type="text" name="forme_calcul" id="edit_forme_calcul" class="input-field">
+                                    <select name="forme_calcul" id="edit_forme_calcul" class="input-field">
+                                        <option value="">-- Sélectionner --</option>
+                                        <option value="Arrondie">Arrondie</option>
+                                        <option value="Ovale">Ovale</option>
+                                        <option value="Irreguliere">Irrégulière</option>
+                                        <option value="Coralliforme">Coralliforme</option>
+                                        <option value="Spiculee">Spiculée</option>
+                                    </select>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Contour du calcul</label>
-                                    <input type="text" name="contour_calcul" id="edit_contour_calcul" class="input-field">
+                                    <select name="contour_calcul" id="edit_contour_calcul" class="input-field">
+                                        <option value="">-- Sélectionner --</option>
+                                        <option value="Lisse">Lisse</option>
+                                        <option value="Irregulier">Irrégulier</option>
+                                        <option value="Spicule">Spiculé</option>
+                                    </select>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Densité noyau (UH)</label>

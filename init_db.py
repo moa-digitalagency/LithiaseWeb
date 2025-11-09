@@ -1,0 +1,384 @@
+"""
+Script d'initialisation complète de la base de données
+Ce script efface toutes les données existantes et regénère la base de données avec de nouvelles données démo
+"""
+from backend import create_app, db
+from backend.models import User, Patient, Episode, Imagerie, Biologie, Document
+from backend.utils.patient_code import generate_unique_patient_code
+from datetime import datetime, timedelta
+import random
+
+app = create_app()
+
+def drop_all_tables():
+    """Supprime toutes les tables de la base de données"""
+    print("=" * 80)
+    print("SUPPRESSION DE TOUTES LES DONNÉES EXISTANTES")
+    print("=" * 80)
+    
+    with app.app_context():
+        db.drop_all()
+        print("✓ Toutes les tables ont été supprimées")
+        print()
+
+def create_all_tables():
+    """Crée toutes les tables de la base de données"""
+    print("=" * 80)
+    print("CRÉATION DU SCHÉMA DE BASE DE DONNÉES")
+    print("=" * 80)
+    print("Tables à créer:")
+    print("  - users (authentification)")
+    print("  - patients (données chiffrées avec Fernet AES-128)")
+    print("  - episodes (épisodes médicaux)")
+    print("  - imageries (résultats d'imagerie)")
+    print("  - biologies (marqueurs métaboliques et thyroïdiens)")
+    print("  - documents (pièces jointes)")
+    print("=" * 80)
+    
+    with app.app_context():
+        db.create_all()
+        
+        print("✓ Schéma de base de données initialisé avec succès")
+        print("✓ Toutes les tables ont été créées")
+        print("✓ Relations et contraintes d'intégrité référentielle établies")
+        print("✓ Cascade delete configuré pour les relations parent-enfant")
+        print("=" * 80)
+        
+        table_count = len(db.metadata.tables)
+        print(f"📊 Total: {table_count} tables créées dans la base de données")
+        print("=" * 80)
+        print()
+
+def create_admin_user():
+    """Crée l'utilisateur administrateur"""
+    print("=" * 80)
+    print("CRÉATION DE L'UTILISATEUR ADMINISTRATEUR")
+    print("=" * 80)
+    
+    with app.app_context():
+        import os
+        admin_username = os.environ.get('ADMIN_USERNAME', 'admin')
+        admin_password = os.environ.get('ADMIN_PASSWORD', 'admin123')
+        
+        admin = User(username=admin_username)
+        admin.set_password(admin_password)
+        db.session.add(admin)
+        db.session.commit()
+        
+        print(f"✓ Utilisateur admin créé (username: {admin_username})")
+        if admin_password == 'admin123':
+            print("⚠️  ATTENTION: Utilisez les variables d'environnement ADMIN_USERNAME et ADMIN_PASSWORD pour sécuriser les credentials")
+        print("=" * 80)
+        print()
+
+def create_demo_patients():
+    """Crée des patients de démonstration avec toutes leurs données"""
+    print("=" * 80)
+    print("CRÉATION DES PATIENTS DE DÉMONSTRATION")
+    print("=" * 80)
+    
+    with app.app_context():
+        demo_patients = [
+            {
+                "nom": "Kalala",
+                "prenom": "Jean",
+                "date_naissance": datetime(1975, 3, 15).date(),
+                "sexe": "M",
+                "telephone": "+243812345678",
+                "email": "jean.kalala@email.cd",
+                "adresse": "Avenue Tombalbaye, Kinshasa",
+                "groupe_ethnique": "Luba",
+                "poids": 82.5,
+                "taille": 178.0,
+                "tension_arterielle_systolique": 145,
+                "tension_arterielle_diastolique": 92,
+                "frequence_cardiaque": 78,
+                "temperature": 37.2,
+                "frequence_respiratoire": 16,
+                "antecedents_personnels": "Hypertension artérielle depuis 2015, Diabète de type 2 depuis 2018",
+                "antecedents_familiaux": "Père ayant eu des calculs rénaux récidivants, Mère hypertendue",
+                "antecedents_chirurgicaux": "Appendicectomie en 2000",
+                "allergies": "Pénicilline",
+                "traitements_chroniques": "Metformine 1000mg 2x/jour, Ramipril 5mg 1x/jour",
+                "hydratation_jour": 1.2,
+                "regime_alimentaire": "Régime hyperprotéiné, consommation élevée de produits laitiers",
+                "petit_dejeuner": "Café au lait, pain blanc avec beurre, pondu (haricots)",
+                "dejeuner": "Viande rouge 4-5x/semaine, chikwangue, peu de légumes",
+                "diner": "Poisson salé, fufu, légumes",
+                "grignotage": "Cacahuètes salées, beignets",
+                "autres_consommations": "2-3 verres de vin de palme par jour, café 5x/jour",
+                "asp_resultats": "Calcul radio-opaque de 8mm au niveau du rein droit",
+                "echographie_resultats": "Calcul hyperéchogène de 8x6mm dans le calice inférieur droit avec cône d'ombre postérieur",
+                "uroscanner_resultats": "Calcul de 8mm densité 950 UH, localisation calicielle inférieure droite, pas de dilatation des cavités pyélocalicielles",
+                "sediment_urinaire": "Cristaux d'oxalate de calcium monohydraté (whewellite) nombreux",
+                "ecbu_resultats": "Stérile, absence de leucocytes",
+                "ph_urinaire": 5.8,
+                "densite_urinaire": 1.025,
+                "nombre_calculs": 1,
+                "topographie_calcul": "Calice inférieur droit",
+                "diametre_longitudinal": 8.2,
+                "diametre_transversal": 6.1,
+                "forme_calcul": "Ovale",
+                "contour_calcul": "Lisse",
+                "densite_noyau": 950,
+                "densites_couches": "Homogène, pas de stratification visible",
+                "calcifications_autres": "Pas d'autres calcifications",
+                "notes": "Patient récidivant (3ème épisode en 5 ans). Mauvaise observance des conseils diététiques. Hydratation insuffisante chronique."
+            },
+            {
+                "nom": "Mukendi",
+                "prenom": "Sophie",
+                "date_naissance": datetime(1988, 7, 22).date(),
+                "sexe": "F",
+                "telephone": "+243898765432",
+                "email": "sophie.mukendi@email.cd",
+                "adresse": "Avenue de la Libération, Lubumbashi",
+                "groupe_ethnique": "Lunda",
+                "poids": 58.0,
+                "taille": 165.0,
+                "tension_arterielle_systolique": 118,
+                "tension_arterielle_diastolique": 75,
+                "frequence_cardiaque": 72,
+                "temperature": 37.8,
+                "frequence_respiratoire": 18,
+                "antecedents_personnels": "Infections urinaires récidivantes (5-6 par an), Maladie inflammatoire intestinale",
+                "antecedents_familiaux": "Mère avec lithiase urinaire",
+                "antecedents_chirurgicaux": "Résection intestinale partielle en 2016",
+                "allergies": "Aucune allergie connue",
+                "traitements_chroniques": "Azathioprine 150mg/jour, Mésalazine 3g/jour",
+                "hydratation_jour": 1.8,
+                "regime_alimentaire": "Régime pauvre en fibres",
+                "petit_dejeuner": "Thé, pain, compote",
+                "dejeuner": "Viande blanche ou poisson, riz ou pâtes",
+                "diner": "Soupe, légumes",
+                "grignotage": "Fruits",
+                "autres_consommations": "Eau plate principalement, thé vert 2-3x/jour",
+                "asp_resultats": "Multiple petits calculs radio-opaques au niveau du rein gauche",
+                "echographie_resultats": "Multiples microlithiases bilatérales, la plus volumineuse mesurant 5mm au pôle inférieur gauche",
+                "uroscanner_resultats": "Multiples calculs bilatéraux de 2-5mm, densité 1200-1400 UH",
+                "sediment_urinaire": "Cristaux d'oxalate de calcium dihydraté (weddellite) abondants",
+                "ecbu_resultats": "E. coli > 100000 UFC/ml, sensible à Fosfomycine",
+                "ph_urinaire": 6.5,
+                "densite_urinaire": 1.018,
+                "nombre_calculs": 8,
+                "topographie_calcul": "Bilatérale, prédominance calices inférieurs",
+                "diametre_longitudinal": 5.0,
+                "diametre_transversal": 4.2,
+                "forme_calcul": "Arrondie",
+                "contour_calcul": "Irregulier",
+                "densite_noyau": 1300,
+                "densites_couches": "Homogène",
+                "calcifications_autres": "Calcifications vasculaires mineures",
+                "notes": "Hyperoxalurie secondaire à la malabsorption intestinale. Infections urinaires favorisées par les calculs."
+            },
+            {
+                "nom": "Tshimanga",
+                "prenom": "André",
+                "date_naissance": datetime(1982, 11, 8).date(),
+                "sexe": "M",
+                "telephone": "+243823456789",
+                "email": "a.tshimanga@email.cd",
+                "adresse": "Boulevard du 30 Juin, Kananga",
+                "groupe_ethnique": "Kongo",
+                "poids": 95.0,
+                "taille": 172.0,
+                "tension_arterielle_systolique": 138,
+                "tension_arterielle_diastolique": 88,
+                "frequence_cardiaque": 85,
+                "temperature": 36.9,
+                "frequence_respiratoire": 17,
+                "antecedents_personnels": "Obésité (IMC 32), Goutte depuis 2019",
+                "antecedents_familiaux": "Père diabétique, oncle avec lithiase",
+                "antecedents_chirurgicaux": "Aucune chirurgie",
+                "allergies": "Allergie aux AINS (urticaire)",
+                "traitements_chroniques": "Allopurinol 300mg/jour",
+                "hydratation_jour": 0.8,
+                "regime_alimentaire": "Alimentation riche en purines (viandes, fruits de mer)",
+                "petit_dejeuner": "Café sucré, pain",
+                "dejeuner": "Viande rouge quotidienne, fufu, légumes",
+                "diner": "Poisson grillé ou poulet",
+                "grignotage": "Biscuits, arachides",
+                "autres_consommations": "2-3 sodas par jour, bière le weekend",
+                "asp_resultats": "Calcul faiblement radio-opaque de 12mm au niveau du bassinet gauche",
+                "echographie_resultats": "Calcul de 12x10mm dans le bassinet gauche avec discrète dilatation pyélocalicielle",
+                "uroscanner_resultats": "Calcul de 12mm densité 450 UH (faible densité évoquant acide urique)",
+                "sediment_urinaire": "Nombreux cristaux d'acide urique en rosette",
+                "ecbu_resultats": "Stérile",
+                "ph_urinaire": 5.2,
+                "densite_urinaire": 1.032,
+                "nombre_calculs": 1,
+                "topographie_calcul": "Bassinet gauche",
+                "diametre_longitudinal": 12.0,
+                "diametre_transversal": 10.5,
+                "forme_calcul": "Irreguliere",
+                "contour_calcul": "Irregulier",
+                "densite_noyau": 450,
+                "densites_couches": "Densité faible et homogène",
+                "calcifications_autres": "Néphrocalcinose médullaire débutante",
+                "notes": "Lithiase urique pure favorisée par pH urinaire acide chronique, hyperuricurie, déshydratation et surpoids."
+            }
+        ]
+        
+        for patient_data in demo_patients:
+            patient = Patient()
+            
+            def code_exists(code):
+                return Patient.query.filter_by(code_patient=code).first() is not None
+            
+            patient.code_patient = generate_unique_patient_code(code_exists)
+            
+            for key, value in patient_data.items():
+                if key not in ['asp_resultats', 'echographie_resultats', 'uroscanner_resultats', 
+                              'sediment_urinaire', 'ecbu_resultats', 'ph_urinaire', 'densite_urinaire',
+                              'nombre_calculs', 'topographie_calcul', 'diametre_longitudinal', 
+                              'diametre_transversal', 'forme_calcul', 'contour_calcul', 'densite_noyau',
+                              'densites_couches', 'calcifications_autres', 'notes']:
+                    setattr(patient, key, value)
+            
+            db.session.add(patient)
+            db.session.flush()
+            
+            episode_date = datetime.now().date() - timedelta(days=random.randint(10, 90))
+            episode = Episode()
+            episode.patient_id = patient.id
+            episode.date_episode = episode_date
+            episode.motif = "Douleur lombaire aiguë avec hématurie"
+            episode.diagnostic = "Colique néphrétique avec calcul urinaire"
+            episode.douleur = True
+            episode.fievre = patient_data.get('sexe') == 'F' and 'Mukendi' in patient_data.get('nom', '')
+            episode.infection_urinaire = patient_data.get('sexe') == 'F' and 'Mukendi' in patient_data.get('nom', '')
+            
+            if episode.infection_urinaire:
+                episode.germe = "E. coli"
+                episode.urease_positif = False
+            
+            db.session.add(episode)
+            db.session.flush()
+            
+            imagerie = Imagerie()
+            imagerie.episode_id = episode.id
+            imagerie.date_examen = episode_date
+            imagerie.taille_mm = int(patient_data.get('diametre_longitudinal', 8))
+            imagerie.densite_uh = patient_data.get('densite_noyau', 900)
+            imagerie.densite_noyau = patient_data.get('densite_noyau', 900)
+            imagerie.densites_couches = patient_data.get('densites_couches', '')
+            imagerie.morphologie = patient_data.get('forme_calcul', 'Arrondie')
+            imagerie.radio_opacite = "opaque" if patient_data.get('densite_noyau', 900) > 500 else "transparent"
+            imagerie.localisation = patient_data.get('topographie_calcul', 'Rein')
+            imagerie.nombre = str(patient_data.get('nombre_calculs', 1))
+            imagerie.nombre_estime = patient_data.get('nombre_calculs', 1)
+            imagerie.nombre_calculs = patient_data.get('nombre_calculs', 1)
+            imagerie.topographie_calcul = patient_data.get('topographie_calcul', '')
+            imagerie.diametre_longitudinal = patient_data.get('diametre_longitudinal', 0)
+            imagerie.diametre_transversal = patient_data.get('diametre_transversal', 0)
+            imagerie.forme_calcul = patient_data.get('forme_calcul', '')
+            imagerie.contour_calcul = patient_data.get('contour_calcul', '')
+            imagerie.calcifications_autres = patient_data.get('calcifications_autres', '')
+            imagerie.asp_resultats = patient_data.get('asp_resultats', '')
+            imagerie.echographie_resultats = patient_data.get('echographie_resultats', '')
+            imagerie.uroscanner_resultats = patient_data.get('uroscanner_resultats', '')
+            
+            imagerie.rein_gauche_cranio_caudal = random.randint(95, 120)
+            imagerie.rein_gauche_antero_posterieur = random.randint(45, 60)
+            imagerie.rein_gauche_transversal = random.randint(40, 55)
+            imagerie.rein_gauche_volume = round((imagerie.rein_gauche_cranio_caudal * imagerie.rein_gauche_antero_posterieur * imagerie.rein_gauche_transversal * 0.523) / 1000, 1)
+            
+            imagerie.rein_droit_cranio_caudal = random.randint(95, 120)
+            imagerie.rein_droit_antero_posterieur = random.randint(45, 60)
+            imagerie.rein_droit_transversal = random.randint(40, 55)
+            imagerie.rein_droit_volume = round((imagerie.rein_droit_cranio_caudal * imagerie.rein_droit_antero_posterieur * imagerie.rein_droit_transversal * 0.523) / 1000, 1)
+            
+            imagerie.epaisseur_cortex_renal = round(random.uniform(8.0, 12.0), 1)
+            imagerie.diametre_pyelon = random.randint(3, 8)
+            imagerie.diametre_uretere_amont = random.randint(2, 6)
+            
+            if random.random() < 0.2:
+                malformations = ["Ectasie pyélocalicielle modérée", "Atrophie corticale localisée", "Duplicité urétérale"]
+                imagerie.malformations_urinaires = random.choice(malformations)
+            
+            db.session.add(imagerie)
+            
+            biologie = Biologie()
+            biologie.episode_id = episode.id
+            biologie.date_examen = episode_date
+            biologie.ph_urinaire = patient_data.get('ph_urinaire', 6.0)
+            biologie.densite_urinaire = patient_data.get('densite_urinaire', 1.020)
+            biologie.sediment_urinaire = patient_data.get('sediment_urinaire', '')
+            biologie.ecbu_resultats = patient_data.get('ecbu_resultats', 'Stérile')
+            biologie.infection_urinaire = episode.infection_urinaire
+            
+            if episode.infection_urinaire:
+                biologie.germe = "E. coli"
+                biologie.urease_positif = False
+            
+            if 'Tshimanga' in patient_data.get('nom', ''):
+                biologie.hyperuricurie = True
+                biologie.uricurie_valeur = 850.0
+                biologie.calciurie_valeur = 280.0
+                biologie.oxalurie_valeur = 35.0
+                biologie.calciemie_valeur = 2.45
+                biologie.tsh = 1.8
+                biologie.t3 = 1.5
+                biologie.t4 = 9.5
+                biologie.uree = 0.35
+                biologie.creatinine = 9.5
+            elif 'Mukendi' in patient_data.get('nom', ''):
+                biologie.hyperoxalurie = True
+                biologie.oxalurie_valeur = 65.0
+                biologie.calciurie_valeur = 220.0
+                biologie.calciemie_valeur = 2.3
+                biologie.tsh = 2.1
+                biologie.t3 = 1.6
+                biologie.t4 = 10.2
+                biologie.uree = 0.28
+                biologie.creatinine = 7.8
+            elif 'Kalala' in patient_data.get('nom', ''):
+                biologie.hypercalciurie = True
+                biologie.calciurie_valeur = 320.0
+                biologie.oxalurie_valeur = 38.0
+                biologie.calciemie_valeur = 2.55
+                biologie.tsh = 1.2
+                biologie.t3 = 1.7
+                biologie.t4 = 11.0
+                biologie.uree = 0.42
+                biologie.creatinine = 11.2
+            
+            db.session.add(biologie)
+            
+            print(f"  ✓ Patient créé: {patient_data['prenom']} {patient_data['nom']} (Code: {patient.code_patient})")
+        
+        db.session.commit()
+        print(f"\n✅ {len(demo_patients)} patients de démonstration créés avec succès!")
+        print("=" * 80)
+        print()
+
+def main():
+    """Fonction principale d'initialisation"""
+    print("\n")
+    print("╔" + "=" * 78 + "╗")
+    print("║" + " " * 20 + "INITIALISATION DE LA BASE DE DONNÉES" + " " * 21 + "║")
+    print("║" + " " * 25 + "Application KALONJI" + " " * 34 + "║")
+    print("╚" + "=" * 78 + "╝")
+    print("\n")
+    
+    input("⚠️  Cette opération va SUPPRIMER TOUTES LES DONNÉES existantes. Appuyez sur Entrée pour continuer ou Ctrl+C pour annuler... ")
+    print()
+    
+    drop_all_tables()
+    create_all_tables()
+    create_admin_user()
+    create_demo_patients()
+    
+    print("╔" + "=" * 78 + "╗")
+    print("║" + " " * 25 + "INITIALISATION TERMINÉE" + " " * 30 + "║")
+    print("╚" + "=" * 78 + "╝")
+    print()
+    print("Vous pouvez maintenant vous connecter avec:")
+    print("  - Nom d'utilisateur: admin")
+    print("  - Mot de passe: admin123")
+    print()
+    print("Pour démarrer l'application, exécutez: python app.py")
+    print()
+
+if __name__ == '__main__':
+    main()
