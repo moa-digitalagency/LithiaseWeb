@@ -55,6 +55,25 @@ Application web mono-médecin pour la gestion des dossiers patients souffrant de
 - Urate d'ammonium
 
 ## Changements récents
+- **✅ COMPLÉTÉ** (09/11/2025): Patients de démonstration et page de paramètres
+  - **Script de démonstration** : create_demo_patients.py crée 4 patients avec données complètes
+    - Jean Dupont (M, 48 ans) : Oxalate de calcium, récidivant, mauvaise observance
+    - Sophie Martin (F, 37 ans) : Oxalate + infections urinaires, maladie de Crohn
+    - Karim Benali (M, 43 ans) : Acide urique, syndrome métabolique, pH acide
+    - Claire Lefebvre (F, 30 ans) : Cystinurie homozygote, suivi excellent
+  - **Section "Objectifs de l'analyse"** : Ajoutée dans patient.html avec design indigo/purple
+    - 5 objectifs clés selon classification Daudon
+    - Visible sur toutes les fiches patients
+  - **Page Paramètres** : /parametres complète et fonctionnelle
+    - Modification du profil utilisateur
+    - Changement de mot de passe sécurisé
+    - Statut du chiffrement des données
+    - Informations système
+    - Zone de danger avec sauvegarde/export (en développement)
+  - **Navigation** : Lien "⚙️ Paramètres" ajouté dans toutes les pages
+  - **Backend** : Route backend/routes/settings.py avec API JSON sécurisée
+
+## Changements récents (Archive)
 - 2025-10-26: Création initiale du projet
 - Configuration de l'environnement Python 3.11
 - Structure de base du projet
