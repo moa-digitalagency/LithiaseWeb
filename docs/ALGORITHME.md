@@ -75,11 +75,11 @@ Le pH urinaire est crucial pour certains types de calculs.
 - **pH neutre/alcalin (6.8-7.5)** : Carbapatite, Struvite, Urate d'ammonium
 - **pH intermédiaire (6.0-6.8)** : Brushite
 
-### 4. Marqueurs métaboliques (4 points)
+### 4. Marqueurs métaboliques (4 points + bonus)
 
 Présence de troubles métaboliques spécifiques.
 
-**Attribution des points :**
+**Attribution des points de base :**
 - **4 points** : Marqueur signature présent
 - **0 point** : Marqueur signature absent ou non applicable
 
@@ -88,6 +88,12 @@ Présence de troubles métaboliques spécifiques.
 - **Hypercalciurie** → Weddellite, Carbapatite, Brushite
 - **Hyperuricurie** → Acide urique
 - **Cystinurie** → Cystine
+
+**Points bonus (jusqu'à +2 points supplémentaires) :**
+- **Hyperthyroïdie détectée** : +1 point si calcul calcique (favorise hypercalciurie)
+  - TSH < 0.4 mUI/L ET (T3 > 2.0 pg/mL OU T4 > 12.0 ng/dL)
+- **Hypercalcémie** : +1 point si marqueur = hypercalciurie
+  - Calciémie > 2.6 mmol/L
 
 ### 5. Infection urinaire (3 points)
 
@@ -313,6 +319,8 @@ L'algorithme récupère les données d'imagerie et de biologie :
 - pH urinaire
 - Densité urinaire
 - Marqueurs métaboliques (hyperoxalurie, hypercalciurie, hyperuricurie, cystinurie)
+- Valeurs des marqueurs (oxalurie, calciurie, uricurie, calciémie)
+- Hormones thyroïdiennes (TSH, T3, T4) pour détecter hyperthyroïdie
 - Infection urinaire
 - Sédiment urinaire
 - ECBU
@@ -326,10 +334,11 @@ score_total = (
     score_densite +      # 0-6 points
     score_morphologie +  # 0-3 points
     score_ph +           # 0-3 points
-    score_metabolique +  # 0-4 points
+    score_metabolique +  # 0-6 points (base 0-4 + bonus 0-2)
     score_infection +    # -1 à +3 points
     score_radio_opacite  # 0-1 point
 )
+# Score maximum théorique : 22 points
 ```
 
 ### Étape 3 : Classement

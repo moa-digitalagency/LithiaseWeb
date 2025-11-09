@@ -196,7 +196,7 @@ with app.app_context():
             "autres_consommations": "Eau minérale 1.5L/jour, thé vert",
             "asp_resultats": "Calcul radio-opaque de 10mm au niveau de l'uretère proximal droit avec structure stratifiée",
             "echographie_resultats": "Calcul de 10mm bloqué à la jonction pyélo-urétérale droite avec dilatation modérée des cavités",
-            "uroscanner_resultats": "Calcul de 10mm avec structure radiaire caractéristique: noyau dense 980 UH, couches périphériques de densité décroissante (720 et 640 UH), suggestif de composition mixte",
+            "uroscanner_resultats": "Calcul de 10mm avec structure radiaire caractéristique: densité centrale 980 UH, couches périphériques de densité décroissante (720 et 640 UH), suggestif de composition mixte",
             "sediment_urinaire": "Cristaux mixtes d'oxalate de calcium monohydraté et dihydraté, quelques cristaux de phosphate de calcium",
             "ecbu_resultats": "Quelques leucocytes 15/mm3, culture négative",
             "ph_urinaire": 6.2,
@@ -208,7 +208,7 @@ with app.app_context():
             "forme_calcul": "Ovoïde stratifiée",
             "contour_calcul": "Régulier avec stratifications visibles",
             "densite_noyau": 980,
-            "densites_couches": "Noyau 980 UH, couche 1: 720 UH, couche 2: 640 UH",
+            "densites_couches": "Couche 1: 980 UH, couche 2: 720 UH, couche 3: 640 UH",
             "calcifications_autres": "Discrètes calcifications médullaires bilatérales",
             "notes": "Calcul mixte post-hyperparathyroïdie avec structure radiaire typique. Noyau probablement Whewellite pur formé en période d'hypercalciurie sévère, couches externes Weddellite formées après parathyroïdectomie. Infection urinaire subclinique possible favorisant formation de couche phosphatée externe."
         }

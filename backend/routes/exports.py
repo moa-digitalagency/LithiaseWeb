@@ -297,7 +297,7 @@ def export_patient_pdf(patient_id):
                 
                 if result.get('top_3'):
                     top3_data = [['Top 3 types probables', 'Score']]
-                    for type_calcul, score in result['top_3']:
+                    for type_calcul, score, reasons in result['top_3']:
                         top3_data.append([type_calcul, f"{score}/20"])
                     
                     t2 = Table(top3_data, colWidths=[12*cm, 5*cm])

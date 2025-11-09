@@ -55,10 +55,24 @@ def biologies(episode_id):
             'id': b.id,
             'date_examen': b.date_examen.isoformat(),
             'ph_urinaire': b.ph_urinaire,
+            'densite_urinaire': b.densite_urinaire,
+            'sediment_urinaire': b.sediment_urinaire,
+            'ecbu_resultats': b.ecbu_resultats,
             'hyperoxalurie': b.hyperoxalurie,
             'hypercalciurie': b.hypercalciurie,
             'hyperuricurie': b.hyperuricurie,
-            'cystinurie': b.cystinurie
+            'cystinurie': b.cystinurie,
+            'hypercalcemie': b.hypercalcemie,
+            'oxalurie_valeur': b.oxalurie_valeur,
+            'calciurie_valeur': b.calciurie_valeur,
+            'uricurie_valeur': b.uricurie_valeur,
+            'calciemie_valeur': b.calciemie_valeur,
+            't3': b.t3,
+            't4': b.t4,
+            'tsh': b.tsh,
+            'infection_urinaire': b.infection_urinaire,
+            'germe': b.germe,
+            'urease_positif': b.urease_positif
         } for b in episode.biologies])
 
 @bp.route('/api/biologies/<int:biologie_id>', methods=['GET', 'PUT', 'DELETE'])

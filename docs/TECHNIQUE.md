@@ -123,8 +123,9 @@ Champs chiffrés :
 Champs non chiffrés :
 - `date_examen`
 - `ph_urinaire`, `densite_urinaire`
-- `hyperoxalurie`, `hypercalciurie`, `hyperuricurie`, `cystinurie`
-- `oxalurie_valeur`, `calciurie_valeur`, `uricurie_valeur`
+- `hyperoxalurie`, `hypercalciurie`, `hyperuricurie`, `cystinurie`, `hypercalcemie`
+- `oxalurie_valeur`, `calciurie_valeur`, `uricurie_valeur`, `calciemie_valeur`
+- `t3`, `t4`, `tsh` (hormones thyroïdiennes)
 - `infection_urinaire`, `urease_positif`
 - Timestamps
 
@@ -236,9 +237,9 @@ Principe :
     "Marqueur signature présent (hyperoxalurie)"
   ],
   "top_3": [
-    ["Whewellite", 14],
-    ["Weddellite", 9],
-    ["Acide urique", 5]
+    ["Whewellite", 14, ["Densité OK", "pH OK", "Hyperoxalurie"]],
+    ["Weddellite", 9, ["Densité proche", "pH OK"]],
+    ["Acide urique", 5, ["pH OK", "Morphologie OK"]]
   ],
   "uncertain": false,
   "lec_eligible": false,
