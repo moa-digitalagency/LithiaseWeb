@@ -192,35 +192,62 @@ def create_styles():
     return styles
 
 def remove_emojis(text):
-    """Supprime tous les emojis du texte"""
-    # Pattern pour détecter les emojis
+    """Supprime tous les emojis et symboles Unicode du texte"""
+    # Pattern étendu pour tous les emojis et symboles
     emoji_pattern = re.compile("["
         u"\U0001F600-\U0001F64F"  # emoticons
         u"\U0001F300-\U0001F5FF"  # symboles & pictogrammes
         u"\U0001F680-\U0001F6FF"  # transport & symboles de carte
-        u"\U0001F1E0-\U0001F1FF"  # drapeaux
-        u"\U00002702-\U000027B0"
-        u"\U000024C2-\U0001F251"
-        u"\U0001F900-\U0001F9FF"  # emojis supplémentaires
-        u"\U0001FA00-\U0001FA6F"
+        u"\U0001F1E0-\U0001F1FF"  # drapeaux (pays)
+        u"\U00002702-\U000027B0"  # Dingbats
+        u"\U000024C2-\U0001F251"  # caractères encadrés
+        u"\U0001F900-\U0001F9FF"  # symboles supplémentaires
+        u"\U0001FA00-\U0001FA6F"  # symboles étendus
+        u"\U00002600-\U000026FF"  # symboles divers
+        u"\U00002B50"              # étoile
+        u"\U0001F004"              # mahjong
+        u"\U0001F0CF"              # jouer aux cartes
+        u"\U0000200D"              # zero width joiner
+        u"\U0000FE0F"              # variation selector
         "]+", flags=re.UNICODE)
-    return emoji_pattern.sub('', text)
+    
+    # Supprimer aussi les symboles communs : ✓✔✅❌⚠️📊💎🔧🎯etc.
+    text = emoji_pattern.sub('', text)
+    # Supprimer d'autres symboles problématiques
+    text = re.sub(r'[\u2700-\u27BF\u2600-\u26FF\u2300-\u23FF]', '', text)
+    
+    return text
 
 def format_text(text):
-    """Formate le texte pour ReportLab (gras, italique, supprime emojis)"""
-    # Supprimer les emojis
+    """Formate le texte pour ReportLab (gras, italique, supprime emojis et markdown)"""
+    if not text:
+        return ''
+    
+    # Supprimer les emojis D'ABORD (avant échappement XML)
     text = remove_emojis(text)
     
-    # Convertir markdown en HTML ReportLab
-    # Gras **texte**
-    text = re.sub(r'\*\*([^*]+)\*\*', r'<b>\1</b>', text)
-    # Italique *texte*
-    text = re.sub(r'(?<!\*)\*([^*]+)\*(?!\*)', r'<i>\1</i>', text)
-    
-    # Échapper les caractères spéciaux XML (sauf nos balises)
+    # D'abord échapper les caractères spéciaux XML
     text = text.replace('&', '&amp;')
-    text = text.replace('<b>', '<b>').replace('</b>', '</b>')
-    text = text.replace('<i>', '<i>').replace('</i>', '</i>')
+    text = text.replace('<', '&lt;')
+    text = text.replace('>', '&gt;')
+    
+    # Convertir markdown en balises XML ReportLab (sur texte échappé)
+    # Gras **texte** 
+    text = re.sub(r'\*\*(.+?)\*\*', lambda m: f'__BOLD_START__{m.group(1)}__BOLD_END__', text)
+    
+    # Italique *texte* (ne pas matcher **)
+    text = re.sub(r'(?<!\*)\*([^*]+?)\*(?!\*)', lambda m: f'__ITALIC_START__{m.group(1)}__ITALIC_END__', text)
+    
+    # Code `texte`
+    text = re.sub(r'`([^`]+)`', lambda m: f'__CODE_START__{m.group(1)}__CODE_END__', text)
+    
+    # Restaurer TOUTES les balises en utilisant des marqueurs temporaires
+    text = text.replace('__BOLD_START__', '<b>').replace('__BOLD_END__', '</b>')
+    text = text.replace('__ITALIC_START__', '<i>').replace('__ITALIC_END__', '</i>')
+    text = text.replace('__CODE_START__', '<font name="Courier" size="9">').replace('__CODE_END__', '</font>')
+    
+    # Nettoyer les espaces multiples
+    text = re.sub(r'\s+', ' ', text)
     
     return text.strip()
 
