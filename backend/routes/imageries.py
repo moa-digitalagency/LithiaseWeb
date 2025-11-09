@@ -53,9 +53,12 @@ def imageries(episode_id):
         imagerie.rein_droit_antero_posterieur = data.get('rein_droit_antero_posterieur')
         imagerie.rein_droit_transversal = data.get('rein_droit_transversal')
         imagerie.rein_droit_volume = data.get('rein_droit_volume')
-        imagerie.epaisseur_cortex_renal = data.get('epaisseur_cortex_renal')
-        imagerie.diametre_pyelon = data.get('diametre_pyelon')
-        imagerie.diametre_uretere_amont = data.get('diametre_uretere_amont')
+        imagerie.epaisseur_cortex_renal_gauche = data.get('epaisseur_cortex_renal_gauche')
+        imagerie.epaisseur_cortex_renal_droit = data.get('epaisseur_cortex_renal_droit')
+        imagerie.diametre_pyelon_gauche = data.get('diametre_pyelon_gauche')
+        imagerie.diametre_pyelon_droit = data.get('diametre_pyelon_droit')
+        imagerie.diametre_uretere_amont_gauche = data.get('diametre_uretere_amont_gauche')
+        imagerie.diametre_uretere_amont_droit = data.get('diametre_uretere_amont_droit')
         imagerie.malformations_urinaires = data.get('malformations_urinaires')
         
         db.session.add(imagerie)
@@ -95,9 +98,12 @@ def imageries(episode_id):
             'rein_droit_antero_posterieur': i.rein_droit_antero_posterieur,
             'rein_droit_transversal': i.rein_droit_transversal,
             'rein_droit_volume': i.rein_droit_volume,
-            'epaisseur_cortex_renal': i.epaisseur_cortex_renal,
-            'diametre_pyelon': i.diametre_pyelon,
-            'diametre_uretere_amont': i.diametre_uretere_amont,
+            'epaisseur_cortex_renal_gauche': i.epaisseur_cortex_renal_gauche,
+            'epaisseur_cortex_renal_droit': i.epaisseur_cortex_renal_droit,
+            'diametre_pyelon_gauche': i.diametre_pyelon_gauche,
+            'diametre_pyelon_droit': i.diametre_pyelon_droit,
+            'diametre_uretere_amont_gauche': i.diametre_uretere_amont_gauche,
+            'diametre_uretere_amont_droit': i.diametre_uretere_amont_droit,
             'malformations_urinaires': i.malformations_urinaires
         } for i in episode.imageries])
 
@@ -140,9 +146,12 @@ def imagerie_detail(imagerie_id):
             'rein_droit_antero_posterieur': imagerie.rein_droit_antero_posterieur,
             'rein_droit_transversal': imagerie.rein_droit_transversal,
             'rein_droit_volume': imagerie.rein_droit_volume,
-            'epaisseur_cortex_renal': imagerie.epaisseur_cortex_renal,
-            'diametre_pyelon': imagerie.diametre_pyelon,
-            'diametre_uretere_amont': imagerie.diametre_uretere_amont,
+            'epaisseur_cortex_renal_gauche': imagerie.epaisseur_cortex_renal_gauche,
+            'epaisseur_cortex_renal_droit': imagerie.epaisseur_cortex_renal_droit,
+            'diametre_pyelon_gauche': imagerie.diametre_pyelon_gauche,
+            'diametre_pyelon_droit': imagerie.diametre_pyelon_droit,
+            'diametre_uretere_amont_gauche': imagerie.diametre_uretere_amont_gauche,
+            'diametre_uretere_amont_droit': imagerie.diametre_uretere_amont_droit,
             'malformations_urinaires': imagerie.malformations_urinaires
         })
     
@@ -213,12 +222,18 @@ def imagerie_detail(imagerie_id):
             imagerie.rein_droit_transversal = data['rein_droit_transversal']
         if 'rein_droit_volume' in data:
             imagerie.rein_droit_volume = data['rein_droit_volume']
-        if 'epaisseur_cortex_renal' in data:
-            imagerie.epaisseur_cortex_renal = data['epaisseur_cortex_renal']
-        if 'diametre_pyelon' in data:
-            imagerie.diametre_pyelon = data['diametre_pyelon']
-        if 'diametre_uretere_amont' in data:
-            imagerie.diametre_uretere_amont = data['diametre_uretere_amont']
+        if 'epaisseur_cortex_renal_gauche' in data:
+            imagerie.epaisseur_cortex_renal_gauche = data['epaisseur_cortex_renal_gauche']
+        if 'epaisseur_cortex_renal_droit' in data:
+            imagerie.epaisseur_cortex_renal_droit = data['epaisseur_cortex_renal_droit']
+        if 'diametre_pyelon_gauche' in data:
+            imagerie.diametre_pyelon_gauche = data['diametre_pyelon_gauche']
+        if 'diametre_pyelon_droit' in data:
+            imagerie.diametre_pyelon_droit = data['diametre_pyelon_droit']
+        if 'diametre_uretere_amont_gauche' in data:
+            imagerie.diametre_uretere_amont_gauche = data['diametre_uretere_amont_gauche']
+        if 'diametre_uretere_amont_droit' in data:
+            imagerie.diametre_uretere_amont_droit = data['diametre_uretere_amont_droit']
         if 'malformations_urinaires' in data:
             imagerie.malformations_urinaires = data['malformations_urinaires']
         

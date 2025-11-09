@@ -471,7 +471,7 @@ class Imagerie(db.Model):
     diametre_pyelon_droit = db.Column(db.Float)
     diametre_uretere_amont_gauche = db.Column(db.Float)
     diametre_uretere_amont_droit = db.Column(db.Float)
-    malformations_urinaires = db.Column(db.String(100))
+    _malformations_urinaires = db.Column('malformations_urinaires', db.Text)
     
     _commentaires = db.Column('commentaires', db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -557,6 +557,13 @@ class Imagerie(db.Model):
     def calcifications_autres(self, value):
         self._calcifications_autres = encryption_manager.encrypt(value)
     
+    @property
+    def malformations_urinaires(self):
+        return encryption_manager.decrypt(self._malformations_urinaires)
+    
+    @malformations_urinaires.setter
+    def malformations_urinaires(self, value):
+        self._malformations_urinaires = encryption_manager.encrypt(value)
 
 class Biologie(db.Model):
     __tablename__ = 'biologies'

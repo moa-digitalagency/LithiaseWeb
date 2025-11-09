@@ -40,7 +40,11 @@ def biologies(episode_id):
         biologie.creatinine = data.get('creatinine')
         biologie.infection_urinaire = data.get('infection_urinaire', False)
         biologie.germe = data.get('germe')
+        biologie.germe_urease = data.get('germe_urease')
         biologie.urease_positif = data.get('urease_positif')
+        biologie.densite_urinaire = data.get('densite_urinaire')
+        biologie.sediment_urinaire = data.get('sediment_urinaire')
+        biologie.ecbu_resultats = data.get('ecbu_resultats')
         biologie.commentaires = data.get('commentaires')
         
         episode_patient = Episode.query.get(episode_id)
@@ -76,7 +80,9 @@ def biologies(episode_id):
             'creatinine': b.creatinine,
             'infection_urinaire': b.infection_urinaire,
             'germe': b.germe,
-            'urease_positif': b.urease_positif
+            'germe_urease': b.germe_urease,
+            'urease_positif': b.urease_positif,
+            'commentaires': b.commentaires
         } for b in episode.biologies])
 
 @bp.route('/api/biologies/<int:biologie_id>', methods=['GET', 'PUT', 'DELETE'])
@@ -106,7 +112,11 @@ def biologie_detail(biologie_id):
             'creatinine': biologie.creatinine,
             'infection_urinaire': biologie.infection_urinaire,
             'germe': biologie.germe,
+            'germe_urease': biologie.germe_urease,
             'urease_positif': biologie.urease_positif,
+            'densite_urinaire': biologie.densite_urinaire,
+            'sediment_urinaire': biologie.sediment_urinaire,
+            'ecbu_resultats': biologie.ecbu_resultats,
             'commentaires': biologie.commentaires
         })
     
@@ -153,8 +163,16 @@ def biologie_detail(biologie_id):
             biologie.infection_urinaire = data['infection_urinaire']
         if 'germe' in data:
             biologie.germe = data['germe']
+        if 'germe_urease' in data:
+            biologie.germe_urease = data['germe_urease']
         if 'urease_positif' in data:
             biologie.urease_positif = data['urease_positif']
+        if 'densite_urinaire' in data:
+            biologie.densite_urinaire = data['densite_urinaire']
+        if 'sediment_urinaire' in data:
+            biologie.sediment_urinaire = data['sediment_urinaire']
+        if 'ecbu_resultats' in data:
+            biologie.ecbu_resultats = data['ecbu_resultats']
         if 'commentaires' in data:
             biologie.commentaires = data['commentaires']
         

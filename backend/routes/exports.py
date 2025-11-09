@@ -110,8 +110,7 @@ def export_patient_pdf(patient_id):
         qr_image = Image(qr_buffer, width=2.5*cm, height=2.5*cm)
         
         qr_data = [[qr_image, [Paragraph(f"<b>Code Patient</b>", code_style), 
-                                Paragraph(f"{patient.code_patient[:18]}", code_style),
-                                Paragraph(f"{patient.code_patient[18:]}", code_style)]]]
+                                Paragraph(f"{patient.code_patient}", code_style)]]]
         qr_table = Table(qr_data, colWidths=[3*cm, 15*cm])
         qr_table.setStyle(TableStyle([
             ('ALIGN', (0, 0), (0, 0), 'CENTER'),
@@ -312,7 +311,7 @@ def export_patient_pdf(patient_id):
                     if imaging.radio_opacite:
                         story.append(Paragraph(f"    Radio-opacité: {imaging.radio_opacite}", styles['Normal']))
                     
-                    if any([imaging.rein_gauche_cranio_caudal, imaging.rein_gauche_volume, imaging.rein_droit_cranio_caudal, imaging.rein_droit_volume, imaging.epaisseur_cortex_renal, imaging.diametre_pyelon, imaging.diametre_uretere_amont]):
+                    if any([imaging.rein_gauche_cranio_caudal, imaging.rein_gauche_volume, imaging.rein_droit_cranio_caudal, imaging.rein_droit_volume, imaging.epaisseur_cortex_renal_gauche, imaging.epaisseur_cortex_renal_droit, imaging.diametre_pyelon_gauche, imaging.diametre_pyelon_droit, imaging.diametre_uretere_amont_gauche, imaging.diametre_uretere_amont_droit]):
                         story.append(Paragraph("<b>    Mesures uroscanner - Retentissement haut appareil:</b>", styles['Normal']))
                         reins_data = [['Paramètre', 'Rein gauche', 'Rein droit']]
                         if imaging.rein_gauche_cranio_caudal or imaging.rein_droit_cranio_caudal:
@@ -323,6 +322,12 @@ def export_patient_pdf(patient_id):
                             reins_data.append(['Transversal', f"{imaging.rein_gauche_transversal or '-'} mm", f"{imaging.rein_droit_transversal or '-'} mm"])
                         if imaging.rein_gauche_volume or imaging.rein_droit_volume:
                             reins_data.append(['Volume', f"{imaging.rein_gauche_volume or '-'} cm³", f"{imaging.rein_droit_volume or '-'} cm³"])
+                        if imaging.epaisseur_cortex_renal_gauche or imaging.epaisseur_cortex_renal_droit:
+                            reins_data.append(['Épaisseur cortex', f"{imaging.epaisseur_cortex_renal_gauche or '-'} mm", f"{imaging.epaisseur_cortex_renal_droit or '-'} mm"])
+                        if imaging.diametre_pyelon_gauche or imaging.diametre_pyelon_droit:
+                            reins_data.append(['Diamètre pyélon', f"{imaging.diametre_pyelon_gauche or '-'} mm", f"{imaging.diametre_pyelon_droit or '-'} mm"])
+                        if imaging.diametre_uretere_amont_gauche or imaging.diametre_uretere_amont_droit:
+                            reins_data.append(['Diamètre uretère amont', f"{imaging.diametre_uretere_amont_gauche or '-'} mm", f"{imaging.diametre_uretere_amont_droit or '-'} mm"])
                         
                         if len(reins_data) > 1:
                             t_reins = Table(reins_data, colWidths=[5*cm, 5*cm, 5*cm])
@@ -339,12 +344,6 @@ def export_patient_pdf(patient_id):
                             story.append(Spacer(1, 0.1*cm))
                             story.append(t_reins)
                         
-                        if imaging.epaisseur_cortex_renal:
-                            story.append(Paragraph(f"    Épaisseur cortex rénal: {imaging.epaisseur_cortex_renal} mm", styles['Normal']))
-                        if imaging.diametre_pyelon:
-                            story.append(Paragraph(f"    Diamètre pyelon: {imaging.diametre_pyelon} mm", styles['Normal']))
-                        if imaging.diametre_uretere_amont:
-                            story.append(Paragraph(f"    Diamètre uretère en amont: {imaging.diametre_uretere_amont} mm", styles['Normal']))
                         if imaging.malformations_urinaires:
                             story.append(Paragraph(f"    Malformations: {imaging.malformations_urinaires}", styles['Normal']))
             
@@ -394,7 +393,12 @@ def export_patient_pdf(patient_id):
                         story.append(Paragraph(f"    Fonction rénale: {', '.join(renal)}", styles['Normal']))
                     
                     if biology.infection_urinaire:
-                        story.append(Paragraph(f"    Infection urinaire: Oui{' (' + biology.germe + ')' if biology.germe else ''}", styles['Normal']))
+                        infection_text = "    Infection urinaire: Oui"
+                        if biology.germe:
+                            infection_text += f" (Germe: {biology.germe})"
+                        if biology.germe_urease:
+                            infection_text += f" (Germe à uréase: {biology.germe_urease})"
+                        story.append(Paragraph(infection_text, styles['Normal']))
             
             if episode.calculated_stone_type and episode.calculated_stone_type_data:
                 import json
