@@ -1,4 +1,4 @@
-# Guide de tests - Webapp Lithiase
+# Guide de tests - Algorithme Lithiase KALONJI
 
 ## Accès à l'application
 - URL: http://localhost:5000

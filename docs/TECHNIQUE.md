@@ -1,4 +1,4 @@
-# Documentation Technique - Webapp Lithiase
+# Documentation Technique - Algorithme Lithiase KALONJI
 
 ## 🏗️ Architecture
 

@@ -1,4 +1,4 @@
-# Suivi du Projet - Webapp Lithiase
+# Suivi du Projet - Algorithme Lithiase KALONJI
 
 ## Vue d'ensemble
 Application web médicale de gestion des calculs rénaux (lithiase) pour médecins mono-utilisateur.

@@ -1,4 +1,4 @@
-# Webapp Lithiase - Application Médicale Sécurisée
+# Algorithme Lithiase KALONJI - Application Médicale Sécurisée
 
 Application web de gestion de calculs rénaux pour médecins avec **chiffrement des données de santé**.
 

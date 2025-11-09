@@ -2,7 +2,7 @@
 
 ## 📊 Vue d'ensemble
 
-Le moteur d'inférence de l'application Lithiase est basé sur la **classification morpho-constitutionnelle de Daudon**, référence internationale pour l'analyse des calculs rénaux. L'algorithme utilise un système de notation sur **20 points** pour déterminer le type de calcul le plus probable parmi 8 types couverts.
+Le moteur d'inférence de l'application **Algorithme Lithiase KALONJI** est basé sur la **classification morpho-constitutionnelle de Daudon**, référence internationale pour l'analyse des calculs rénaux. L'algorithme utilise un système de notation sur **20 points** pour déterminer le type de calcul le plus probable parmi 8 types couverts.
 
 ## 🎯 Objectifs médicaux
 

@@ -1,8 +1,8 @@
-# Webapp Lithiase - Documentation
+# Algorithme Lithiase KALONJI - Documentation
 
 ## 📋 Vue d'ensemble
 
-**Webapp Lithiase** est une application web médicale destinée aux médecins pour la gestion complète des patients souffrant de lithiase rénale (calculs rénaux). L'application intègre un moteur d'inférence basé sur la classification morpho-constitutionnelle de Daudon pour aider au diagnostic et au traitement.
+**Algorithme Lithiase KALONJI** est une application web médicale destinée aux médecins pour la gestion complète des patients souffrant de lithiase rénale (calculs rénaux). L'application intègre un moteur d'inférence basé sur la classification morpho-constitutionnelle de Daudon pour aider au diagnostic et au traitement.
 
 ## 🎯 Objectifs médicaux
 

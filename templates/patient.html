@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiche Patient - Lithiase</title>
+    <title>Fiche Patient - Algorithme Lithiase KALONJI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/static/css/myoneart.css">
 </head>
 <body class="page-bg">
     <nav class="gradient-bg text-white shadow-lg">
         <div class="container mx-auto px-6 flex justify-between items-center">
-            <h1 class="text-3xl font-bold">💊 Lithiase</h1>
+            <h1 class="text-3xl font-bold">💊 Algorithme Lithiase KALONJI</h1>
             <div class="flex items-center space-x-6">
                 <a href="/" class="hover:text-indigo-200 transition-colors font-medium">🏠 Tableau de bord</a>
                 <a href="/nouveau-patient" class="hover:text-indigo-200 transition-colors font-medium">➕ Nouveau Patient</a>
@@ -27,9 +27,17 @@
                 <div class="w-full">
                     <div class="flex justify-between items-center mb-4">
                         <h2 id="patientName" class="text-3xl font-bold text-gray-800"></h2>
-                        <button onclick="exportPDF()" class="btn btn-success py-3 px-6">
-                            📄 Exporter PDF
-                        </button>
+                        <div class="flex gap-3">
+                            <button onclick="showEditPatientModal()" class="btn btn-primary py-3 px-6">
+                                ✏️ Modifier
+                            </button>
+                            <button onclick="showDeleteConfirmModal()" class="btn bg-red-600 hover:bg-red-700 text-white py-3 px-6 transition-colors">
+                                🗑️ Supprimer
+                            </button>
+                            <button onclick="exportPDF()" class="btn btn-success py-3 px-6">
+                                📄 Exporter PDF
+                            </button>
+                        </div>
                     </div>
                     
                     <div class="bg-gradient-to-r from-indigo-100 to-purple-100 border-2 border-indigo-300 rounded-lg p-6 mb-6">
@@ -382,6 +390,126 @@
         </div>
     </div>
     
+    <!-- Modal: Modifier Patient -->
+    <div id="editPatientModal" class="hidden modal-backdrop">
+        <div class="modal-content modal-lg my-8 mx-4">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-2xl font-bold text-gray-800">✏️ Modifier le Patient</h3>
+            </div>
+            <div class="p-6 max-h-[70vh] overflow-y-auto">
+                <form id="editPatientForm" class="space-y-6">
+                    <!-- Informations personnelles -->
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                        <h4 class="text-lg font-bold text-blue-900 mb-3">👤 Informations personnelles</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nom *</label>
+                                <input type="text" name="nom" id="edit_nom" required class="input-field">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Prénom *</label>
+                                <input type="text" name="prenom" id="edit_prenom" required class="input-field">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Date de naissance *</label>
+                                <input type="date" name="date_naissance" id="edit_date_naissance" required class="input-field">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Sexe *</label>
+                                <select name="sexe" id="edit_sexe" required class="input-field">
+                                    <option value="M">Masculin</option>
+                                    <option value="F">Féminin</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
+                                <input type="tel" name="telephone" id="edit_telephone" class="input-field">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <input type="email" name="email" id="edit_email" class="input-field">
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Adresse</label>
+                                <input type="text" name="adresse" id="edit_adresse" class="input-field">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Poids (kg)</label>
+                                <input type="number" name="poids" id="edit_poids" step="0.1" class="input-field">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Taille (cm)</label>
+                                <input type="number" name="taille" id="edit_taille" step="0.1" class="input-field">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Antécédents médicaux -->
+                    <div class="bg-green-50 border-2 border-green-200 rounded-lg p-4">
+                        <h4 class="text-lg font-bold text-green-900 mb-3">🏥 Antécédents médicaux</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Antécédents personnels</label>
+                                <textarea name="antecedents_personnels" id="edit_antecedents_personnels" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Antécédents familiaux</label>
+                                <textarea name="antecedents_familiaux" id="edit_antecedents_familiaux" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Allergies</label>
+                                <textarea name="allergies" id="edit_allergies" rows="2" class="input-field"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Traitements chroniques</label>
+                                <textarea name="traitements_chroniques" id="edit_traitements_chroniques" rows="2" class="input-field"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hygiène de vie -->
+                    <div class="bg-purple-50 border-2 border-purple-200 rounded-lg p-4">
+                        <h4 class="text-lg font-bold text-purple-900 mb-3">💧 Hygiène de vie</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Hydratation (L/jour)</label>
+                                <input type="number" name="hydratation_jour" id="edit_hydratation_jour" step="0.1" class="input-field">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Régime alimentaire</label>
+                                <input type="text" name="regime_alimentaire" id="edit_regime_alimentaire" class="input-field">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" onclick="hideEditPatientModal()" class="btn btn-secondary">Annuler</button>
+                        <button type="submit" class="btn btn-primary">💾 Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal: Confirmation Suppression -->
+    <div id="deleteConfirmModal" class="hidden modal-backdrop">
+        <div class="modal-content modal-sm my-8 mx-4">
+            <div class="p-6 border-b border-gray-200 bg-red-50">
+                <h3 class="text-2xl font-bold text-red-800">⚠️ Confirmer la suppression</h3>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-700 mb-4">Êtes-vous sûr de vouloir supprimer ce patient ?</p>
+                <p class="text-red-600 font-semibold mb-4">⚠️ Cette action est irréversible !</p>
+                <p class="text-gray-600 text-sm mb-6">Toutes les données du patient, incluant les épisodes, imageries et biologies seront définitivement supprimées.</p>
+                
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="hideDeleteConfirmModal()" class="btn btn-secondary">Annuler</button>
+                    <button type="button" onclick="deletePatient()" class="btn bg-red-600 hover:bg-red-700 text-white">🗑️ Supprimer définitivement</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script>
         const patientId = {{ patient_id }};
         let currentEpisodeId = null;
@@ -666,6 +794,86 @@
             
             hideNewBiologyModal();
             showEpisodeDetail(currentEpisodeId);
+        });
+        
+        // Fonctions pour modifier le patient
+        async function showEditPatientModal() {
+            const response = await fetch(`/api/patients/${patientId}`);
+            const patient = await response.json();
+            
+            // Remplir le formulaire avec les données actuelles
+            document.getElementById('edit_nom').value = patient.nom || '';
+            document.getElementById('edit_prenom').value = patient.prenom || '';
+            document.getElementById('edit_date_naissance').value = patient.date_naissance || '';
+            document.getElementById('edit_sexe').value = patient.sexe || 'M';
+            document.getElementById('edit_telephone').value = patient.telephone || '';
+            document.getElementById('edit_email').value = patient.email || '';
+            document.getElementById('edit_adresse').value = patient.adresse || '';
+            document.getElementById('edit_poids').value = patient.poids || '';
+            document.getElementById('edit_taille').value = patient.taille || '';
+            document.getElementById('edit_antecedents_personnels').value = patient.antecedents_personnels || '';
+            document.getElementById('edit_antecedents_familiaux').value = patient.antecedents_familiaux || '';
+            document.getElementById('edit_allergies').value = patient.allergies || '';
+            document.getElementById('edit_traitements_chroniques').value = patient.traitements_chroniques || '';
+            document.getElementById('edit_hydratation_jour').value = patient.hydratation_jour || '';
+            document.getElementById('edit_regime_alimentaire').value = patient.regime_alimentaire || '';
+            
+            document.getElementById('editPatientModal').classList.remove('hidden');
+        }
+        
+        function hideEditPatientModal() {
+            document.getElementById('editPatientModal').classList.add('hidden');
+        }
+        
+        document.getElementById('editPatientForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            const response = await fetch(`/api/patients/${patientId}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            
+            if (response.ok) {
+                hideEditPatientModal();
+                loadPatient(); // Recharger les données
+            } else {
+                alert('Erreur lors de la modification du patient');
+            }
+        });
+        
+        // Fonctions pour supprimer le patient
+        function showDeleteConfirmModal() {
+            document.getElementById('deleteConfirmModal').classList.remove('hidden');
+        }
+        
+        function hideDeleteConfirmModal() {
+            document.getElementById('deleteConfirmModal').classList.add('hidden');
+        }
+        
+        async function deletePatient() {
+            const response = await fetch(`/api/patients/${patientId}`, {
+                method: 'DELETE'
+            });
+            
+            if (response.ok) {
+                // Rediriger vers le dashboard après suppression
+                window.location.href = '/';
+            } else {
+                alert('Erreur lors de la suppression du patient');
+                hideDeleteConfirmModal();
+            }
+        }
+        
+        // Gérer le clic sur le backdrop pour fermer les modals
+        ['editPatientModal', 'deleteConfirmModal'].forEach(modalId => {
+            document.getElementById(modalId).addEventListener('click', (e) => {
+                if (e.target.id === modalId) {
+                    document.getElementById(modalId).classList.add('hidden');
+                }
+            });
         });
         
         loadPatient();
