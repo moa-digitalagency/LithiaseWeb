@@ -84,6 +84,35 @@ The application uses a Flask (Python 3.11) backend with SQLAlchemy ORM for datab
   - Analysis results and inference justifications
   - Prevents text overflow in long addresses, medical narratives, and imaging descriptions
 
+#### Demo Data & Documentation Enhancement (Nov 9 - Latest)
+- **Comprehensive Demo Dataset**: Created `init_demo_data.py` with 5 highly detailed patient cases
+  - **Joseph Kabongo** - Whewellite (hyperoxalurie primaire, densité 1450 UH, pH 5.4)
+  - **Françoise Mwamba** - Struvite (infection Proteus mirabilis, calcul coralliforme 45mm, pH 7.8)
+  - **Marcel Tshilombo** - Acide urique (syndrome métabolique, obésité IMC 33, hyperuricurie 1250 mg/24h, pH 5.0)
+  - **Marie Kasongo** - Weddellite (hyperoxalurie entérique post-résection iléale, 12 calculs bilatéraux, oxalurie 95 mg/24h)
+  - **Pierre Ngoy** - Brushite (hyperparathyroïdie primaire, hypercalcémie 2.98 mmol/L, PTH 185 pg/mL)
+  - All patients include complete demographics, vital signs, medical history, lifestyle habits, imaging results, and biological markers
+  - Each patient represents a specific clinical archetype with coherent pathophysiology
+- **Professional PDF Generator**: Created `generate_scientific_pdf.py` for scientific documentation
+  - Automatic emoji removal from all content
+  - Professional ReportLab PLATYPUS formatting with custom styles
+  - Structured page layout with title page, section headings (H2-H4), and page numbers
+  - Color-coded tables with professional styling
+  - Bibliography references formatted with bold numbering
+  - No conflicts with existing ReportLab styles (all custom styles prefixed with "Custom")
+- **Scientific Bibliography**: 40 peer-reviewed references with DOIs organized in 10 thematic categories
+  - Composition and classification (5 refs)
+  - CT density and imaging (5 refs)
+  - Pathophysiology and risk factors (5 refs)
+  - Biological and metabolic markers (5 refs)
+  - Infections and struvite stones (3 refs)
+  - Cystine stones (2 refs)
+  - Clinical and therapeutic guidelines (4 refs)
+  - Prevention and dietetics (4 refs)
+  - Epidemiology (3 refs)
+  - Thyroid and lithiasis (2 refs)
+  - Malformations and uropathies (2 refs)
+
 ## External Dependencies
 - **Flask**: Web framework
 - **SQLAlchemy**: ORM for database interaction
