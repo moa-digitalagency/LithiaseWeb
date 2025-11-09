@@ -189,6 +189,7 @@ def infer(episode_id):
     imaging_data = {
         'densite_uh': latest_imaging.densite_uh,
         'densite_noyau': latest_imaging.densite_noyau,
+        'densites_couches': latest_imaging.densites_couches,
         'morphologie': latest_imaging.morphologie,
         'radio_opacite': latest_imaging.radio_opacite,
         'taille_mm': latest_imaging.taille_mm,
@@ -196,7 +197,8 @@ def infer(episode_id):
         'forme_calcul': latest_imaging.forme_calcul,
         'contour_calcul': latest_imaging.contour_calcul,
         'nombre_calculs': latest_imaging.nombre_calculs,
-        'topographie_calcul': latest_imaging.topographie_calcul
+        'topographie_calcul': latest_imaging.topographie_calcul,
+        'calcifications_autres': latest_imaging.calcifications_autres
     }
     
     biology_data = {}
