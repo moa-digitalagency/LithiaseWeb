@@ -67,6 +67,14 @@ def episode_detail(episode_id):
     episode = Episode.query.get_or_404(episode_id)
     
     if request.method == 'GET':
+        import json as json_lib
+        calculated_data = None
+        if episode.calculated_stone_type_data:
+            try:
+                calculated_data = json_lib.loads(episode.calculated_stone_type_data)
+            except:
+                calculated_data = None
+        
         return jsonify({
             'id': episode.id,
             'patient_id': episode.patient_id,
@@ -87,6 +95,9 @@ def episode_detail(episode_id):
             'centre_traitement': episode.centre_traitement,
             'resultat_traitement': episode.resultat_traitement,
             'notes': episode.notes,
+            'calculated_stone_type': episode.calculated_stone_type,
+            'calculated_at': episode.calculated_at.isoformat() if episode.calculated_at else None,
+            'calculated_data': calculated_data,
             'imageries': [{
                 'id': i.id,
                 'date_examen': i.date_examen.isoformat(),

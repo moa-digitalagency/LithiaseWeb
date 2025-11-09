@@ -751,20 +751,14 @@
                 </div>
             `).join('') || '<p class="text-gray-500">😔 Aucune biologie</p>';
             
+            if (episode.calculated_data) {
+                displayInferenceResult(episode.calculated_data);
+            }
+            
             document.getElementById('episodeDetailModal').classList.remove('hidden');
         }
         
-        async function runInference() {
-            const response = await fetch(`/api/episodes/${currentEpisodeId}/inference`, {
-                method: 'POST'
-            });
-            const result = await response.json();
-            
-            if (result.error) {
-                document.getElementById('inferenceResult').innerHTML = `<div style="background: rgba(239, 68, 68, 0.08); border: 2px solid #EF4444; color: #991B1B; padding: 1rem; border-radius: 1rem;">❌ ${result.error}</div>`;
-                return;
-            }
-            
+        function displayInferenceResult(result) {
             document.getElementById('inferenceResult').innerHTML = `
                 <div style="border: 2px dashed #8B5CF6; background: rgba(139, 92, 246, 0.08); border-radius: 1.5rem; padding: 2rem;">
                     <h4 class="text-2xl font-bold mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🤖 Résultat de l'inférence</h4>
@@ -808,6 +802,20 @@
                     </div>
                 </div>
             `;
+        }
+        
+        async function runInference() {
+            const response = await fetch(`/api/episodes/${currentEpisodeId}/inference`, {
+                method: 'POST'
+            });
+            const result = await response.json();
+            
+            if (result.error) {
+                document.getElementById('inferenceResult').innerHTML = `<div style="background: rgba(239, 68, 68, 0.08); border: 2px solid #EF4444; color: #991B1B; padding: 1rem; border-radius: 1rem;">❌ ${result.error}</div>`;
+                return;
+            }
+            
+            displayInferenceResult(result);
         }
         
         function showNewEpisodeModal() {
