@@ -34,3 +34,15 @@ qrcode
 reportlab
 sqlalchemy
 Werkzeug
+cryptography
+Flask
+Flask-Login
+Flask-SQLAlchemy
+flask-wtf
+pillow
+psycopg2-binary
+python-dateutil
+qrcode
+reportlab
+sqlalchemy
+Werkzeug
