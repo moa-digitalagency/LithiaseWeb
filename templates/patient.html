@@ -190,9 +190,9 @@
     </div>
     
     <div id="newImagingModal" class="hidden modal-backdrop">
-        <div class="modal-content modal-sm my-8 mx-4">
+        <div class="modal-content modal-lg my-8 mx-4">
             <div class="p-6 border-b border-gray-200">
-                <h3 class="text-xl font-bold text-gray-800">🔬 Nouvelle Imagerie (Scanner)</h3>
+                <h3 class="text-xl font-bold text-gray-800">🔬 Nouvelle Imagerie</h3>
             </div>
             <div class="p-6 max-h-[70vh] overflow-y-auto">
                 <form id="newImagingForm" class="space-y-4">
@@ -202,8 +202,60 @@
                             <input type="date" name="date_examen" required class="input-field">
                         </div>
                         <div>
+                            <label class="block text-sm font-medium mb-2">🔢 Nombre de calculs</label>
+                            <input type="number" name="nombre_calculs" min="0" class="input-field">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">📋 Résultats ASP (Abdomen Sans Préparation)</label>
+                        <textarea name="asp_resultats" rows="2" class="input-field" placeholder="Résultats de la radiographie..."></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">🔊 Résultats Échographie</label>
+                        <textarea name="echographie_resultats" rows="2" class="input-field" placeholder="Résultats de l'échographie..."></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">💻 Résultats Uro-scanner</label>
+                        <textarea name="uroscanner_resultats" rows="2" class="input-field" placeholder="Résultats de l'uro-scanner..."></textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">📍 Topographie du calcul</label>
+                            <input type="text" name="topographie_calcul" placeholder="Ex: Rein droit, calice inférieur" class="input-field">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">📍 Localisation</label>
+                            <input type="text" name="localisation" placeholder="Ex: Uretère pelvien" class="input-field">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">📏 Diamètre longitudinal (mm)</label>
+                            <input type="number" step="0.1" name="diametre_longitudinal" class="input-field">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">📐 Diamètre transversal (mm)</label>
+                            <input type="number" step="0.1" name="diametre_transversal" class="input-field">
+                        </div>
+                        <div>
                             <label class="block text-sm font-medium mb-2">📏 Taille (mm)</label>
                             <input type="number" name="taille_mm" min="0" class="input-field">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">🔶 Forme du calcul</label>
+                            <input type="text" name="forme_calcul" placeholder="Ex: Rond, ovale, irrégulier" class="input-field">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">⭕ Contour du calcul</label>
+                            <input type="text" name="contour_calcul" placeholder="Ex: Régulier, irrégulier, spiculé" class="input-field">
                         </div>
                     </div>
                     
@@ -212,6 +264,18 @@
                             <label class="block text-sm font-medium mb-2">⚡ Densité (UH)</label>
                             <input type="number" name="densite_uh" min="100" max="2200" class="input-field">
                         </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">💎 Densité du noyau (UH)</label>
+                            <input type="number" name="densite_noyau" class="input-field">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">🌈 Densités des différentes couches</label>
+                        <input type="text" name="densites_couches" placeholder="Ex: Noyau 800 UH, couche 1: 650 UH..." class="input-field">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium mb-2">🔍 Morphologie</label>
                             <select name="morphologie" class="input-field">
@@ -223,9 +287,6 @@
                                 <option value="heterogene">Hétérogène</option>
                             </select>
                         </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium mb-2">📡 Radio-opacité</label>
                             <select name="radio_opacite" class="input-field">
@@ -235,10 +296,11 @@
                                 <option value="inconnu">Inconnu</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">📍 Localisation</label>
-                            <input type="text" name="localisation" placeholder="Ex: Rein gauche, calice supérieur" class="input-field">
-                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">🧮 Autres calcifications</label>
+                        <textarea name="calcifications_autres" rows="2" class="input-field" placeholder="Calcifications vasculaires, ganglions, paroi vésicale..."></textarea>
                     </div>
                     
                     <div class="flex justify-end space-x-3 pt-4">
@@ -251,7 +313,7 @@
     </div>
     
     <div id="newBiologyModal" class="hidden modal-backdrop">
-        <div class="modal-content modal-sm my-8 mx-4">
+        <div class="modal-content modal-md my-8 mx-4">
             <div class="p-6 border-b border-gray-200">
                 <h3 class="text-xl font-bold text-gray-800">🧪 Nouvelle Biologie</h3>
             </div>
@@ -266,6 +328,21 @@
                             <label class="block text-sm font-medium mb-2">🧪 pH urinaire (4.5-8.5)</label>
                             <input type="number" name="ph_urinaire" step="0.1" min="4.5" max="8.5" class="input-field">
                         </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">💧 Densité urinaire</label>
+                        <input type="number" name="densite_urinaire" step="0.001" min="1.000" max="1.040" placeholder="Ex: 1.020" class="input-field">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">🔬 Sédiment urinaire</label>
+                        <textarea name="sediment_urinaire" rows="2" class="input-field" placeholder="Cristaux, cylindres, cellules..."></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">🦠 Résultats ECBU (Examen Cytobactériologique Urinaire)</label>
+                        <textarea name="ecbu_resultats" rows="2" class="input-field" placeholder="Germe isolé si infection..."></textarea>
                     </div>
                     
                     <div>
@@ -397,18 +474,43 @@
             document.getElementById('imagingList').innerHTML = episode.imageries.map(i => `
                 <div class="info-card">
                     <div><strong>📅 Date:</strong> ${new Date(i.date_examen).toLocaleDateString('fr-FR')}</div>
-                    <div><strong>📏 Taille:</strong> ${i.taille_mm || '-'} mm</div>
-                    <div><strong>⚡ Densité:</strong> ${i.densite_uh || '-'} UH</div>
-                    <div><strong>🔍 Morphologie:</strong> ${i.morphologie || '-'}</div>
+                    ${i.asp_resultats ? `<div class="col-span-2"><strong>📋 ASP:</strong> ${i.asp_resultats}</div>` : ''}
+                    ${i.echographie_resultats ? `<div class="col-span-2"><strong>🔊 Échographie:</strong> ${i.echographie_resultats}</div>` : ''}
+                    ${i.uroscanner_resultats ? `<div class="col-span-2"><strong>💻 Uro-scanner:</strong> ${i.uroscanner_resultats}</div>` : ''}
+                    ${i.nombre_calculs ? `<div><strong>🔢 Nombre de calculs:</strong> ${i.nombre_calculs}</div>` : ''}
+                    ${i.topographie_calcul ? `<div><strong>📍 Topographie:</strong> ${i.topographie_calcul}</div>` : ''}
+                    ${i.diametre_longitudinal ? `<div><strong>📏 Diam. longitudinal:</strong> ${i.diametre_longitudinal} mm</div>` : ''}
+                    ${i.diametre_transversal ? `<div><strong>📐 Diam. transversal:</strong> ${i.diametre_transversal} mm</div>` : ''}
+                    ${i.taille_mm ? `<div><strong>📏 Taille:</strong> ${i.taille_mm} mm</div>` : ''}
+                    ${i.forme_calcul ? `<div><strong>🔶 Forme:</strong> ${i.forme_calcul}</div>` : ''}
+                    ${i.contour_calcul ? `<div><strong>⭕ Contour:</strong> ${i.contour_calcul}</div>` : ''}
+                    ${i.densite_uh ? `<div><strong>⚡ Densité noyau:</strong> ${i.densite_uh} UH</div>` : ''}
+                    ${i.densite_noyau ? `<div><strong>💎 Densité noyau:</strong> ${i.densite_noyau} UH</div>` : ''}
+                    ${i.densites_couches ? `<div class="col-span-2"><strong>🌈 Densités couches:</strong> ${i.densites_couches}</div>` : ''}
+                    ${i.morphologie ? `<div><strong>🔍 Morphologie:</strong> ${i.morphologie}</div>` : ''}
+                    ${i.radio_opacite ? `<div><strong>📡 Radio-opacité:</strong> ${i.radio_opacite}</div>` : ''}
+                    ${i.localisation ? `<div class="col-span-2"><strong>📌 Localisation:</strong> ${i.localisation}</div>` : ''}
+                    ${i.calcifications_autres ? `<div class="col-span-2"><strong>🧮 Autres calcifications:</strong> ${i.calcifications_autres}</div>` : ''}
                 </div>
             `).join('') || '<p class="text-gray-500">😔 Aucune imagerie</p>';
             
             document.getElementById('biologyList').innerHTML = episode.biologies.map(b => `
                 <div class="info-card">
                     <div><strong>📅 Date:</strong> ${new Date(b.date_examen).toLocaleDateString('fr-FR')}</div>
-                    <div><strong>🧪 pH:</strong> ${b.ph_urinaire || '-'}</div>
-                    <div><strong>Hyperoxalurie:</strong> ${b.hyperoxalurie ? '✅ Oui' : '❌ Non'}</div>
-                    <div><strong>Hypercalciurie:</strong> ${b.hypercalciurie ? '✅ Oui' : '❌ Non'}</div>
+                    ${b.ph_urinaire ? `<div><strong>🧪 pH urinaire:</strong> ${b.ph_urinaire}</div>` : ''}
+                    ${b.densite_urinaire ? `<div><strong>💧 Densité urinaire:</strong> ${b.densite_urinaire}</div>` : ''}
+                    ${b.sediment_urinaire ? `<div class="col-span-2"><strong>🔬 Sédiment urinaire:</strong> ${b.sediment_urinaire}</div>` : ''}
+                    ${b.ecbu_resultats ? `<div class="col-span-2"><strong>🦠 ECBU:</strong> ${b.ecbu_resultats}</div>` : ''}
+                    <div class="col-span-2 mt-2 border-t pt-2">
+                        <strong>📊 Marqueurs métaboliques:</strong>
+                        <div class="grid grid-cols-2 gap-2 mt-1">
+                            <span>Hyperoxalurie: ${b.hyperoxalurie ? '✅' : '❌'}</span>
+                            <span>Hypercalciurie: ${b.hypercalciurie ? '✅' : '❌'}</span>
+                            <span>Hyperuricurie: ${b.hyperuricurie ? '✅' : '❌'}</span>
+                            <span>Cystinurie: ${b.cystinurie ? '✅' : '❌'}</span>
+                        </div>
+                    </div>
+                    ${b.infection_urinaire ? `<div class="col-span-2 mt-2"><strong>🦠 Infection:</strong> Oui ${b.germe ? `(${b.germe})` : ''}</div>` : ''}
                 </div>
             `).join('') || '<p class="text-gray-500">😔 Aucune biologie</p>';
             
