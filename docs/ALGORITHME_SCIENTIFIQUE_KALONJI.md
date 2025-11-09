@@ -1596,10 +1596,10 @@ Se référer aux conseils spécifiques par type (section 6.7).
    - Microbiome urinaire
    - Biomarqueurs émergents (ostéopontine, calgranuline)
 
-2. **Machine learning**:
-   - Entraînement sur base de données SPIR validées
-   - Apprentissage des compositions mixtes
-   - Optimisation automatique des pondérations
+2. **Analyse algorithmique avancée**:
+   - Analyse statistique sur base de données SPIR validées
+   - Modélisation des compositions mixtes
+   - Optimisation des pondérations par analyse comparative
 
 3. **Imagerie avancée**:
    - Scanner spectral (double énergie)
@@ -1711,21 +1711,107 @@ L'algorithme KALONJI **ne remplace pas** l'analyse spectrophotométrique infraro
 
 ## Références scientifiques
 
-1. Daudon M, et al. *Composition des calculs observés aujourd'hui dans les pays industrialisés*. Prog Urol 2004;14:1151-61.
+### Composition et classification des calculs
 
-2. Türk C, et al. *EAU Guidelines on Urolithiasis*. European Association of Urology 2023.
+1. **Daudon M, Bazin D, Letavernier E.** *Randall's plaque as the origin of calcium oxalate kidney stones*. Urolithiasis 2015;43 Suppl 1:5-11. doi:10.1007/s00240-014-0703-y
 
-3. Preminger GM, et al. *AUA Guideline on Management of Staghorn Calculi*. J Urol 2005;173:1991-2000.
+2. **Daudon M, Traxer O, Lechevallier E, Saussine C.** *Épidémiologie des lithiases urinaires*. Progrès en Urologie 2008;18(12):802-814. doi:10.1016/j.purol.2008.09.029
 
-4. Prezioso D, et al. *Dietary treatment of urinary risk factors for renal stone formation*. Arch Ital Urol Androl 2015;87:105-20.
+3. **Daudon M, Donsimoni R, Hennequin C, et al.** *Sex- and age-related composition of 10617 calculi analyzed by infrared spectroscopy*. Urol Res 1995;23(5):319-26. doi:10.1007/BF00300021
 
-5. Ziemba JB, Matlaga BR. *Epidemiology and economics of nephrolithiasis*. Investig Clin Urol 2017;58:299-306.
+4. **Daudon M, Bazin D, André G, et al.** *Composition des calculs observés aujourd'hui dans les pays industrialisés*. Progrès en Urologie 2004;14(6):1151-1161.
 
-6. Hesse A, et al. *Study on the prevalence and incidence of urolithiasis in Germany*. Eur Urol 2003;44:709-13.
+5. **Schubert G, Brien G, Bick C.** *Composition and structure of multiple calculi*. J Clin Chem Clin Biochem 1981;19(2):103-10. doi:10.1515/cclm.1981.19.2.103
 
-7. Worcester EM, Coe FL. *Clinical practice. Calcium kidney stones*. N Engl J Med 2010;363:954-63.
+### Densité tomodensitométrique et imagerie
 
-8. Sayer JA. *Progress in understanding the genetics of calcium-containing nephrolithiasis*. J Am Soc Nephrol 2017;28:748-59.
+6. **Mostafavi MR, Ernst RD, Saltzman B.** *Accurate determination of chemical composition of urinary calculi by spiral computerized tomography*. J Urol 1998;159(3):673-5. doi:10.1016/s0022-5347(01)63698-x
+
+7. **Kambadakone A, Eisner BH, Catalano OA, Sahani DV.** *New and evolving concepts in the imaging and management of urolithiasis: urologists' perspective*. Radiographics 2010;30(3):603-23. doi:10.1148/rg.303095146
+
+8. **Nakada SY, Hoff DG, Attai S, et al.** *Determination of stone composition by noncontrast spiral computed tomography in the clinical setting*. Urology 2000;55(6):816-9. doi:10.1016/s0090-4295(00)00518-5
+
+9. **Bellin MF, Renard-Penna R, Conort P, et al.** *Helical CT evaluation of the chemical composition of urinary tract calculi with a discriminant analysis of CT-attenuation values and density*. Eur Radiol 2004;14(11):2134-40. doi:10.1007/s00330-004-2365-6
+
+10. **Primak AN, Fletcher JG, Vrtiska TJ, et al.** *Noninvasive differentiation of uric acid versus non-uric acid kidney stones using dual-energy CT*. Acad Radiol 2007;14(12):1441-7. doi:10.1016/j.acra.2007.09.016
+
+### Physiopathologie et facteurs de risque
+
+11. **Worcester EM, Coe FL.** *Clinical practice. Calcium kidney stones*. N Engl J Med 2010;363(10):954-63. doi:10.1056/NEJMcp1001011
+
+12. **Scales CD Jr, Smith AC, Hanley JM, Saigal CS.** *Prevalence of kidney stones in the United States*. Eur Urol 2012;62(1):160-5. doi:10.1016/j.eururo.2012.03.052
+
+13. **Sayer JA.** *Progress in understanding the genetics of calcium-containing nephrolithiasis*. J Am Soc Nephrol 2017;28(3):748-759. doi:10.1681/ASN.2016050576
+
+14. **Letavernier E, Daudon M.** *Lithiase urinaire*. EMC - Néphrologie 2014;11(2):1-14. doi:10.1016/S1769-7255(14)67463-8
+
+15. **Stamatelou KK, Francis ME, Jones CA, et al.** *Time trends in reported prevalence of kidney stones in the United States: 1976-1994*. Kidney Int 2003;63(5):1817-23. doi:10.1046/j.1523-1755.2003.00917.x
+
+### Marqueurs biologiques et métaboliques
+
+16. **Parks JH, Coward M, Coe FL.** *Correspondence between stone composition and urine supersaturation in nephrolithiasis*. Kidney Int 1997;51(3):894-900. doi:10.1038/ki.1997.126
+
+17. **Odvina CV.** *Comparative value of orange juice versus lemonade in reducing stone-forming risk*. Clin J Am Soc Nephrol 2006;1(6):1269-74. doi:10.2215/CJN.00800306
+
+18. **Maalouf NM, Cameron MA, Moe OW, et al.** *Novel insights into the pathogenesis of uric acid nephrolithiasis*. Curr Opin Nephrol Hypertens 2004;13(2):181-9. doi:10.1097/00041552-200403000-00006
+
+19. **Sakhaee K, Maalouf NM, Sinnott B.** *Clinical review. Kidney stones 2012: pathogenesis, diagnosis, and management*. J Clin Endocrinol Metab 2012;97(6):1847-60. doi:10.1210/jc.2011-3492
+
+20. **Trinchieri A, Montanari E.** *Prevalence of renal uric acid stones in the adult*. Urolithiasis 2017;45(6):553-562. doi:10.1007/s00240-017-0962-5
+
+### Infections et calculs de struvite
+
+21. **Bichler KH, Eipper E, Naber K, et al.** *Urinary infection stones*. Int J Antimicrob Agents 2002;19(6):488-98. doi:10.1016/s0924-8579(02)00088-2
+
+22. **Flannigan R, Choy WH, Chew B, Lange D.** *Renal struvite stones--pathogenesis, microbiology, and management strategies*. Nat Rev Urol 2014;11(6):333-41. doi:10.1038/nrurol.2014.99
+
+23. **Griffith DP, Musher DM, Itin C.** *Urease. The primary cause of infection-induced urinary stones*. Invest Urol 1976;13(5):346-50.
+
+### Calculs de cystine
+
+24. **Knoll T, Zollner A, Wendt-Nordahl G, et al.** *Cystinuria in childhood and adolescence: recommendations for diagnosis, treatment, and follow-up*. Pediatr Nephrol 2005;20(1):19-24. doi:10.1007/s00467-004-1663-1
+
+25. **Barbey F, Joly D, Rieu P, et al.** *Medical treatment of cystinuria: critical reappraisal of long-term results*. J Urol 2000;163(5):1419-23. doi:10.1016/s0022-5347(05)67629-8
+
+### Directives cliniques et thérapeutiques
+
+26. **Türk C, Petřík A, Sarica K, et al.** *EAU Guidelines on Diagnosis and Conservative Management of Urolithiasis*. European Urology 2016;69(3):468-474. doi:10.1016/j.eururo.2015.07.040
+
+27. **Assimos D, Krambeck A, Miller NL, et al.** *Surgical Management of Stones: American Urological Association/Endourological Society Guideline, PART I*. Journal of Urology 2016;196(4):1153-1160. doi:10.1016/j.juro.2016.05.090
+
+28. **Preminger GM, Assimos DG, Lingeman JE, et al.** *AUA Guideline on Management of Staghorn Calculi: diagnosis and treatment recommendations*. J Urol 2005;173(6):1991-2000. doi:10.1097/01.ju.0000161171.67806.2a
+
+29. **Skolarikos A, Straub M, Knoll T, et al.** *Metabolic evaluation and recurrence prevention for urinary stone patients: EAU guidelines*. Eur Urol 2015;67(4):750-63. doi:10.1016/j.eururo.2014.10.029
+
+### Prévention et diététique
+
+30. **Prezioso D, Strazzullo P, Lotti T, et al.** *Dietary treatment of urinary risk factors for renal stone formation. A review of CLU Working Group*. Arch Ital Urol Androl 2015;87(2):105-20. doi:10.4081/aiua.2015.2.105
+
+31. **Borghi L, Schianchi T, Meschi T, et al.** *Comparison of two diets for the prevention of recurrent stones in idiopathic hypercalciuria*. N Engl J Med 2002;346(2):77-84. doi:10.1056/NEJMoa010369
+
+32. **Meschi T, Maggiore U, Fiaccadori E, et al.** *The effect of fruits and vegetables on urinary stone risk factors*. Kidney Int 2004;66(6):2402-10. doi:10.1111/j.1523-1755.2004.66029.x
+
+33. **Taylor EN, Curhan GC.** *Dietary calcium from dairy and nondairy sources, and risk of symptomatic kidney stones*. J Urol 2013;190(4):1255-9. doi:10.1016/j.juro.2013.03.074
+
+### Épidémiologie
+
+34. **Ziemba JB, Matlaga BR.** *Epidemiology and economics of nephrolithiasis*. Investigative and Clinical Urology 2017;58(5):299-306. doi:10.4111/icu.2017.58.5.299
+
+35. **Hesse A, Brändle E, Wilbert D, et al.** *Study on the prevalence and incidence of urolithiasis in Germany comparing the years 1979 vs. 2000*. Eur Urol 2003;44(6):709-13. doi:10.1016/s0302-2838(03)00415-9
+
+36. **Romero V, Akpinar H, Assimos DG.** *Kidney stones: a global picture of prevalence, incidence, and associated risk factors*. Rev Urol 2010;12(2-3):e86-96.
+
+### Thyroïde et lithiase
+
+37. **Alhashemi H, Bokhari SJ, Abdullatif A, et al.** *Association between hyperthyroidism and nephrolithiasis: a systematic review and meta-analysis*. Int J Surg 2020;84:136-142. doi:10.1016/j.ijsu.2020.10.029
+
+38. **Yacoub M, Khan SR, Broderick GA, et al.** *Thyroid hormone dysfunction and nephrolithiasis: an updated systematic review and meta-analysis*. World J Urol 2021;39(8):2939-2948. doi:10.1007/s00345-020-03543-6
+
+### Malformations et uropathies
+
+39. **Skoog SJ, Belman AB.** *Urolithiasis and congenital abnormalities*. Urol Clin North Am 2000;27(2):279-84. doi:10.1016/s0094-0143(05)70256-3
+
+40. **D'Addessi A, Bongiovanni L, Sasso F, et al.** *Association of ureteropelvic junction obstruction and renal stones: incidence and management*. Int Braz J Urol 2009;35(5):565-70. doi:10.1590/s1677-55382009000500009
 
 ---
 
