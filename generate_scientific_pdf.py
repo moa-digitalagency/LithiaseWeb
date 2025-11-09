@@ -120,7 +120,7 @@ def create_styles():
     
     # Style corps de texte
     styles.add(ParagraphStyle(
-        name='BodyText',
+        name='CustomBodyText',
         parent=styles['Normal'],
         fontSize=10,
         leading=14,
@@ -132,7 +132,7 @@ def create_styles():
     
     # Style liste à puces
     styles.add(ParagraphStyle(
-        name='BulletList',
+        name='CustomBulletList',
         parent=styles['Normal'],
         fontSize=10,
         leading=13,
@@ -145,7 +145,7 @@ def create_styles():
     
     # Style références bibliographiques
     styles.add(ParagraphStyle(
-        name='Reference',
+        name='CustomReference',
         parent=styles['Normal'],
         fontSize=9,
         leading=12,
@@ -157,7 +157,7 @@ def create_styles():
     
     # Style code
     styles.add(ParagraphStyle(
-        name='CodeBlock',
+        name='CustomCodeBlock',
         parent=styles['Code'],
         fontSize=8,
         leading=10,
@@ -174,7 +174,7 @@ def create_styles():
     
     # Style encadré
     styles.add(ParagraphStyle(
-        name='BoxedText',
+        name='CustomBoxedText',
         parent=styles['Normal'],
         fontSize=9,
         leading=12,
@@ -300,7 +300,7 @@ def parse_markdown_to_pdf_professional(md_file, pdf_file):
             if in_code_block:
                 if code_buffer:
                     code_text = '\n'.join(code_buffer)
-                    story.append(Paragraph(f'<pre>{code_text}</pre>', styles['CodeBlock']))
+                    story.append(Paragraph(f'<pre>{code_text}</pre>', styles['CustomCodeBlock']))
                     story.append(Spacer(1, 2*mm))
                 code_buffer = []
                 in_code_block = False
@@ -349,12 +349,12 @@ def parse_markdown_to_pdf_professional(md_file, pdf_file):
         # Listes à puces
         elif line.strip().startswith('- ') or line.strip().startswith('* '):
             text = format_text(line.strip()[2:])
-            story.append(Paragraph(f'• {text}', styles['BulletList']))
+            story.append(Paragraph(f'• {text}', styles['CustomBulletList']))
         # Listes numérotées (références)
         elif re.match(r'^\d+\.\s+', line.strip()):
             text = format_text(re.sub(r'^\d+\.\s+', '', line.strip()))
             num = re.match(r'^(\d+)\.', line.strip()).group(1)
-            story.append(Paragraph(f'<b>[{num}]</b> {text}', styles['Reference']))
+            story.append(Paragraph(f'<b>[{num}]</b> {text}', styles['CustomReference']))
         # Séparateurs
         elif line.strip() == '---':
             story.append(Spacer(1, 3*mm))
@@ -365,7 +365,7 @@ def parse_markdown_to_pdf_professional(md_file, pdf_file):
         else:
             if line.strip():
                 text = format_text(line.strip())
-                story.append(Paragraph(text, styles['BodyText']))
+                story.append(Paragraph(text, styles['CustomBodyText']))
         
         i += 1
     
