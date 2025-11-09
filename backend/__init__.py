@@ -61,16 +61,22 @@ def create_app():
         if os.environ.get('SKIP_DB_INIT') != 'true':
             initialize_database(app)
         
+        # SÉCURITÉ: Création automatique de compte admin UNIQUEMENT en développement
+        # En production, les administrateurs doivent créer manuellement leur compte
         if not User.query.first():
-            admin_username = os.environ.get('ADMIN_USERNAME', 'admin')
-            admin_password = os.environ.get('ADMIN_PASSWORD', 'admin123')
-            admin = User(username=admin_username)
-            admin.set_password(admin_password)
-            db.session.add(admin)
-            db.session.commit()
-            print(f"Utilisateur admin créé (username: {admin_username})")
-            if admin_password == 'admin123':
-                print("ATTENTION: Utilisez les variables d'environnement ADMIN_USERNAME et ADMIN_PASSWORD pour sécuriser les credentials")
+            if os.environ.get('FLASK_ENV') == 'development' or os.environ.get('ENABLE_AUTO_DEMO_DATA') == 'true':
+                admin_username = os.environ.get('ADMIN_USERNAME', 'admin')
+                admin_password = os.environ.get('ADMIN_PASSWORD', 'admin123')
+                admin = User(username=admin_username)
+                admin.set_password(admin_password)
+                db.session.add(admin)
+                db.session.commit()
+                print(f"✓ Utilisateur admin DE DÉVELOPPEMENT créé (username: {admin_username})")
+                if admin_password == 'admin123':
+                    print("⚠️  ATTENTION: Credentials par défaut utilisés! En production, définir ADMIN_USERNAME et ADMIN_PASSWORD")
+            else:
+                print("⚠️  PRODUCTION: Aucun utilisateur trouvé. Créez manuellement le premier compte admin.")
+                print("ℹ️  Pour activer le chargement automatique en dev: FLASK_ENV=development")
     
     @login_manager.user_loader
     def load_user(user_id):

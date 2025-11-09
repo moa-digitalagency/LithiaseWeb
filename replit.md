@@ -94,7 +94,9 @@ The application uses a Flask (Python 3.11) backend with SQLAlchemy ORM for datab
   - All patients include complete demographics, vital signs, medical history, lifestyle habits, imaging results, and biological markers
   - Each patient represents a specific clinical archetype with coherent pathophysiology
 - **Professional PDF Generator**: Created `generate_scientific_pdf.py` for scientific documentation
-  - Automatic emoji removal from all content
+  - **FIXED**: Corrected format_text() function to eliminate ALL markdown artifacts (**, `, emojis)
+  - Uses temporary markers (__BOLD_START__, etc.) to avoid XML escaping conflicts
+  - Extended emoji removal pattern for comprehensive Unicode symbol cleanup
   - Professional ReportLab PLATYPUS formatting with custom styles
   - Structured page layout with title page, section headings (H2-H4), and page numbers
   - Color-coded tables with professional styling
@@ -112,6 +114,33 @@ The application uses a Flask (Python 3.11) backend with SQLAlchemy ORM for datab
   - Epidemiology (3 refs)
   - Thyroid and lithiasis (2 refs)
   - Malformations and uropathies (2 refs)
+
+#### Automated Database Management & Field Enhancements (Nov 9 - Current Session)
+- **Automatic Database Verification System** (`verify_and_init_db.py`)
+  - Runs automatically at startup to verify complete database schema
+  - Checks all 6 tables (users, patients, episodes, imageries, biologies, documents)
+  - Validates presence of all columns (56 patient columns, 25 episode columns, etc.)
+  - **Auto-loads demo data** if database is empty (5 comprehensive patient records)
+  - **PRODUCTION SECURITY**: Gated behind FLASK_ENV='development' or ENABLE_AUTO_DEMO_DATA='true'
+  - Never exposes default credentials in production environment
+  
+- **Structured Field Input Infrastructure**
+  - **Field Options API** (`backend/field_options.py` + `backend/routes/field_options_api.py`)
+    - Centralized constants for all predefined medical options
+    - 14 checkbox fields (multi-select): antécédents familiaux, personnels, chirurgicaux, allergies, etc.
+    - 2 select fields (single choice): regime_alimentaire, autres_consommations
+    - RESTful endpoint `/api/field-options` for dynamic field configuration
+  - **Client-Side Field Transformer** (`static/js/form-field-enhancer.js`)
+    - Automatically transforms text inputs into checkboxes/selects based on server configuration
+    - Preserves existing data during transformation
+    - Handles semicolon-delimited multi-select values
+    - Applied to patient registration form (`templates/nouveau-patient.html`)
+  
+- **Enhanced Production Security**
+  - Default admin account creation ONLY in development mode
+  - Production deployments require manual admin account creation
+  - Clear warnings when default credentials are used
+  - Environment variable override: ADMIN_USERNAME and ADMIN_PASSWORD
 
 ## External Dependencies
 - **Flask**: Web framework
