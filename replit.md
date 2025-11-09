@@ -27,6 +27,10 @@ The application uses a Flask (Python 3.11) backend with SQLAlchemy ORM for datab
 - Added patient deletion functionality with confirmation modal and cascade deletion of related data
 - Enhanced patient detail page (patient.html) with Edit and Delete buttons
 - Validated full data persistence in edit operations with no field loss
+- **Enhanced Imaging Data (Nov 9)**: Extended imaging API to include all new fields (densite_noyau, densites_couches, topographie_calcul, forme_calcul, contour_calcul, calcifications_autres, etc.) in both list and detail endpoints
+- **Inference Algorithm Enhancement (Nov 9)**: Modified inference engine to detect and explain radial structure in mixed stones, displaying nucleus and layer densities in justification (e.g., "Structure radiaire détectée: noyau 980 UH, couches périphériques (720 UH, 640 UH)")
+- **Demo Data Upgrade (Nov 9)**: Created comprehensive demo dataset with 5 patients including new patient "Pierre Rousseau" showcasing mixed stone with radial structure, all patients now include complete imaging data with nucleus/layer densities
+- **Professional PDF Design (Nov 9)**: Complete redesign with color-coded sections (blue: personal info, yellow: medical history, green: lifestyle, purple: analysis results), structured tables, and comprehensive result display including radial structure information
 
 ## External Dependencies
 - **Flask**: Web framework
