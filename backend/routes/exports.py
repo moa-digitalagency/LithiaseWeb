@@ -118,7 +118,7 @@ def export_patient_pdf(patient_id):
         
         qr_data = [[qr_image, [Paragraph(f"<b>Code Patient</b>", code_style), 
                                 Paragraph(f"{patient.code_patient}", code_style)]]]
-        qr_table = Table(qr_data, colWidths=[3*cm, 15*cm])
+        qr_table = Table(qr_data, colWidths=[3*cm, TABLE_WIDTH-3*cm])
         qr_table.setStyle(TableStyle([
             ('ALIGN', (0, 0), (0, 0), 'CENTER'),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
@@ -148,7 +148,11 @@ def export_patient_pdf(patient_id):
     if patient.groupe_ethnique:
         patient_data.append([wrap_text('Groupe ethnique', table_cell_bold_style), wrap_text(patient.groupe_ethnique)])
     
-    t = Table(patient_data, colWidths=[6*cm, 11*cm])
+    TABLE_WIDTH = 17*cm
+    COL1_WIDTH = 6*cm
+    COL2_WIDTH = 11*cm
+    
+    t = Table(patient_data, colWidths=[COL1_WIDTH, COL2_WIDTH])
     t.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#EEF2FF')),
         ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor('#4338CA')),
@@ -183,7 +187,7 @@ def export_patient_pdf(patient_id):
         if patient.frequence_respiratoire:
             constantes_data.append([wrap_text('Fréquence respiratoire', table_cell_bold_style), wrap_text(f"{patient.frequence_respiratoire} /min")])
         
-        t = Table(constantes_data, colWidths=[6*cm, 11*cm])
+        t = Table(constantes_data, colWidths=[COL1_WIDTH, COL2_WIDTH])
         t.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#E0F2FE')),
             ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor('#075985')),
@@ -213,7 +217,7 @@ def export_patient_pdf(patient_id):
         if patient.traitements_chroniques:
             medical_data.append([wrap_text('Traitements chroniques', table_cell_bold_style), wrap_text(patient.traitements_chroniques)])
         
-        t = Table(medical_data, colWidths=[6*cm, 11*cm])
+        t = Table(medical_data, colWidths=[COL1_WIDTH, COL2_WIDTH])
         t.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#FEF3C7')),
             ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor('#92400E')),
@@ -247,7 +251,7 @@ def export_patient_pdf(patient_id):
         if patient.autres_consommations:
             lifestyle_data.append([wrap_text('Autres consommations', table_cell_bold_style), wrap_text(patient.autres_consommations)])
         
-        t = Table(lifestyle_data, colWidths=[6*cm, 11*cm])
+        t = Table(lifestyle_data, colWidths=[COL1_WIDTH, COL2_WIDTH])
         t.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#D1FAE5')),
             ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor('#065F46')),
@@ -423,7 +427,7 @@ def export_patient_pdf(patient_id):
                     [wrap_text('Voie de traitement', table_cell_bold_style), wrap_text(result.get('voie_traitement', '-'))],
                 ]
                 
-                t = Table(result_data, colWidths=[7*cm, 10*cm])
+                t = Table(result_data, colWidths=[COL1_WIDTH, COL2_WIDTH])
                 t.setStyle(TableStyle([
                     ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#7C3AED')),
                     ('BACKGROUND', (0, 1), (0, -1), colors.HexColor('#EDE9FE')),
@@ -449,7 +453,7 @@ def export_patient_pdf(patient_id):
                     for type_calcul, score, reasons in result['top_3']:
                         top3_data.append([wrap_text(type_calcul), wrap_text(f"{score}/20")])
                     
-                    t2 = Table(top3_data, colWidths=[12*cm, 5*cm])
+                    t2 = Table(top3_data, colWidths=[COL2_WIDTH, COL1_WIDTH])
                     t2.setStyle(TableStyle([
                         ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#A78BFA')),
                         ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
