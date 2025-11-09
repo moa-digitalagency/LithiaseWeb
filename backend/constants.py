@@ -132,6 +132,119 @@ VOIE_TRAITEMENT_CHOICES = [
     ('Chirurgie ouverte', 'Chirurgie ouverte')
 ]
 
+PROVINCE_CHOICES = [
+    ('Kinshasa', 'Kinshasa'),
+    ('Kongo-Central', 'Kongo-Central'),
+    ('Kwango', 'Kwango'),
+    ('Kwilu', 'Kwilu'),
+    ('Mai-Ndombe', 'Mai-Ndombe'),
+    ('Kasai', 'Kasaï'),
+    ('Kasai-Central', 'Kasaï-Central'),
+    ('Kasai-Oriental', 'Kasaï-Oriental'),
+    ('Lomami', 'Lomami'),
+    ('Sankuru', 'Sankuru'),
+    ('Maniema', 'Maniema'),
+    ('Sud-Kivu', 'Sud-Kivu'),
+    ('Nord-Kivu', 'Nord-Kivu'),
+    ('Ituri', 'Ituri'),
+    ('Haut-Uele', 'Haut-Uélé'),
+    ('Tshopo', 'Tshopo'),
+    ('Bas-Uele', 'Bas-Uélé'),
+    ('Nord-Ubangi', 'Nord-Ubangi'),
+    ('Sud-Ubangi', 'Sud-Ubangi'),
+    ('Mongala', 'Mongala'),
+    ('Equateur', 'Équateur'),
+    ('Tshuapa', 'Tshuapa'),
+    ('Tanganyika', 'Tanganyika'),
+    ('Haut-Lomami', 'Haut-Lomami'),
+    ('Lualaba', 'Lualaba'),
+    ('Haut-Katanga', 'Haut-Katanga'),
+    ('Autre', 'Autre')
+]
+
+VILLE_CHOICES = [
+    ('Kinshasa', 'Kinshasa'),
+    ('Lubumbashi', 'Lubumbashi'),
+    ('Mbuji-Mayi', 'Mbuji-Mayi'),
+    ('Kananga', 'Kananga'),
+    ('Kisangani', 'Kisangani'),
+    ('Goma', 'Goma'),
+    ('Bukavu', 'Bukavu'),
+    ('Likasi', 'Likasi'),
+    ('Kolwezi', 'Kolwezi'),
+    ('Tshikapa', 'Tshikapa'),
+    ('Kikwit', 'Kikwit'),
+    ('Mbandaka', 'Mbandaka'),
+    ('Matadi', 'Matadi'),
+    ('Bunia', 'Bunia'),
+    ('Uvira', 'Uvira'),
+    ('Beni', 'Beni'),
+    ('Butembo', 'Butembo'),
+    ('Kalemie', 'Kalemie'),
+    ('Isiro', 'Isiro'),
+    ('Bandundu', 'Bandundu'),
+    ('Gemena', 'Gemena'),
+    ('Kindu', 'Kindu'),
+    ('Kamina', 'Kamina'),
+    ('Boma', 'Boma'),
+    ('Autre', 'Autre')
+]
+
+PROFESSION_CHOICES = [
+    ('Agriculteur', 'Agriculteur'),
+    ('Commercant', 'Commerçant'),
+    ('Enseignant', 'Enseignant'),
+    ('Fonctionnaire', 'Fonctionnaire'),
+    ('Medecin', 'Médecin'),
+    ('Infirmier', 'Infirmier'),
+    ('Ingenieur', 'Ingénieur'),
+    ('Chauffeur', 'Chauffeur'),
+    ('Artisan', 'Artisan'),
+    ('Etudiant', 'Étudiant'),
+    ('Militaire', 'Militaire'),
+    ('Policier', 'Policier'),
+    ('Mineur', 'Mineur'),
+    ('Ouvrier', 'Ouvrier'),
+    ('Menagere', 'Ménagère'),
+    ('Retraite', 'Retraité'),
+    ('Chomeur', 'Chômeur'),
+    ('Travailleur independant', 'Travailleur indépendant'),
+    ('Autre', 'Autre'),
+    ('Non precise', 'Non précisé')
+]
+
+NIVEAU_EDUCATION_CHOICES = [
+    ('Aucun', 'Aucun'),
+    ('Primaire', 'Primaire'),
+    ('Secondaire', 'Secondaire'),
+    ('Superieur', 'Supérieur'),
+    ('Universitaire', 'Universitaire'),
+    ('Non precise', 'Non précisé')
+]
+
+STATUT_MATRIMONIAL_CHOICES = [
+    ('Celibataire', 'Célibataire'),
+    ('Marie', 'Marié(e)'),
+    ('Divorce', 'Divorcé(e)'),
+    ('Veuf', 'Veuf/Veuve'),
+    ('Union libre', 'Union libre'),
+    ('Non precise', 'Non précisé')
+]
+
+ANTECEDENTS_MEDICAUX_CHOICES = [
+    ('Hypertension', 'Hypertension'),
+    ('Diabete', 'Diabète'),
+    ('Obesite', 'Obésité'),
+    ('Goutte', 'Goutte'),
+    ('Hyperparathyroidie', 'Hyperparathyroïdie'),
+    ('Maladie inflammatoire intestinale', 'Maladie inflammatoire intestinale'),
+    ('Infection urinaire recurrente', 'Infection urinaire récurrente'),
+    ('Malformation renale', 'Malformation rénale'),
+    ('Chirurgie digestive', 'Chirurgie digestive'),
+    ('Autre', 'Autre'),
+    ('Aucun', 'Aucun')
+]
+
 def get_choice_label(choices, value):
     for choice_value, choice_label in choices:
         if choice_value == value:
