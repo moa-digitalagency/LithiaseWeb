@@ -1,4 +1,4 @@
-modules = ["python-3.12", "web"]
+modules = ["web", "python-3.12"]
 [agent]
 expertMode = true
 
@@ -33,6 +33,10 @@ outputType = "webview"
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 34835
+externalPort = 3001
 
 [[ports]]
 localPort = 44445
