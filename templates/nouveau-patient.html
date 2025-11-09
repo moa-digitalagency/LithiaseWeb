@@ -302,6 +302,59 @@
                             </div>
                         </div>
                         
+                        <!-- Nouveau: Hormones thyroïdiennes -->
+                        <div class="border-l-4 border-teal-400 pl-4 mt-4">
+                            <h4 class="text-lg font-semibold text-teal-800 mb-3">🔬 Hormones thyroïdiennes</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">T3 (ng/mL)</label>
+                                    <input type="number" step="0.01" name="t3" class="input-field" placeholder="Ex: 1.2">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">T4 (µg/dL)</label>
+                                    <input type="number" step="0.01" name="t4" class="input-field" placeholder="Ex: 8.5">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">TSH (mUI/L)</label>
+                                    <input type="number" step="0.01" name="tsh" class="input-field" placeholder="Ex: 2.5">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Nouveau: Marqueurs métaboliques urinaires -->
+                        <div class="border-l-4 border-teal-400 pl-4 mt-4">
+                            <h4 class="text-lg font-semibold text-teal-800 mb-3">💎 Marqueurs métaboliques urinaires</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Calciurie (mg/24h)</label>
+                                    <input type="number" step="0.1" name="calciurie" class="input-field" placeholder="Ex: 250">
+                                    <p class="text-xs text-gray-500 mt-1">Normale: 100-300 mg/24h</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Calciémie (mmol/L)</label>
+                                    <input type="number" step="0.01" name="calciemie" class="input-field" placeholder="Ex: 2.4">
+                                    <p class="text-xs text-gray-500 mt-1">Normale: 2.2-2.6 mmol/L</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Oxalurie (mg/24h)</label>
+                                    <input type="number" step="0.1" name="oxalurie" class="input-field" placeholder="Ex: 35">
+                                    <p class="text-xs text-gray-500 mt-1">Normale: 20-45 mg/24h</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Nouveau: Infection urinaire -->
+                        <div class="border-l-4 border-red-400 pl-4 mt-4">
+                            <h4 class="text-lg font-semibold text-red-800 mb-3">🦠 Infection urinaire</h4>
+                            <div class="flex items-center space-x-3">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" name="infection_urinaire" value="true" class="mr-2 h-5 w-5 text-indigo-600 rounded">
+                                    <span class="text-sm font-medium text-gray-700">Présence d'infection urinaire associée</span>
+                                </label>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">⚠️ Important pour déterminer le type de calcul (influence Struvite, Carbapatite, Urate d'ammonium)</p>
+                        </div>
+                        
                         <!-- Pièce jointe laboratoire (à implémenter) -->
                         <!-- <div class="mt-4 pt-4 border-t border-teal-200">
                             <label class="block text-sm font-medium text-gray-700 mb-2">📎 Pièce jointe : Résultats de laboratoire (facultatif)</label>

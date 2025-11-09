@@ -189,7 +189,20 @@ class InferenceEngine:
             return 0, ""
     
     @staticmethod
-    def score_metabolic(markers, stone_type):
+    def detect_hyperthyroidism(t3, t4, tsh):
+        if tsh is None:
+            return False, None
+        
+        if tsh < 0.4:
+            if t3 is not None and t3 > 2.0:
+                return True, "Hyperthyroïdie détectée (TSH bas, T3 élevé)"
+            elif t4 is not None and t4 > 12.0:
+                return True, "Hyperthyroïdie détectée (TSH bas, T4 élevé)"
+        
+        return False, None
+    
+    @staticmethod
+    def score_metabolic(markers, stone_type, thyroid_data=None, calciemie=None):
         if markers is None:
             return 0, "Marqueurs métaboliques non renseignés"
         
@@ -197,12 +210,32 @@ class InferenceEngine:
         metabolic_marker = config['metabolic_marker']
         
         if metabolic_marker is None:
-            return 0, "Pas de marqueur métabolique spécifique"
-        
-        if markers.get(metabolic_marker):
-            return 4, f"Marqueur signature présent ({metabolic_marker})"
+            base_score = 0
+            reasons = []
+        elif markers.get(metabolic_marker):
+            base_score = 4
+            reasons = [f"Marqueur signature présent ({metabolic_marker})"]
         else:
-            return 0, "Marqueur signature absent"
+            base_score = 0
+            reasons = []
+        
+        bonus_score = 0
+        if thyroid_data:
+            is_hyperthyroid, thyroid_reason = InferenceEngine.detect_hyperthyroidism(
+                thyroid_data.get('t3'), thyroid_data.get('t4'), thyroid_data.get('tsh')
+            )
+            if is_hyperthyroid and metabolic_marker == 'hypercalciurie':
+                bonus_score += 1
+                reasons.append(f"{thyroid_reason} → favorise hypercalciurie")
+        
+        if calciemie and calciemie > 2.6 and metabolic_marker == 'hypercalciurie':
+            bonus_score += 1
+            reasons.append(f"Hypercalcémie détectée ({calciemie} mmol/L) → risque accru")
+        
+        total_score = base_score + bonus_score
+        reason_text = "; ".join(reasons) if reasons else "Marqueur signature absent"
+        
+        return total_score, reason_text
     
     @staticmethod
     def score_infection(infection, stone_type):
@@ -263,6 +296,13 @@ class InferenceEngine:
             'cystinurie': biology_data.get('cystinurie', False)
         }
         
+        thyroid_data = {
+            't3': biology_data.get('t3'),
+            't4': biology_data.get('t4'),
+            'tsh': biology_data.get('tsh')
+        }
+        calciemie = biology_data.get('calciemie_valeur')
+        
         for stone_type in InferenceEngine.STONE_TYPES.keys():
             score = 0
             reasons = []
@@ -282,7 +322,9 @@ class InferenceEngine:
             if ph_score > 0 and ph_reason:
                 reasons.append(ph_reason)
             
-            metabolic_score, metabolic_reason = InferenceEngine.score_metabolic(markers, stone_type)
+            metabolic_score, metabolic_reason = InferenceEngine.score_metabolic(
+                markers, stone_type, thyroid_data, calciemie
+            )
             score += metabolic_score
             if metabolic_score > 0:
                 reasons.append(metabolic_reason)

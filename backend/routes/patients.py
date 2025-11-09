@@ -1,8 +1,9 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_required
 from backend import db
-from backend.models import Patient
-from datetime import datetime
+from backend.models import Patient, Episode, Biologie
+from backend.utils.biologies import calculate_metabolic_booleans
+from datetime import datetime, date
 
 bp = Blueprint('patients', __name__, url_prefix='/api/patients')
 
@@ -59,6 +60,45 @@ def patients():
         patient.notes = data.get('notes')
         
         db.session.add(patient)
+        db.session.flush()
+        
+        has_biological_data = any([
+            data.get('t3'), data.get('t4'), data.get('tsh'),
+            data.get('calciurie'), data.get('calciemie'), data.get('oxalurie'),
+            data.get('infection_urinaire')
+        ])
+        
+        if has_biological_data:
+            episode = Episode()
+            episode.patient_id = patient.id
+            episode.date_episode = date.today()
+            episode.motif = "Bilan initial"
+            episode.diagnostic = "Évaluation initiale"
+            db.session.add(episode)
+            db.session.flush()
+            
+            biologie = Biologie()
+            biologie.episode_id = episode.id
+            biologie.date_examen = date.today()
+            biologie.ph_urinaire = data.get('ph_urinaire')
+            biologie.densite_urinaire = data.get('densite_urinaire')
+            
+            biologie.t3 = data.get('t3')
+            biologie.t4 = data.get('t4')
+            biologie.tsh = data.get('tsh')
+            
+            biologie.oxalurie_valeur = data.get('oxalurie')
+            biologie.calciurie_valeur = data.get('calciurie')
+            biologie.calciemie_valeur = data.get('calciemie')
+            
+            calculate_metabolic_booleans(biologie, data.get('sexe', 'M'))
+            
+            biologie.infection_urinaire = data.get('infection_urinaire', False)
+            biologie.sediment_urinaire = data.get('sediment_urinaire')
+            biologie.ecbu_resultats = data.get('ecbu_resultats')
+            
+            db.session.add(biologie)
+        
         db.session.commit()
         
         return jsonify({'id': patient.id, 'message': 'Patient créé avec succès'}), 201

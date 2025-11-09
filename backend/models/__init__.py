@@ -540,10 +540,16 @@ class Biologie(db.Model):
     hypercalciurie = db.Column(db.Boolean, default=False)
     hyperuricurie = db.Column(db.Boolean, default=False)
     cystinurie = db.Column(db.Boolean, default=False)
+    hypercalcemie = db.Column(db.Boolean, default=False)
     
     oxalurie_valeur = db.Column(db.Float)
     calciurie_valeur = db.Column(db.Float)
     uricurie_valeur = db.Column(db.Float)
+    calciemie_valeur = db.Column(db.Float)
+    
+    t3 = db.Column(db.Float)
+    t4 = db.Column(db.Float)
+    tsh = db.Column(db.Float)
     
     infection_urinaire = db.Column(db.Boolean, default=False)
     _germe = db.Column('germe', db.Text)

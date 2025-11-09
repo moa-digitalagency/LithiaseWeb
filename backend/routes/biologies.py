@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_login import login_required
 from backend import db
 from backend.models import Episode, Biologie
+from backend.utils.biologies import calculate_metabolic_booleans
 from datetime import datetime
 
 bp = Blueprint('biologies', __name__)
@@ -27,13 +28,22 @@ def biologies(episode_id):
         biologie.hypercalciurie = data.get('hypercalciurie', False)
         biologie.hyperuricurie = data.get('hyperuricurie', False)
         biologie.cystinurie = data.get('cystinurie', False)
+        biologie.hypercalcemie = data.get('hypercalcemie', False)
         biologie.oxalurie_valeur = data.get('oxalurie_valeur')
         biologie.calciurie_valeur = data.get('calciurie_valeur')
         biologie.uricurie_valeur = data.get('uricurie_valeur')
+        biologie.calciemie_valeur = data.get('calciemie_valeur')
+        biologie.t3 = data.get('t3')
+        biologie.t4 = data.get('t4')
+        biologie.tsh = data.get('tsh')
         biologie.infection_urinaire = data.get('infection_urinaire', False)
         biologie.germe = data.get('germe')
         biologie.urease_positif = data.get('urease_positif')
         biologie.commentaires = data.get('commentaires')
+        
+        episode_patient = Episode.query.get(episode_id)
+        patient_sexe = episode_patient.patient.sexe if episode_patient else 'M'
+        calculate_metabolic_booleans(biologie, patient_sexe)
         
         db.session.add(biologie)
         db.session.commit()
@@ -66,9 +76,14 @@ def biologie_detail(biologie_id):
             'hypercalciurie': biologie.hypercalciurie,
             'hyperuricurie': biologie.hyperuricurie,
             'cystinurie': biologie.cystinurie,
+            'hypercalcemie': biologie.hypercalcemie,
             'oxalurie_valeur': biologie.oxalurie_valeur,
             'calciurie_valeur': biologie.calciurie_valeur,
             'uricurie_valeur': biologie.uricurie_valeur,
+            'calciemie_valeur': biologie.calciemie_valeur,
+            't3': biologie.t3,
+            't4': biologie.t4,
+            'tsh': biologie.tsh,
             'infection_urinaire': biologie.infection_urinaire,
             'germe': biologie.germe,
             'urease_positif': biologie.urease_positif,
@@ -94,12 +109,22 @@ def biologie_detail(biologie_id):
             biologie.hyperuricurie = data['hyperuricurie']
         if 'cystinurie' in data:
             biologie.cystinurie = data['cystinurie']
+        if 'hypercalcemie' in data:
+            biologie.hypercalcemie = data['hypercalcemie']
         if 'oxalurie_valeur' in data:
             biologie.oxalurie_valeur = data['oxalurie_valeur']
         if 'calciurie_valeur' in data:
             biologie.calciurie_valeur = data['calciurie_valeur']
         if 'uricurie_valeur' in data:
             biologie.uricurie_valeur = data['uricurie_valeur']
+        if 'calciemie_valeur' in data:
+            biologie.calciemie_valeur = data['calciemie_valeur']
+        if 't3' in data:
+            biologie.t3 = data['t3']
+        if 't4' in data:
+            biologie.t4 = data['t4']
+        if 'tsh' in data:
+            biologie.tsh = data['tsh']
         if 'infection_urinaire' in data:
             biologie.infection_urinaire = data['infection_urinaire']
         if 'germe' in data:
@@ -108,6 +133,10 @@ def biologie_detail(biologie_id):
             biologie.urease_positif = data['urease_positif']
         if 'commentaires' in data:
             biologie.commentaires = data['commentaires']
+        
+        episode_patient = Episode.query.get(biologie.episode_id)
+        patient_sexe = episode_patient.patient.sexe if episode_patient else 'M'
+        calculate_metabolic_booleans(biologie, patient_sexe)
         
         db.session.commit()
         return jsonify({'message': 'Biologie mise à jour avec succès'})
