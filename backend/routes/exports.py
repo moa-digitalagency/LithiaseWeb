@@ -88,37 +88,41 @@ def export_patient_pdf(patient_id):
         for episode in sorted(patient.episodes, key=lambda x: x.date_episode, reverse=True)[:3]:
             story.append(Paragraph(f"<b>Épisode du {episode.date_episode.strftime('%d/%m/%Y')}</b>", styles['Normal']))
             story.append(Paragraph(f"Motif: {episode.motif or '-'}", styles['Normal']))
+            story.append(Paragraph(f"Diagnostic: {episode.diagnostic or '-'}", styles['Normal']))
             
-            if episode.imageries and episode.biologies:
+            if episode.imageries:
                 latest_imaging = max(episode.imageries, key=lambda x: x.date_examen)
+                story.append(Paragraph(f"<b>Imagerie:</b> Densité {latest_imaging.densite_uh or latest_imaging.densite_noyau or '-'} UH, Taille {latest_imaging.taille_mm or latest_imaging.diametre_longitudinal or '-'} mm", styles['Normal']))
+                if latest_imaging.nombre_calculs:
+                    story.append(Paragraph(f"Nombre de calculs: {latest_imaging.nombre_calculs}", styles['Normal']))
+                if latest_imaging.topographie_calcul:
+                    story.append(Paragraph(f"Topographie: {latest_imaging.topographie_calcul}", styles['Normal']))
+                if latest_imaging.forme_calcul:
+                    story.append(Paragraph(f"Forme: {latest_imaging.forme_calcul}", styles['Normal']))
+            
+            if episode.biologies:
                 latest_biology = max(episode.biologies, key=lambda x: x.date_examen)
+                story.append(Paragraph(f"<b>Biologie:</b> pH {latest_biology.ph_urinaire or '-'}", styles['Normal']))
+                if latest_biology.sediment_urinaire:
+                    story.append(Paragraph(f"Sédiment: {latest_biology.sediment_urinaire}", styles['Normal']))
+            
+            if episode.calculated_stone_type and episode.calculated_stone_type_data:
+                import json
+                result = json.loads(episode.calculated_stone_type_data)
                 
-                imaging_data = {
-                    'densite_uh': latest_imaging.densite_uh,
-                    'morphologie': latest_imaging.morphologie,
-                    'radio_opacite': latest_imaging.radio_opacite,
-                    'taille_mm': latest_imaging.taille_mm
-                }
+                story.append(Paragraph(f"<b>Type de calcul:</b> {result['top_1']} (score: {result['top_1_score']}/20)", styles['Normal']))
+                story.append(Paragraph(f"<b>Calculé le:</b> {episode.calculated_at.strftime('%d/%m/%Y %H:%M') if episode.calculated_at else '-'}", styles['Normal']))
+                story.append(Paragraph(f"<b>LEC éligible:</b> {'Oui' if result.get('lec_eligible') else 'Non'}", styles['Normal']))
+                story.append(Paragraph(f"<b>Voie de traitement:</b> {result.get('voie_traitement', '-')}", styles['Normal']))
                 
-                biology_data = {
-                    'ph_urinaire': latest_biology.ph_urinaire,
-                    'infection_urinaire': latest_biology.infection_urinaire,
-                    'hyperoxalurie': latest_biology.hyperoxalurie,
-                    'hypercalciurie': latest_biology.hypercalciurie,
-                    'hyperuricurie': latest_biology.hyperuricurie,
-                    'cystinurie': latest_biology.cystinurie
-                }
-                
-                result = InferenceEngine.infer_stone_type(imaging_data, biology_data)
-                
-                story.append(Paragraph(f"<b>Type proposé:</b> {result['top_1']} (score: {result['top_1_score']}/20)", styles['Normal']))
-                story.append(Paragraph(f"<b>LEC éligible:</b> {'Oui' if result['lec_eligible'] else 'Non'}", styles['Normal']))
-                story.append(Paragraph(f"<b>Voie de traitement:</b> {result['voie_traitement']}", styles['Normal']))
-                
-                if result['prevention']:
+                if result.get('prevention'):
                     story.append(Paragraph("<b>Prévention:</b>", styles['Normal']))
                     for conseil in result['prevention'][:3]:
                         story.append(Paragraph(f"• {conseil}", styles['Normal']))
+                
+                story.append(Paragraph(f"<b>Top 3:</b>", styles['Normal']))
+                for type_calcul, score in result['top_3']:
+                    story.append(Paragraph(f"  {type_calcul}: {score}/20", styles['Normal']))
             
             story.append(Spacer(1, 0.3*cm))
     

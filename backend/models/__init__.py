@@ -318,6 +318,11 @@ class Episode(db.Model):
     _resultat_traitement = db.Column('resultat_traitement', db.Text)
     
     _notes = db.Column('notes', db.Text)
+    
+    calculated_stone_type = db.Column(db.String(100))
+    calculated_stone_type_data = db.Column(db.Text)
+    calculated_at = db.Column(db.DateTime)
+    
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     

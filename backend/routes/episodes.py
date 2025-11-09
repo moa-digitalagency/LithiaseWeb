@@ -157,6 +157,8 @@ def episode_detail(episode_id):
 @bp.route('/api/episodes/<int:episode_id>/inference', methods=['POST'])
 @login_required
 def infer(episode_id):
+    import json
+    
     episode = Episode.query.get_or_404(episode_id)
     
     if not episode.imageries:
@@ -166,9 +168,15 @@ def infer(episode_id):
     
     imaging_data = {
         'densite_uh': latest_imaging.densite_uh,
+        'densite_noyau': latest_imaging.densite_noyau,
         'morphologie': latest_imaging.morphologie,
         'radio_opacite': latest_imaging.radio_opacite,
-        'taille_mm': latest_imaging.taille_mm
+        'taille_mm': latest_imaging.taille_mm,
+        'diametre_longitudinal': latest_imaging.diametre_longitudinal,
+        'forme_calcul': latest_imaging.forme_calcul,
+        'contour_calcul': latest_imaging.contour_calcul,
+        'nombre_calculs': latest_imaging.nombre_calculs,
+        'topographie_calcul': latest_imaging.topographie_calcul
     }
     
     biology_data = {}
@@ -177,6 +185,8 @@ def infer(episode_id):
         biology_data = {
             'ph_urinaire': latest_biology.ph_urinaire,
             'infection_urinaire': latest_biology.infection_urinaire,
+            'sediment_urinaire': latest_biology.sediment_urinaire,
+            'ecbu_resultats': latest_biology.ecbu_resultats,
             'hyperoxalurie': latest_biology.hyperoxalurie,
             'hypercalciurie': latest_biology.hypercalciurie,
             'hyperuricurie': latest_biology.hyperuricurie,
@@ -184,5 +194,10 @@ def infer(episode_id):
         }
     
     result = InferenceEngine.infer_stone_type(imaging_data, biology_data)
+    
+    episode.calculated_stone_type = result['top_1']
+    episode.calculated_stone_type_data = json.dumps(result)
+    episode.calculated_at = datetime.utcnow()
+    db.session.commit()
     
     return jsonify(result)
