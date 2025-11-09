@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Patients - Algorithme Lithiase KALONJI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/myoneart.css') }}">
+</head>
+<body class="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 min-h-screen">
+    <nav class="gradient-bg text-white p-4 shadow-lg">
+        <div class="container mx-auto flex items-center justify-between">
+            <h1 class="text-2xl font-bold">📊 Liste des Patients</h1>
+            <div class="space-x-4">
+                <a href="/dashboard" class="hover:text-purple-200">Tableau de bord</a>
+                <a href="/patients/nouveau" class="hover:text-purple-200">Nouveau patient</a>
+                <a href="/logout" class="hover:text-purple-200">Déconnexion</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-6">
+        <div class="bg-white rounded-2xl shadow-2xl p-6">
+            <!-- Barre de recherche et actions -->
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex-1 max-w-md">
+                    <input type="text" id="searchInput" placeholder="🔍 Rechercher par nom, prénom..." 
+                           class="input-field w-full" onkeyup="filterPatients()">
+                </div>
+                <div class="space-x-2">
+                    <button onclick="printList()" class="btn btn-secondary">
+                        🖨️ Imprimer la liste
+                    </button>
+                    <button onclick="exportCSV()" class="btn btn-info">
+                        📥 Exporter CSV
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tableau des patients -->
+            <div class="overflow-x-auto">
+                <table class="data-table w-full" id="patientsTable">
+                    <thead>
+                        <tr>
+                            <th class="text-left cursor-pointer" onclick="sortTable(0)">
+                                📝 Nom ⬍
+                            </th>
+                            <th class="text-left cursor-pointer" onclick="sortTable(1)">
+                                👤 Prénom ⬍
+                            </th>
+                            <th class="text-left cursor-pointer" onclick="sortTable(2)">
+                                🎂 Date naissance ⬍
+                            </th>
+                            <th class="text-center">
+                                ⚥ Sexe
+                            </th>
+                            <th class="text-left">
+                                📞 Téléphone
+                            </th>
+                            <th class="text-center cursor-pointer" onclick="sortTable(5)">
+                                📊 Épisodes ⬍
+                            </th>
+                            <th class="text-center">
+                                ⚙️ Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="patientsTableBody">
+                        <!-- Rempli dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="noResults" class="text-center py-8 text-gray-500 hidden">
+                Aucun patient trouvé
+            </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-between items-center mt-6">
+                <div class="text-sm text-gray-600">
+                    Total: <span id="totalCount" class="font-bold">0</span> patients
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let patients = [];
+        let currentSort = { column: 0, ascending: true };
+
+        async function loadPatients() {
+            try {
+                const response = await fetch('/api/patients');
+                patients = await response.json();
+                renderPatients(patients);
+            } catch (error) {
+                console.error('Erreur lors du chargement des patients:', error);
+            }
+        }
+
+        function renderPatients(data) {
+            const tbody = document.getElementById('patientsTableBody');
+            const noResults = document.getElementById('noResults');
+            const totalCount = document.getElementById('totalCount');
+            
+            totalCount.textContent = data.length;
+            
+            if (data.length === 0) {
+                tbody.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+            
+            noResults.classList.add('hidden');
+            
+            tbody.innerHTML = data.map(p => `
+                <tr class="hover:bg-purple-50 transition-colors">
+                    <td class="font-semibold">${p.nom}</td>
+                    <td>${p.prenom}</td>
+                    <td>${new Date(p.date_naissance).toLocaleDateString('fr-FR')}</td>
+                    <td class="text-center">${p.sexe === 'M' ? '♂️' : '♀️'}</td>
+                    <td>${p.telephone || '-'}</td>
+                    <td class="text-center">
+                        <span class="badge badge-info">${p.nb_episodes || 0}</span>
+                    </td>
+                    <td class="text-center space-x-2">
+                        <button onclick="viewPatient(${p.id})" class="btn-icon btn-info" title="Voir">
+                            👁️
+                        </button>
+                        <button onclick="deletePatient(${p.id}, '${p.nom} ${p.prenom}')" 
+                                class="btn-icon btn-danger" title="Supprimer">
+                            🗑️
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterPatients() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = patients.filter(p => 
+                p.nom.toLowerCase().includes(search) || 
+                p.prenom.toLowerCase().includes(search) ||
+                (p.telephone && p.telephone.includes(search))
+            );
+            renderPatients(filtered);
+        }
+
+        function sortTable(columnIndex) {
+            if (currentSort.column === columnIndex) {
+                currentSort.ascending = !currentSort.ascending;
+            } else {
+                currentSort.column = columnIndex;
+                currentSort.ascending = true;
+            }
+
+            const sortedPatients = [...patients].sort((a, b) => {
+                let aVal, bVal;
+                
+                switch(columnIndex) {
+                    case 0: aVal = a.nom; bVal = b.nom; break;
+                    case 1: aVal = a.prenom; bVal = b.prenom; break;
+                    case 2: aVal = a.date_naissance; bVal = b.date_naissance; break;
+                    case 5: aVal = a.nb_episodes || 0; bVal = b.nb_episodes || 0; break;
+                    default: return 0;
+                }
+
+                if (aVal < bVal) return currentSort.ascending ? -1 : 1;
+                if (aVal > bVal) return currentSort.ascending ? 1 : -1;
+                return 0;
+            });
+
+            renderPatients(sortedPatients);
+        }
+
+        function viewPatient(id) {
+            window.location.href = `/patients/${id}`;
+        }
+
+        async function deletePatient(id, name) {
+            if (!confirm(`Voulez-vous vraiment supprimer le patient ${name} et tous ses épisodes ?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/patients/${id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    alert('Patient supprimé avec succès');
+                    loadPatients();
+                } else {
+                    alert('Erreur lors de la suppression');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Erreur lors de la suppression');
+            }
+        }
+
+        function printList() {
+            window.print();
+        }
+
+        async function exportCSV() {
+            try {
+                const response = await fetch('/api/patients/export/csv', { method: 'POST' });
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `patients_${new Date().toISOString().split('T')[0]}.csv`;
+                a.click();
+            } catch (error) {
+                console.error('Erreur lors de l\'export CSV:', error);
+            }
+        }
+
+        loadPatients();
+    </script>
+
+    <style>
+        @media print {
+            nav, button, input { display: none !important; }
+            .btn-icon { display: none !important; }
+            body { background: white; }
+        }
+        
+        .btn-icon {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-info {
+            background-color: #DBEAFE;
+            color: #1E40AF;
+        }
+    </style>
+</body>
+</html>

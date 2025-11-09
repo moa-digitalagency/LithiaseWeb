@@ -6,10 +6,11 @@ from backend.routes.search import search_patients
 from datetime import datetime
 import csv
 import io
+import qrcode
 from reportlab.lib.pagesizes import A4, letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm, mm
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, Image
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 
@@ -60,9 +61,34 @@ def export_patient_pdf(patient_id):
     title_style = ParagraphStyle('CustomTitle', parent=styles['Heading1'], fontSize=22, textColor=colors.HexColor('#4F46E5'), spaceAfter=6, alignment=TA_CENTER)
     subtitle_style = ParagraphStyle('Subtitle', parent=styles['Normal'], fontSize=11, textColor=colors.HexColor('#6B7280'), spaceAfter=12, alignment=TA_CENTER)
     section_title_style = ParagraphStyle('SectionTitle', parent=styles['Heading2'], fontSize=14, textColor=colors.HexColor('#1F2937'), spaceAfter=8, spaceBefore=12, leftIndent=10)
+    code_style = ParagraphStyle('CodeStyle', parent=styles['Normal'], fontSize=9, textColor=colors.HexColor('#6B7280'), alignment=TA_CENTER, spaceAfter=4)
     
     story.append(Paragraph("DOSSIER MÉDICAL PATIENT", title_style))
     story.append(Paragraph(f"{patient.nom} {patient.prenom}", subtitle_style))
+    
+    if patient.code_patient:
+        qr = qrcode.QRCode(version=1, box_size=3, border=1)
+        qr.add_data(patient.code_patient)
+        qr.make(fit=True)
+        qr_img = qr.make_image(fill_color="black", back_color="white")
+        
+        qr_buffer = io.BytesIO()
+        qr_img.save(qr_buffer, format='PNG')
+        qr_buffer.seek(0)
+        
+        qr_image = Image(qr_buffer, width=2.5*cm, height=2.5*cm)
+        
+        qr_data = [[qr_image, [Paragraph(f"<b>Code Patient</b>", code_style), 
+                                Paragraph(f"{patient.code_patient[:18]}", code_style),
+                                Paragraph(f"{patient.code_patient[18:]}", code_style)]]]
+        qr_table = Table(qr_data, colWidths=[3*cm, 15*cm])
+        qr_table.setStyle(TableStyle([
+            ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('ALIGN', (1, 0), (1, 0), 'LEFT')
+        ]))
+        story.append(qr_table)
+    
     story.append(Spacer(1, 0.3*cm))
     
     story.append(Paragraph("📋 INFORMATIONS PERSONNELLES", section_title_style))

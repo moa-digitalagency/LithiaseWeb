@@ -45,3 +45,8 @@ def search_page():
 @login_required
 def nouveau_patient_page():
     return render_template('nouveau-patient.html')
+
+@bp.route('/liste-patients')
+@login_required
+def liste_patients_page():
+    return render_template('liste-patients.html')
