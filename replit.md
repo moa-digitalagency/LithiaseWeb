@@ -105,12 +105,23 @@ Application web mono-médecin pour la gestion des dossiers patients souffrant de
 - **✅ COMPLÉTÉ** (08/11/2025): Transformation du formulaire patient en page complète
   - **Page dédiée** : nouveau-patient.html - formulaire complet sur une page dédiée (plus de modal popup)
   - **Navigation** : Lien "Nouveau Patient" dans le dashboard redirige vers /nouveau-patient
-  - **Extension modèle Patient** : Tous les champs imagerie et laboratoire directement dans le modèle Patient (asp_resultats, echographie_resultats, uroscanner_resultats, sediment_urinaire, ecbu_resultats, ph_urinaire, densite_urinaire, nombre_calculs, situation_calcul, topographie_calcul, diametre_longitudinal, diametre_transversal, forme_calcul, contour_calcul, densite_noyau, densites_couches, calcifications_autres)
+  - **Extension modèle Patient** : Tous les champs imagerie et laboratoire directement dans le modèle Patient (asp_resultats, echographie_resultats, uroscanner_resultats, sediment_urinaire, ecbu_resultats, ph_urinaire, densite_urinaire, nombre_calculs, topographie_calcul, diametre_longitudinal, diametre_transversal, forme_calcul, contour_calcul, densite_noyau, densites_couches, calcifications_autres)
   - **Sections organisées** : Informations personnelles, anthropométrie, antécédents médicaux, habitudes alimentaires, imagerie médicale, résultats de laboratoire, détails des calculs
   - **Styling** : Border-radius réduit à 0.5rem pour tous les champs de formulaire
   - **Backend** : Routes /nouveau-patient (GET) et /api/patients (POST/GET/PUT) gèrent tous les nouveaux champs
   - **Chiffrement** : Tous les champs sensibles sont chiffrés avec Fernet AES-128
   - **Tests** : Création et récupération de patient avec tous les champs validés en end-to-end
+  - **Validation** : Architecture complète validée par architect (PASS)
+- **✅ COMPLÉTÉ** (08/11/2025): Refonte UX/UI du formulaire patient selon classification Daudon
+  - **Section Objectifs** : Nouveau bloc en haut du formulaire expliquant les 5 objectifs de l'analyse (classification Daudon, détection anomalies, régime adapté, traitement scientifique, gestion infections)
+  - **Système de couleurs par section** : Chaque section a une couleur distinctive (bleu=infos personnelles, vert=anthropométrie, rouge=antécédents, jaune=alimentation, violet=imagerie, turquoise=laboratoire, gris=notes)
+  - **Réorganisation des blocs** : Groupe ethnique déplacé dans Informations personnelles, Hydratation déplacée dans Habitudes alimentaires
+  - **Calcul IMC automatique** : JavaScript calcule et affiche l'IMC en temps réel avec classification colorée (sous-poids=bleu, normal=vert, surpoids=jaune, obésité=rouge)
+  - **Intégration Uro-scanner** : Détails des calculs rénaux (dimensions, forme, contour, densités) intégrés directement dans la section Uro-scanner
+  - **Fusion topographie** : Suppression du champ `situation_calcul` au profit d'un champ unique `topographie_calcul` incluant rein + localisation
+  - **Renommage terminologie** : "Traitements chroniques" → "Traitements en cours" pour refléter l'état actuel
+  - **Pièces jointes (préparation)** : 3 nouvelles colonnes dans le modèle (fichier_imagerie, fichier_laboratoire, fichier_ordonnance) pour implémentation future de l'upload de documents
+  - **Tests end-to-end** : Création/récupération de patients validées avec nouveau schéma
   - **Validation** : Architecture complète validée par architect (PASS)
 
 ## Sécurité
