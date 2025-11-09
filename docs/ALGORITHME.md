@@ -115,6 +115,50 @@ Visibilité du calcul à la radiographie simple (ASP).
 - **Opaques** : Oxalate de calcium, Phosphates calciques
 - **Transparents** : Acide urique, Cystine, Struvite, Urate d'ammonium
 
+## 🔀 Détermination : Calcul Pur ou Mixte
+
+Après le calcul du score pour chaque type de calcul, l'algorithme détermine si la composition est **Pure** ou **Mixte** :
+
+### Calcul Pur
+Un calcul est considéré comme **Pur** lorsqu'un type domine clairement :
+- **Critère** : La différence de score entre le type le plus probable et le deuxième type > 4 points
+- **Interprétation** : Le calcul est composé principalement d'un seul type
+- **Affichage** : "Whewellite pur", "Struvite pur", etc.
+
+**Exemple :**
+```
+Score Whewellite : 14/20
+Score Weddellite : 8/20
+Différence : 6 points → Calcul PUR (Whewellite pur)
+```
+
+### Calcul Mixte
+Un calcul est considéré comme **Mixte** lorsque plusieurs types ont des scores proches :
+- **Critère** : La différence de score entre le type le plus probable et le deuxième type ≤ 4 points
+- **Interprétation** : Le calcul est composé d'un mélange de plusieurs types
+- **Affichage** : "Whewellite + Weddellite (mixte)", "Carbapatite + Struvite (mixte)", etc.
+
+**Exemple :**
+```
+Score Whewellite : 12/20
+Score Weddellite : 10/20
+Score Brushite : 9/20
+Différence : 2 points → Calcul MIXTE (Whewellite + Weddellite + Brushite)
+```
+
+### Signification clinique
+
+**Calculs purs :**
+- Étiologie unique et bien identifiée
+- Traitement préventif ciblé plus efficace
+- Récidive prévisible si la cause n'est pas traitée
+
+**Calculs mixtes :**
+- Étiologies multiples ou évolutives
+- Traitement préventif doit couvrir plusieurs facteurs
+- Indication d'un déséquilibre métabolique complexe
+- Nécessite un suivi métabolique approfondi
+
 ## 📋 Types de calculs couverts
 
 ### 1. Oxalate de calcium - Whewellite (CaC₂O₄·H₂O)

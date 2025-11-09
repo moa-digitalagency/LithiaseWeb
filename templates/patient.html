@@ -535,9 +535,12 @@
                     
                     ${result.uncertain ? '<div style="background: rgba(245, 158, 11, 0.08); border: 2px solid #F59E0B; color: #92400E; padding: 0.75rem 1rem; border-radius: 1rem; margin-bottom: 1rem;">⚠️ Résultat incertain, compléter biologie/CT</div>' : ''}
                     
-                    <div class="mb-4">
-                        <h5 class="font-bold text-lg mb-2">🎯 Type proposé: ${result.top_1}</h5>
-                        <p class="text-gray-700">⭐ Score: ${result.top_1_score}/20</p>
+                    <div class="mb-4 p-4 rounded-lg" style="background: ${result.composition_type === 'Pur' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(249, 115, 22, 0.1)'}; border: 2px solid ${result.composition_type === 'Pur' ? '#22C55E' : '#F97316'};">
+                        <h5 class="font-bold text-xl mb-2">🎯 Nature morpho-constitutionnelle</h5>
+                        <p class="text-lg font-semibold mb-1" style="color: ${result.composition_type === 'Pur' ? '#15803D' : '#C2410C'};">
+                            ${result.composition_type === 'Pur' ? '💎' : '🔀'} ${result.composition_detail}
+                        </p>
+                        <p class="text-gray-700 text-sm">⭐ Score: ${result.top_1_score}/20</p>
                     </div>
                     
                     <div class="mb-4">

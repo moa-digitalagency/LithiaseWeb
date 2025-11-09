@@ -305,8 +305,22 @@ class InferenceEngine:
         
         top_1_type, top_1_data = top_3[0]
         top_2_type, top_2_data = top_3[1] if len(top_3) > 1 else (None, {'score': 0})
+        top_3_type, top_3_data = top_3[2] if len(top_3) > 2 else (None, {'score': 0})
         
-        uncertain = abs(top_1_data['score'] - top_2_data['score']) < 2
+        score_diff = top_1_data['score'] - top_2_data['score']
+        uncertain = score_diff < 2
+        
+        if score_diff > 4:
+            composition_type = "Pur"
+            composition_detail = f"{top_1_type} pur"
+        else:
+            composition_type = "Mixte"
+            mixed_components = [top_1_type]
+            if top_2_type and top_2_data['score'] > 0:
+                mixed_components.append(top_2_type)
+            if top_3_type and top_3_data['score'] > 0 and score_diff < 3:
+                mixed_components.append(top_3_type)
+            composition_detail = " + ".join(mixed_components) + " (mixte)"
         
         lec_eligible = InferenceEngine.LEC_ELIGIBILITY.get(top_1_type, False)
         
@@ -320,6 +334,8 @@ class InferenceEngine:
             'top_1_score': top_1_data['score'],
             'top_1_reasons': top_1_data['reasons'],
             'uncertain': uncertain,
+            'composition_type': composition_type,
+            'composition_detail': composition_detail,
             'lec_eligible': lec_eligible,
             'voie_traitement': voie_traitement,
             'prevention': prevention

@@ -54,6 +54,9 @@
 
 ### Moteur d'inférence
 - Classification automatique du type de calcul sur un système de notation sur 20 points
+- **Nature morpho-constitutionnelle** : Spécifie si le calcul est **Pur** ou **Mixte**
+  - **Pur** : Un seul type dominant (différence de score > 4 points)
+  - **Mixte** : Combinaison de plusieurs types (scores proches)
 - 8 types de calculs couverts :
   - Oxalate de calcium (Whewellite, Weddellite)
   - Phosphates calciques (Carbapatite, Brushite)
