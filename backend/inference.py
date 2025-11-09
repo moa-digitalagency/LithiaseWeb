@@ -328,10 +328,8 @@ class InferenceEngine:
                 structure_radiaire = "Structure radiaire détectée: "
                 if densite_noyau:
                     structure_radiaire += f"noyau {densite_noyau} UH"
-                    if densites_couches:
-                        structure_radiaire += f", couches périphériques ({densites_couches})"
-                elif densites_couches:
-                    structure_radiaire += f"couches ({densites_couches})"
+                if densites_couches:
+                    structure_radiaire += f", couches périphériques ({densites_couches})"
                 top_1_data['reasons'].append(structure_radiaire)
         
         lec_eligible = InferenceEngine.LEC_ELIGIBILITY.get(top_1_type, False)
