@@ -22,3 +22,15 @@ qrcode[pil]
 reportlab==4.0.7
 sqlalchemy
 Werkzeug==3.0.1
+cryptography
+Flask
+Flask-Login
+Flask-SQLAlchemy
+flask-wtf
+pillow
+psycopg2-binary
+python-dateutil
+qrcode
+reportlab
+sqlalchemy
+Werkzeug
