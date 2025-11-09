@@ -238,13 +238,21 @@ class InferenceEngine:
     def infer_stone_type(imaging_data, biology_data):
         results = {}
         
-        uh = imaging_data.get('densite_uh')
+        # Extraction des données d'imagerie
+        uh = imaging_data.get('densite_uh') or imaging_data.get('densite_noyau')
         morphology = imaging_data.get('morphologie')
         radio_opacity = imaging_data.get('radio_opacite')
-        taille = imaging_data.get('taille_mm')
+        taille = imaging_data.get('taille_mm') or imaging_data.get('diametre_longitudinal')
+        forme_calcul = imaging_data.get('forme_calcul')
+        contour_calcul = imaging_data.get('contour_calcul')
+        nombre_calculs = imaging_data.get('nombre_calculs')
+        topographie = imaging_data.get('topographie_calcul')
         
+        # Extraction des données biologiques
         ph = biology_data.get('ph_urinaire')
         infection = biology_data.get('infection_urinaire')
+        sediment = biology_data.get('sediment_urinaire')
+        ecbu = biology_data.get('ecbu_resultats')
         
         markers = {
             'hyperoxalurie': biology_data.get('hyperoxalurie', False),
