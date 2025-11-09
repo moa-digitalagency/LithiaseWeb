@@ -145,7 +145,7 @@ async function showEpisodeDetail(episodeId) {
 function displayInferenceResult(result) {
     document.getElementById('inferenceResult').innerHTML = `
         <div style="border: 2px dashed #8B5CF6; background: rgba(139, 92, 246, 0.08); border-radius: 1.5rem; padding: 2rem;">
-            <h4 class="text-2xl font-bold mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🤖 Résultat de l'inférence</h4>
+            <h4 class="text-2xl font-bold mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🧮 Résultat de l'inférence</h4>
             
             ${result.uncertain ? '<div style="background: rgba(245, 158, 11, 0.08); border: 2px solid #F59E0B; color: #92400E; padding: 0.75rem 1rem; border-radius: 1rem; margin-bottom: 1rem;">⚠️ Résultat incertain, compléter biologie/CT</div>' : ''}
             

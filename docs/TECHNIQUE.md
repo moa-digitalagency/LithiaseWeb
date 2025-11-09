@@ -311,7 +311,7 @@ Création automatique au premier lancement avec utilisateur admin.
 ## 🔮 Évolutions futures
 
 - Upload de fichiers d'imagerie (DICOM)
-- Analyse d'images avec IA
+- Analyse d'images avec algorithme avancé
 - Graphiques d'évolution (pH, densité, IMC)
 - Export FHIR
 - API externe pour laboratoires

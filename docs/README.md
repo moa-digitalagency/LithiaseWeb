@@ -93,7 +93,7 @@
 2. **Patients de démonstration** : 4 patients complets sont pré-chargés pour découvrir l'application
 3. **Nouveau patient** : Cliquez sur "➕ Nouveau Patient" dans le menu
 4. **Ajout d'épisode** : Depuis la fiche patient, ajoutez des épisodes avec imagerie et biologie
-5. **Inférence** : Cliquez sur "🤖 Calculer le type de calcul" pour obtenir une analyse automatique
+5. **Inférence** : Cliquez sur "🧮 Calculer le type de calcul" pour obtenir une analyse par algorithme
 
 ## 💡 Cas d'usage typique
 
@@ -118,7 +118,7 @@ Le tableau de bord affiche en temps réel :
 - Nombre total de patients
 - Nombre d'épisodes enregistrés
 - IMC moyen des patients
-- Nombre de dossiers prêts pour l'analyse IA (avec données complètes)
+- Nombre de dossiers prêts pour l'analyse par algorithme (avec données complètes)
 
 ## 🤝 Support
 

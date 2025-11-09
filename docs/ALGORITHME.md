@@ -511,5 +511,5 @@ L'algorithme peut être enrichi avec :
 - Nouveaux critères (forme détaillée, contour, densité des couches)
 - Machine learning sur historique de calculs analysés
 - Intégration de marqueurs biologiques supplémentaires
-- Analyse d'images DICOM avec IA
+- Analyse d'images DICOM avec algorithme avancé
 - Corrélation avec analyse physicochimique des calculs expulsés

@@ -187,7 +187,7 @@ Supprime une analyse biologique
 
 ---
 
-## 🤖 Inférence (Algorithme KALONJI)
+## 🧮 Inférence (Algorithme KALONJI)
 
 ### POST /api/episodes/{episode_id}/calculate
 Lance le calcul d'inférence pour déterminer le type de calcul
