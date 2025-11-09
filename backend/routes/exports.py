@@ -6,11 +6,12 @@ from backend.routes.search import search_patients
 from datetime import datetime
 import csv
 import io
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A4, letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import cm
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.units import cm, mm
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
 from reportlab.lib import colors
+from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 
 bp = Blueprint('exports', __name__)
 
@@ -51,19 +52,24 @@ def export_patient_pdf(patient_id):
     patient = Patient.query.get_or_404(patient_id)
     
     buffer = io.BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=2*cm, leftMargin=2*cm, topMargin=2*cm, bottomMargin=2*cm)
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=1.5*cm, leftMargin=1.5*cm, topMargin=1.5*cm, bottomMargin=1.5*cm)
     
     story = []
     styles = getSampleStyleSheet()
-    title_style = ParagraphStyle('CustomTitle', parent=styles['Heading1'], fontSize=16, textColor=colors.HexColor('#1e40af'))
     
-    story.append(Paragraph(f"Dossier Patient - {patient.nom} {patient.prenom}", title_style))
-    story.append(Spacer(1, 0.5*cm))
+    title_style = ParagraphStyle('CustomTitle', parent=styles['Heading1'], fontSize=22, textColor=colors.HexColor('#4F46E5'), spaceAfter=6, alignment=TA_CENTER)
+    subtitle_style = ParagraphStyle('Subtitle', parent=styles['Normal'], fontSize=11, textColor=colors.HexColor('#6B7280'), spaceAfter=12, alignment=TA_CENTER)
+    section_title_style = ParagraphStyle('SectionTitle', parent=styles['Heading2'], fontSize=14, textColor=colors.HexColor('#1F2937'), spaceAfter=8, spaceBefore=12, leftIndent=10)
     
+    story.append(Paragraph("DOSSIER MÉDICAL PATIENT", title_style))
+    story.append(Paragraph(f"{patient.nom} {patient.prenom}", subtitle_style))
+    story.append(Spacer(1, 0.3*cm))
+    
+    story.append(Paragraph("📋 INFORMATIONS PERSONNELLES", section_title_style))
     patient_data = [
-        ['Nom', f"{patient.nom} {patient.prenom}"],
+        ['Nom complet', f"{patient.nom} {patient.prenom}"],
         ['Date de naissance', patient.date_naissance.strftime('%d/%m/%Y')],
-        ['Sexe', patient.sexe],
+        ['Sexe', 'Masculin' if patient.sexe == 'M' else 'Féminin'],
         ['Téléphone', patient.telephone or '-'],
         ['Email', patient.email or '-'],
         ['Adresse', patient.adresse or '-']
@@ -79,55 +85,88 @@ def export_patient_pdf(patient_id):
     if patient.groupe_ethnique:
         patient_data.append(['Groupe ethnique', patient.groupe_ethnique])
     
-    t = Table(patient_data, colWidths=[5*cm, 10*cm])
+    t = Table(patient_data, colWidths=[6*cm, 11*cm])
     t.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (0, -1), colors.grey),
-        ('TEXTCOLOR', (0, 0), (0, -1), colors.whitesmoke),
+        ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#EEF2FF')),
+        ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor('#4338CA')),
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
         ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+        ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
         ('FONTSIZE', (0, 0), (-1, -1), 10),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
-        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey)
+        ('TOPPADDING', (0, 0), (-1, -1), 10),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#C7D2FE')),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')
     ]))
     story.append(t)
     story.append(Spacer(1, 0.5*cm))
     
     if any([patient.antecedents_personnels, patient.antecedents_familiaux, patient.antecedents_chirurgicaux, patient.allergies, patient.traitements_chroniques]):
-        story.append(Paragraph("Antécédents médicaux", styles['Heading2']))
-        story.append(Spacer(1, 0.2*cm))
+        story.append(Paragraph("🏥 ANTÉCÉDENTS MÉDICAUX", section_title_style))
+        medical_data = []
         if patient.antecedents_personnels:
-            story.append(Paragraph(f"<b>Antécédents personnels:</b> {patient.antecedents_personnels}", styles['Normal']))
+            medical_data.append(['Antécédents personnels', patient.antecedents_personnels])
         if patient.antecedents_familiaux:
-            story.append(Paragraph(f"<b>Antécédents familiaux:</b> {patient.antecedents_familiaux}", styles['Normal']))
+            medical_data.append(['Antécédents familiaux', patient.antecedents_familiaux])
         if patient.antecedents_chirurgicaux:
-            story.append(Paragraph(f"<b>Antécédents chirurgicaux:</b> {patient.antecedents_chirurgicaux}", styles['Normal']))
+            medical_data.append(['Antécédents chirurgicaux', patient.antecedents_chirurgicaux])
         if patient.allergies:
-            story.append(Paragraph(f"<b>Allergies:</b> {patient.allergies}", styles['Normal']))
+            medical_data.append(['Allergies', patient.allergies])
         if patient.traitements_chroniques:
-            story.append(Paragraph(f"<b>Traitements chroniques:</b> {patient.traitements_chroniques}", styles['Normal']))
+            medical_data.append(['Traitements chroniques', patient.traitements_chroniques])
+        
+        t = Table(medical_data, colWidths=[6*cm, 11*cm])
+        t.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#FEF3C7')),
+            ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor('#92400E')),
+            ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+            ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+            ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+            ('FONTSIZE', (0, 0), (-1, -1), 9),
+            ('TOPPADDING', (0, 0), (-1, -1), 10),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#FCD34D')),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')
+        ]))
+        story.append(t)
         story.append(Spacer(1, 0.5*cm))
     
     if any([patient.hydratation_jour, patient.regime_alimentaire, patient.petit_dejeuner, patient.dejeuner, patient.diner]):
-        story.append(Paragraph("Habitudes de vie & Alimentation", styles['Heading2']))
-        story.append(Spacer(1, 0.2*cm))
+        story.append(Paragraph("🍽️ HABITUDES DE VIE & ALIMENTATION", section_title_style))
+        lifestyle_data = []
         if patient.hydratation_jour:
-            story.append(Paragraph(f"<b>Hydratation:</b> {patient.hydratation_jour} L/jour", styles['Normal']))
+            lifestyle_data.append(['Hydratation', f"{patient.hydratation_jour} L/jour"])
         if patient.regime_alimentaire:
-            story.append(Paragraph(f"<b>Régime alimentaire:</b> {patient.regime_alimentaire}", styles['Normal']))
+            lifestyle_data.append(['Régime alimentaire', patient.regime_alimentaire])
         if patient.petit_dejeuner:
-            story.append(Paragraph(f"<b>Petit déjeuner:</b> {patient.petit_dejeuner}", styles['Normal']))
+            lifestyle_data.append(['Petit déjeuner', patient.petit_dejeuner])
         if patient.dejeuner:
-            story.append(Paragraph(f"<b>Déjeuner:</b> {patient.dejeuner}", styles['Normal']))
+            lifestyle_data.append(['Déjeuner', patient.dejeuner])
         if patient.diner:
-            story.append(Paragraph(f"<b>Dîner:</b> {patient.diner}", styles['Normal']))
+            lifestyle_data.append(['Dîner', patient.diner])
         if patient.grignotage:
-            story.append(Paragraph(f"<b>Grignotage:</b> {patient.grignotage}", styles['Normal']))
+            lifestyle_data.append(['Grignotage', patient.grignotage])
         if patient.autres_consommations:
-            story.append(Paragraph(f"<b>Autres consommations:</b> {patient.autres_consommations}", styles['Normal']))
+            lifestyle_data.append(['Autres consommations', patient.autres_consommations])
+        
+        t = Table(lifestyle_data, colWidths=[6*cm, 11*cm])
+        t.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#D1FAE5')),
+            ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor('#065F46')),
+            ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+            ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+            ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+            ('FONTSIZE', (0, 0), (-1, -1), 9),
+            ('TOPPADDING', (0, 0), (-1, -1), 10),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#6EE7B7')),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')
+        ]))
+        story.append(t)
         story.append(Spacer(1, 0.5*cm))
     
     if patient.episodes:
-        story.append(Paragraph("Épisodes récents", styles['Heading2']))
+        story.append(Paragraph("📊 ÉPISODES RÉCENTS", section_title_style))
         story.append(Spacer(1, 0.3*cm))
         
         for episode in sorted(patient.episodes, key=lambda x: x.date_episode, reverse=True):
@@ -214,21 +253,60 @@ def export_patient_pdf(patient_id):
                 composition_type = result.get('composition_type', 'Non déterminé')
                 composition_detail = result.get('composition_detail', result['top_1'])
                 
-                story.append(Paragraph(f"<b>Nature morpho-constitutionnelle:</b> {composition_detail}", styles['Normal']))
-                story.append(Paragraph(f"<b>Type:</b> {composition_type}", styles['Normal']))
-                story.append(Paragraph(f"<b>Score:</b> {result['top_1_score']}/20", styles['Normal']))
-                story.append(Paragraph(f"<b>Calculé le:</b> {episode.calculated_at.strftime('%d/%m/%Y %H:%M') if episode.calculated_at else '-'}", styles['Normal']))
-                story.append(Paragraph(f"<b>LEC éligible:</b> {'Oui' if result.get('lec_eligible') else 'Non'}", styles['Normal']))
-                story.append(Paragraph(f"<b>Voie de traitement:</b> {result.get('voie_traitement', '-')}", styles['Normal']))
+                result_data = [
+                    ['RÉSULTAT D\'ANALYSE (ALGORITHME KALONJI)', ''],
+                    ['Nature morpho-constitutionnelle', composition_detail],
+                    ['Type de composition', composition_type],
+                    ['Score de confiance', f"{result['top_1_score']}/20"],
+                    ['LEC éligible', 'Oui' if result.get('lec_eligible') else 'Non'],
+                    ['Voie de traitement', result.get('voie_traitement', '-')],
+                ]
+                
+                t = Table(result_data, colWidths=[7*cm, 10*cm])
+                t.setStyle(TableStyle([
+                    ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#7C3AED')),
+                    ('BACKGROUND', (0, 1), (0, -1), colors.HexColor('#EDE9FE')),
+                    ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                    ('TEXTCOLOR', (0, 1), (0, -1), colors.HexColor('#5B21B6')),
+                    ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+                    ('ALIGN', (0, 1), (-1, -1), 'LEFT'),
+                    ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                    ('FONTNAME', (0, 1), (0, -1), 'Helvetica-Bold'),
+                    ('FONTSIZE', (0, 0), (-1, 0), 11),
+                    ('FONTSIZE', (0, 1), (-1, -1), 9),
+                    ('TOPPADDING', (0, 0), (-1, -1), 10),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+                    ('GRID', (0, 0), (-1, -1), 1, colors.HexColor('#A78BFA')),
+                    ('SPAN', (0, 0), (-1, 0)),
+                    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')
+                ]))
+                story.append(t)
+                story.append(Spacer(1, 0.2*cm))
+                
+                if result.get('top_3'):
+                    top3_data = [['Top 3 types probables', 'Score']]
+                    for type_calcul, score in result['top_3']:
+                        top3_data.append([type_calcul, f"{score}/20"])
+                    
+                    t2 = Table(top3_data, colWidths=[12*cm, 5*cm])
+                    t2.setStyle(TableStyle([
+                        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#A78BFA')),
+                        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                        ('ALIGN', (1, 0), (1, -1), 'CENTER'),
+                        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                        ('FONTSIZE', (0, 0), (-1, -1), 9),
+                        ('TOPPADDING', (0, 0), (-1, -1), 8),
+                        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+                        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#C4B5FD'))
+                    ]))
+                    story.append(t2)
                 
                 if result.get('prevention'):
-                    story.append(Paragraph("<b>Prévention:</b>", styles['Normal']))
-                    for conseil in result['prevention'][:3]:
-                        story.append(Paragraph(f"• {conseil}", styles['Normal']))
-                
-                story.append(Paragraph(f"<b>Top 3 types probables:</b>", styles['Normal']))
-                for type_calcul, score in result['top_3']:
-                    story.append(Paragraph(f"  {type_calcul}: {score}/20", styles['Normal']))
+                    story.append(Spacer(1, 0.2*cm))
+                    story.append(Paragraph("<b>Conseils de prévention:</b>", styles['Normal']))
+                    for conseil in result['prevention'][:5]:
+                        story.append(Paragraph(f"  • {conseil}", styles['Normal']))
             
             story.append(Spacer(1, 0.3*cm))
     
