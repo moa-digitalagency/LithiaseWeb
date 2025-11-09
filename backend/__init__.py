@@ -23,7 +23,7 @@ def create_app():
     
     with app.app_context():
         from backend.models import User
-        from backend.routes import auth, patients, episodes, imageries, biologies, search, exports
+        from backend.routes import auth, patients, episodes, imageries, biologies, search, exports, settings
         
         app.register_blueprint(auth.bp)
         app.register_blueprint(patients.bp)
@@ -32,6 +32,7 @@ def create_app():
         app.register_blueprint(biologies.bp)
         app.register_blueprint(search.bp)
         app.register_blueprint(exports.bp)
+        app.register_blueprint(settings.bp)
         
         db.create_all()
         

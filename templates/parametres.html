@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paramètres - Lithiase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/myoneart.css">
+</head>
+<body class="page-bg">
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <h1 class="text-3xl font-bold">💊 Lithiase</h1>
+            <div class="flex items-center space-x-6">
+                <a href="/" class="hover:text-indigo-200 transition-colors font-medium">🏠 Tableau de bord</a>
+                <a href="/search" class="hover:text-indigo-200 transition-colors font-medium">🔍 Recherche</a>
+                <a href="/parametres" class="hover:text-indigo-200 transition-colors font-medium text-indigo-300">⚙️ Paramètres</a>
+                <a href="/logout" class="hover:text-indigo-200 transition-colors font-medium">🚪 Déconnexion</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mx-auto p-6 max-w-4xl">
+        <div class="card mb-6">
+            <div class="border-b border-gray-200 pb-4 mb-6">
+                <h2 class="text-3xl font-bold text-gray-800">⚙️ Paramètres</h2>
+                <p class="text-gray-600 mt-2">Gérez vos préférences et paramètres de compte</p>
+            </div>
+            
+            <div class="space-y-8">
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-blue-900 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">👤</span> Profil utilisateur
+                    </h3>
+                    
+                    <form id="profileForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nom d'utilisateur</label>
+                            <input type="text" id="username" name="username" class="input-field" required>
+                        </div>
+                        
+                        <div class="flex justify-end">
+                            <button type="submit" class="btn btn-primary">
+                                💾 Sauvegarder le profil
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="bg-purple-50 border-2 border-purple-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-purple-900 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">🔒</span> Sécurité
+                    </h3>
+                    
+                    <form id="passwordForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mot de passe actuel *</label>
+                            <input type="password" name="current_password" required class="input-field">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nouveau mot de passe *</label>
+                            <input type="password" name="new_password" required class="input-field" minlength="6">
+                            <p class="text-xs text-gray-500 mt-1">Minimum 6 caractères</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Confirmer le nouveau mot de passe *</label>
+                            <input type="password" name="confirm_password" required class="input-field" minlength="6">
+                        </div>
+                        
+                        <div class="flex justify-end">
+                            <button type="submit" class="btn btn-primary">
+                                🔑 Changer le mot de passe
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="bg-green-50 border-2 border-green-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-green-900 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">🔐</span> Sécurité des données
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-white rounded">
+                            <div>
+                                <p class="font-medium text-gray-800">Chiffrement des données patients</p>
+                                <p class="text-sm text-gray-600">Toutes les données sensibles sont chiffrées</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span id="encryptionStatus" class="badge badge-success">✓ Actif</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-white rounded">
+                            <div>
+                                <p class="font-medium text-gray-800">Base de données</p>
+                                <p class="text-sm text-gray-600">SQLite avec chiffrement AES-256</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="badge badge-info">ℹ️ SQLite</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-white rounded">
+                            <div>
+                                <p class="font-medium text-gray-800">Conformité RGPD</p>
+                                <p class="text-sm text-gray-600">Données médicales protégées selon RGPD</p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="badge badge-success">✓ Conforme</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-orange-50 border-2 border-orange-200 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-orange-900 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">ℹ️</span> Informations système
+                    </h3>
+                    
+                    <div class="space-y-2 text-sm text-gray-700">
+                        <div class="flex justify-between p-2 bg-white rounded">
+                            <span class="font-medium">Version de l'application</span>
+                            <span>1.0.0</span>
+                        </div>
+                        <div class="flex justify-between p-2 bg-white rounded">
+                            <span class="font-medium">Framework</span>
+                            <span>Flask 3.0.0</span>
+                        </div>
+                        <div class="flex justify-between p-2 bg-white rounded">
+                            <span class="font-medium">Base de données</span>
+                            <span>SQLite</span>
+                        </div>
+                        <div class="flex justify-between p-2 bg-white rounded">
+                            <span class="font-medium">Type de déploiement</span>
+                            <span>Développement</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-6">
+                    <h3 class="text-xl font-bold text-yellow-900 mb-3 flex items-center">
+                        <span class="text-2xl mr-2">⚠️</span> Zone de danger
+                    </h3>
+                    <p class="text-sm text-gray-700 mb-4">
+                        Les actions suivantes sont irréversibles. Veuillez procéder avec prudence.
+                    </p>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-white rounded border border-yellow-300">
+                            <div>
+                                <p class="font-medium text-gray-800">Sauvegarde de la base de données</p>
+                                <p class="text-sm text-gray-600">Créer une copie de sauvegarde complète</p>
+                            </div>
+                            <button class="btn btn-warning" onclick="backupDatabase()">
+                                💾 Sauvegarder
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-white rounded border border-red-300">
+                            <div>
+                                <p class="font-medium text-red-700">Exporter toutes les données</p>
+                                <p class="text-sm text-gray-600">Exporter toutes les données en format JSON</p>
+                            </div>
+                            <button class="btn btn-secondary" onclick="exportAllData()">
+                                📤 Exporter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        async function loadProfile() {
+            try {
+                const response = await fetch('/api/settings/profile');
+                const data = await response.json();
+                
+                document.getElementById('username').value = data.username;
+                
+                if (data.encryption_key_exists) {
+                    document.getElementById('encryptionStatus').textContent = '✓ Actif';
+                    document.getElementById('encryptionStatus').className = 'badge badge-success';
+                } else {
+                    document.getElementById('encryptionStatus').textContent = '⚠️ Absent';
+                    document.getElementById('encryptionStatus').className = 'badge badge-warning';
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement du profil:', error);
+            }
+        }
+        
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = {
+                username: formData.get('username')
+            };
+            
+            try {
+                const response = await fetch('/api/settings/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert('✓ ' + result.message);
+                    loadProfile();
+                } else {
+                    alert('❌ ' + result.error);
+                }
+            } catch (error) {
+                alert('❌ Erreur lors de la mise à jour du profil');
+                console.error('Erreur:', error);
+            }
+        });
+        
+        document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = {
+                current_password: formData.get('current_password'),
+                new_password: formData.get('new_password'),
+                confirm_password: formData.get('confirm_password')
+            };
+            
+            try {
+                const response = await fetch('/api/settings/password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert('✓ ' + result.message);
+                    e.target.reset();
+                } else {
+                    alert('❌ ' + result.error);
+                }
+            } catch (error) {
+                alert('❌ Erreur lors du changement de mot de passe');
+                console.error('Erreur:', error);
+            }
+        });
+        
+        function backupDatabase() {
+            alert('ℹ️ Fonctionnalité de sauvegarde en cours de développement.\nVeuillez copier manuellement le fichier lithiase.db pour créer une sauvegarde.');
+        }
+        
+        function exportAllData() {
+            alert('ℹ️ Fonctionnalité d\'export en cours de développement.\nUtilisez la fonction d\'export PDF pour chaque patient individuellement.');
+        }
+        
+        loadProfile();
+    </script>
+</body>
+</html>
