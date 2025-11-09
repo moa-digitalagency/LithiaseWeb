@@ -189,7 +189,7 @@ function displayInferenceResult(result) {
 }
 
 async function runInference() {
-    const response = await fetch(`/api/episodes/${currentEpisodeId}/inference`, {
+    const response = await fetchWithCSRF(`/api/episodes/${currentEpisodeId}/inference`, {
         method: 'POST'
     });
     const result = await response.json();
@@ -302,7 +302,7 @@ function hideDeleteConfirmModal() {
 
 async function deletePatient() {
     const patientId = window.patientId;
-    const response = await fetch(`/api/patients/${patientId}`, {
+    const response = await fetchWithCSRF(`/api/patients/${patientId}`, {
         method: 'DELETE'
     });
     
@@ -332,9 +332,8 @@ document.addEventListener('DOMContentLoaded', () => {
         data.fievre = formData.has('fievre');
         data.infection_urinaire = formData.has('infection_urinaire');
         
-        await fetch(`/api/patients/${patientId}/episodes`, {
+        await fetchWithCSRF(`/api/patients/${patientId}/episodes`, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
         
@@ -347,9 +346,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData.entries());
         
-        await fetch(`/api/episodes/${currentEpisodeId}/imageries`, {
+        await fetchWithCSRF(`/api/episodes/${currentEpisodeId}/imageries`, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
         
@@ -372,9 +370,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.t3) data.t3 = parseFloat(data.t3);
         if (data.t4) data.t4 = parseFloat(data.t4);
         
-        await fetch(`/api/episodes/${currentEpisodeId}/biologies`, {
+        await fetchWithCSRF(`/api/episodes/${currentEpisodeId}/biologies`, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
         
@@ -388,9 +385,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData.entries());
         
-        const response = await fetch(`/api/patients/${patientId}`, {
+        const response = await fetchWithCSRF(`/api/patients/${patientId}`, {
             method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
         

@@ -43,11 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         try {
-            const response = await fetch('/api/patients', {
+            const response = await fetchWithCSRF('/api/patients', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
                 body: JSON.stringify(data)
             });
             

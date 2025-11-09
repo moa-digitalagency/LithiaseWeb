@@ -38,6 +38,11 @@ def create_app():
     login_manager.login_view = 'auth.login'
     csrf.init_app(app)
     
+    @app.context_processor
+    def inject_csrf_token():
+        from flask_wtf.csrf import generate_csrf
+        return dict(csrf_token=generate_csrf)
+    
     with app.app_context():
         from backend.models import User
         from backend.routes import auth, patients, episodes, imageries, biologies, search, exports, settings
