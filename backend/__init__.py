@@ -16,13 +16,13 @@ def create_app():
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'lithiase-secret-key-change-in-production')
     
     database_url = os.environ.get('DATABASE_URL')
-    if database_url:
-        if '?' not in database_url:
-            database_url += '?sslmode=require'
-        elif 'sslmode' not in database_url:
-            database_url += '&sslmode=require'
-    else:
-        database_url = 'sqlite:///../lithiase.db'
+    if not database_url:
+        raise ValueError("DATABASE_URL environment variable is required. PostgreSQL database must be configured.")
+    
+    if '?' not in database_url:
+        database_url += '?sslmode=require'
+    elif 'sslmode' not in database_url:
+        database_url += '&sslmode=require'
     
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
