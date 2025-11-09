@@ -202,7 +202,11 @@
 
         async function exportCSV() {
             try {
-                const response = await fetch('/api/patients/export/csv', { method: 'POST' });
+                const response = await fetch('/api/export/patients-csv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -211,6 +215,7 @@
                 a.click();
             } catch (error) {
                 console.error('Erreur lors de l\'export CSV:', error);
+                alert('Erreur lors de l\'export CSV');
             }
         }
 

@@ -220,13 +220,24 @@ class InferenceEngine:
             reasons = []
         
         bonus_score = 0
-        if thyroid_data:
+        if thyroid_data and thyroid_data.get('tsh') is not None:
             is_hyperthyroid, thyroid_reason = InferenceEngine.detect_hyperthyroidism(
                 thyroid_data.get('t3'), thyroid_data.get('t4'), thyroid_data.get('tsh')
             )
             if is_hyperthyroid and metabolic_marker == 'hypercalciurie':
                 bonus_score += 1
                 reasons.append(f"{thyroid_reason} → favorise hypercalciurie")
+            elif thyroid_data.get('tsh') is not None and metabolic_marker == 'hypercalciurie':
+                tsh_val = thyroid_data.get('tsh')
+                t3_val = thyroid_data.get('t3')
+                t4_val = thyroid_data.get('t4')
+                thyroid_status = f"Hormones thyroïdiennes: TSH={tsh_val}"
+                if t3_val:
+                    thyroid_status += f", T3={t3_val}"
+                if t4_val:
+                    thyroid_status += f", T4={t4_val}"
+                thyroid_status += " (normales)"
+                reasons.append(thyroid_status)
         
         if calciemie and calciemie > 2.6 and metabolic_marker == 'hypercalciurie':
             bonus_score += 1

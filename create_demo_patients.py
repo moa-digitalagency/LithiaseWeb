@@ -2,6 +2,7 @@ from backend import create_app, db
 from backend.models import Patient, Episode, Imagerie, Biologie
 from datetime import datetime, timedelta
 import random
+import uuid
 
 app = create_app()
 
@@ -227,6 +228,7 @@ with app.app_context():
             continue
         
         patient = Patient()
+        patient.code_patient = str(uuid.uuid4())
         for key, value in patient_data.items():
             setattr(patient, key, value)
         
@@ -327,9 +329,9 @@ with app.app_context():
             biologie.calciurie_valeur = 340.0
             biologie.oxalurie_valeur = 42.0
             biologie.calciemie_valeur = 2.75
-            biologie.tsh = 1.6
-            biologie.t3 = 1.8
-            biologie.t4 = 11.5
+            biologie.tsh = 0.3
+            biologie.t3 = 2.4
+            biologie.t4 = 13.5
         
         db.session.add(biologie)
         

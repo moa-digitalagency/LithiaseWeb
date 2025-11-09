@@ -47,6 +47,36 @@ def export_csv():
         download_name=f'lithiase_export_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
     )
 
+@bp.route('/api/export/patients-csv', methods=['POST'])
+@login_required
+def export_patients_csv():
+    patients = Patient.query.all()
+    
+    output = io.StringIO()
+    writer = csv.writer(output)
+    
+    writer.writerow(['Code Patient', 'Nom', 'Prénom', 'Date Naissance', 'Sexe', 'Téléphone', 'Email', 'Nombre Épisodes'])
+    
+    for patient in patients:
+        writer.writerow([
+            patient.code_patient or '',
+            patient.nom,
+            patient.prenom,
+            patient.date_naissance.strftime('%d/%m/%Y'),
+            patient.sexe,
+            patient.telephone or '',
+            patient.email or '',
+            len(patient.episodes)
+        ])
+    
+    output.seek(0)
+    return send_file(
+        io.BytesIO(output.getvalue().encode('utf-8')),
+        mimetype='text/csv',
+        as_attachment=True,
+        download_name=f'patients_liste_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
+    )
+
 @bp.route('/api/patients/<int:patient_id>/export/pdf', methods=['GET'])
 @login_required
 def export_patient_pdf(patient_id):
@@ -62,6 +92,7 @@ def export_patient_pdf(patient_id):
     subtitle_style = ParagraphStyle('Subtitle', parent=styles['Normal'], fontSize=11, textColor=colors.HexColor('#6B7280'), spaceAfter=12, alignment=TA_CENTER)
     section_title_style = ParagraphStyle('SectionTitle', parent=styles['Heading2'], fontSize=14, textColor=colors.HexColor('#1F2937'), spaceAfter=8, spaceBefore=12, leftIndent=10)
     code_style = ParagraphStyle('CodeStyle', parent=styles['Normal'], fontSize=9, textColor=colors.HexColor('#6B7280'), alignment=TA_CENTER, spaceAfter=4)
+    table_cell_style = ParagraphStyle('TableCell', parent=styles['Normal'], fontSize=9, leading=11, wordWrap='CJK')
     
     story.append(Paragraph("DOSSIER MÉDICAL PATIENT", title_style))
     story.append(Paragraph(f"{patient.nom} {patient.prenom}", subtitle_style))
@@ -235,8 +266,10 @@ def export_patient_pdf(patient_id):
                         story.append(Paragraph(f"    Forme: {imaging.forme_calcul}", styles['Normal']))
                     if imaging.contour_calcul:
                         story.append(Paragraph(f"    Contour: {imaging.contour_calcul}", styles['Normal']))
-                    if imaging.densite_uh or imaging.densite_noyau:
-                        story.append(Paragraph(f"    Densité: {imaging.densite_uh or imaging.densite_noyau} UH", styles['Normal']))
+                    if imaging.densite_uh:
+                        story.append(Paragraph(f"    Densité: {imaging.densite_uh} UH", styles['Normal']))
+                    if imaging.densite_noyau:
+                        story.append(Paragraph(f"    Densité noyau: {imaging.densite_noyau} UH", styles['Normal']))
                     if imaging.densites_couches:
                         story.append(Paragraph(f"    Densités couches: {imaging.densites_couches}", styles['Normal']))
                     if imaging.morphologie:
