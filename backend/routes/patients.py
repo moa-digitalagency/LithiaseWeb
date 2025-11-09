@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_login import login_required
 from backend import db
 from backend.models import Patient, Episode, Biologie
-from backend.utils.biologies import calculate_metabolic_booleans
+from backend.services import calculate_metabolic_booleans
 from datetime import datetime, date
 import uuid
 

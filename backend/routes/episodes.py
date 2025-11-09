@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_login import login_required
 from backend import db
 from backend.models import Patient, Episode
-from backend.inference import InferenceEngine
+from backend.services import InferenceEngine
 from datetime import datetime
 
 bp = Blueprint('episodes', __name__)

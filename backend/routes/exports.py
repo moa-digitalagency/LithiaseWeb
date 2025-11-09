@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, send_file
 from flask_login import login_required
 from backend.models import Patient
-from backend.inference import InferenceEngine
+from backend.services import InferenceEngine
 from backend.routes.search import search_patients
 from datetime import datetime
 import csv

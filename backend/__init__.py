@@ -1,10 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_wtf.csrf import CSRFProtect
 import os
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+csrf = CSRFProtect()
 
 def create_app():
     app = Flask(__name__, 
@@ -12,18 +14,34 @@ def create_app():
                 static_folder='../static')
     
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'lithiase-secret-key-change-in-production')
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../lithiase.db'
+    
+    database_url = os.environ.get('DATABASE_URL')
+    if database_url:
+        if '?' not in database_url:
+            database_url += '?sslmode=require'
+        elif 'sslmode' not in database_url:
+            database_url += '&sslmode=require'
+    else:
+        database_url = 'sqlite:///../lithiase.db'
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'pool_recycle': 300,
+        'pool_pre_ping': True,
+    }
     app.config['UPLOAD_FOLDER'] = 'uploads'
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
     
     db.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
+    csrf.init_app(app)
     
     with app.app_context():
         from backend.models import User
         from backend.routes import auth, patients, episodes, imageries, biologies, search, exports, settings
+        from backend.database.init import initialize_database
         
         app.register_blueprint(auth.bp)
         app.register_blueprint(patients.bp)
@@ -34,7 +52,8 @@ def create_app():
         app.register_blueprint(exports.bp)
         app.register_blueprint(settings.bp)
         
-        db.create_all()
+        if os.environ.get('SKIP_DB_INIT') != 'true':
+            initialize_database(app)
         
         if not User.query.first():
             admin_username = os.environ.get('ADMIN_USERNAME', 'admin')
