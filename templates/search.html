@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Recherche Avancée - Algorithme Lithiase KALONJI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/static/css/myoneart.css">
@@ -91,6 +92,7 @@
         </div>
     </div>
     
+    <script src="/static/js/csrf.js"></script>
     <script>
         let currentResults = [];
         
@@ -110,11 +112,8 @@
                 }
             }
             
-            const response = await fetch('/api/search', {
+            const response = await fetchWithCSRF('/api/search', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
                 body: JSON.stringify(filters)
             });
             
