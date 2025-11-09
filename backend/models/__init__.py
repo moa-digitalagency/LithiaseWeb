@@ -43,6 +43,12 @@ class Patient(db.Model):
     taille = db.Column(db.Float)
     _groupe_ethnique = db.Column('groupe_ethnique', db.Text)
     
+    province = db.Column(db.String(100))
+    ville = db.Column(db.String(100))
+    profession = db.Column(db.String(100))
+    niveau_education = db.Column(db.String(50))
+    statut_matrimonial = db.Column(db.String(50))
+    
     _petit_dejeuner = db.Column('petit_dejeuner', db.Text)
     _dejeuner = db.Column('dejeuner', db.Text)
     _diner = db.Column('diner', db.Text)
@@ -442,6 +448,21 @@ class Imagerie(db.Model):
     _densites_couches = db.Column('densites_couches', db.Text)
     _calcifications_autres = db.Column('calcifications_autres', db.Text)
     
+    rein_gauche_cranio_caudal = db.Column(db.Float)
+    rein_gauche_antero_posterieur = db.Column(db.Float)
+    rein_gauche_transversal = db.Column(db.Float)
+    rein_gauche_volume = db.Column(db.Float)
+    
+    rein_droit_cranio_caudal = db.Column(db.Float)
+    rein_droit_antero_posterieur = db.Column(db.Float)
+    rein_droit_transversal = db.Column(db.Float)
+    rein_droit_volume = db.Column(db.Float)
+    
+    epaisseur_cortex_renal = db.Column(db.Float)
+    diametre_pyelon = db.Column(db.Float)
+    diametre_uretere_amont = db.Column(db.Float)
+    _malformations_urinaires = db.Column('malformations_urinaires', db.Text)
+    
     _commentaires = db.Column('commentaires', db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -525,6 +546,14 @@ class Imagerie(db.Model):
     @calcifications_autres.setter
     def calcifications_autres(self, value):
         self._calcifications_autres = encryption_manager.encrypt(value)
+    
+    @property
+    def malformations_urinaires(self):
+        return encryption_manager.decrypt(self._malformations_urinaires)
+    
+    @malformations_urinaires.setter
+    def malformations_urinaires(self, value):
+        self._malformations_urinaires = encryption_manager.encrypt(value)
 
 class Biologie(db.Model):
     __tablename__ = 'biologies'
@@ -552,6 +581,10 @@ class Biologie(db.Model):
     t3 = db.Column(db.Float)
     t4 = db.Column(db.Float)
     tsh = db.Column(db.Float)
+    
+    uree = db.Column(db.Float)
+    creatinine = db.Column(db.Float)
+    _autres_parametres = db.Column('autres_parametres', db.Text)
     
     infection_urinaire = db.Column(db.Boolean, default=False)
     _germe = db.Column('germe', db.Text)
@@ -592,6 +625,14 @@ class Biologie(db.Model):
     @commentaires.setter
     def commentaires(self, value):
         self._commentaires = encryption_manager.encrypt(value)
+    
+    @property
+    def autres_parametres(self):
+        return encryption_manager.decrypt(self._autres_parametres)
+    
+    @autres_parametres.setter
+    def autres_parametres(self, value):
+        self._autres_parametres = encryption_manager.encrypt(value)
 
 class Document(db.Model):
     __tablename__ = 'documents'
