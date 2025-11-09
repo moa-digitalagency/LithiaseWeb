@@ -20,7 +20,7 @@ class User(UserMixin, db.Model):
 class Patient(db.Model):
     __tablename__ = 'patients'
     id = db.Column(db.Integer, primary_key=True)
-    code_patient = db.Column(db.String(36), unique=True, nullable=True)
+    code_patient = db.Column(db.String(6), unique=True, nullable=True)
     
     _nom = db.Column('nom', db.Text, nullable=False)
     _prenom = db.Column('prenom', db.Text, nullable=False)
@@ -320,6 +320,7 @@ class Episode(db.Model):
     infection_urinaire = db.Column(db.Boolean, default=False)
     _germe = db.Column('germe', db.Text)
     urease_positif = db.Column(db.Boolean)
+    germe_urease = db.Column(db.String(100))
     
     _lateralite = db.Column('lateralite', db.Text)
     _siege_douloureux = db.Column('siege_douloureux', db.Text)
@@ -464,10 +465,13 @@ class Imagerie(db.Model):
     rein_droit_transversal = db.Column(db.Float)
     rein_droit_volume = db.Column(db.Float)
     
-    epaisseur_cortex_renal = db.Column(db.Float)
-    diametre_pyelon = db.Column(db.Float)
-    diametre_uretere_amont = db.Column(db.Float)
-    _malformations_urinaires = db.Column('malformations_urinaires', db.Text)
+    epaisseur_cortex_renal_gauche = db.Column(db.Float)
+    epaisseur_cortex_renal_droit = db.Column(db.Float)
+    diametre_pyelon_gauche = db.Column(db.Float)
+    diametre_pyelon_droit = db.Column(db.Float)
+    diametre_uretere_amont_gauche = db.Column(db.Float)
+    diametre_uretere_amont_droit = db.Column(db.Float)
+    malformations_urinaires = db.Column(db.String(100))
     
     _commentaires = db.Column('commentaires', db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -553,13 +557,6 @@ class Imagerie(db.Model):
     def calcifications_autres(self, value):
         self._calcifications_autres = encryption_manager.encrypt(value)
     
-    @property
-    def malformations_urinaires(self):
-        return encryption_manager.decrypt(self._malformations_urinaires)
-    
-    @malformations_urinaires.setter
-    def malformations_urinaires(self, value):
-        self._malformations_urinaires = encryption_manager.encrypt(value)
 
 class Biologie(db.Model):
     __tablename__ = 'biologies'
@@ -595,6 +592,7 @@ class Biologie(db.Model):
     infection_urinaire = db.Column(db.Boolean, default=False)
     _germe = db.Column('germe', db.Text)
     urease_positif = db.Column(db.Boolean)
+    germe_urease = db.Column(db.String(100))
     
     _commentaires = db.Column('commentaires', db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

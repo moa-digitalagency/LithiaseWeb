@@ -57,6 +57,36 @@ GERME_CHOICES = [
     ('Culture negative', 'Culture négative')
 ]
 
+GERMES_UREASE_CHOICES = [
+    ('Aucun', 'Aucun'),
+    ('Proteus mirabilis', 'Proteus mirabilis (uréase +)'),
+    ('Proteus vulgaris', 'Proteus vulgaris (uréase +)'),
+    ('Klebsiella pneumoniae', 'Klebsiella pneumoniae (uréase +)'),
+    ('Pseudomonas aeruginosa', 'Pseudomonas aeruginosa (uréase +)'),
+    ('Staphylococcus saprophyticus', 'Staphylococcus saprophyticus (uréase +)'),
+    ('Ureaplasma urealyticum', 'Ureaplasma urealyticum (uréase +)'),
+    ('Morganella morganii', 'Morganella morganii (uréase +)'),
+    ('Providencia rettgeri', 'Providencia rettgeri (uréase +)'),
+    ('Autre germe urease+', 'Autre germe à uréase')
+]
+
+MALFORMATIONS_CHOICES = [
+    ('Aucune', 'Aucune'),
+    ('Stenose JPU', 'Sténose de la jonction pyélo-urétérale (JPU)'),
+    ('Syndrome JUV', 'Syndrome de la jonction urétéro-vésicale'),
+    ('Megauretere', 'Mégauretère'),
+    ('Reflux vesico-ureteral', 'Reflux vésico-urétéral'),
+    ('Rein fer cheval', 'Rein en fer à cheval'),
+    ('Ectopie renale', 'Ectopie rénale'),
+    ('Duplicite ureterale', 'Duplicité urétérale'),
+    ('Ureterocele', 'Urétérocèle'),
+    ('Valve uretre posterieur', 'Valve de l\'urètre postérieur'),
+    ('Diverticule caliciel', 'Diverticule caliciel'),
+    ('Kyste renal', 'Kyste rénal'),
+    ('Polykystose renale', 'Polykystose rénale'),
+    ('Autre malformation', 'Autre malformation')
+]
+
 REGIME_ALIMENTAIRE_CHOICES = [
     ('Omnivore', 'Omnivore'),
     ('Vegetarien', 'Végétarien'),

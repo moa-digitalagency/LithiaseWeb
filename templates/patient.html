@@ -162,7 +162,7 @@
                 <button onclick="hideEpisodeDetailModal()" class="btn btn-secondary btn-close">✕</button>
             </div>
             <div class="p-6 max-h-[80vh] overflow-y-auto">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 gap-6">
                     <div>
                         <h4 class="text-xl font-bold text-gray-800 mb-4">🔬 Imagerie</h4>
                         <button onclick="showNewImagingModal()" class="btn btn-primary mb-4">➕ Ajouter Imagerie</button>
@@ -261,11 +261,23 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium mb-2">🔶 Forme du calcul</label>
-                            <input type="text" name="forme_calcul" placeholder="Ex: Rond, ovale, irrégulier" class="input-field">
+                            <select name="forme_calcul" class="input-field">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="Arrondie">Arrondie</option>
+                                <option value="Ovale">Ovale</option>
+                                <option value="Irreguliere">Irrégulière</option>
+                                <option value="Coralliforme">Coralliforme</option>
+                                <option value="Spiculee">Spiculée</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-2">⭕ Contour du calcul</label>
-                            <input type="text" name="contour_calcul" placeholder="Ex: Régulier, irrégulier, spiculé" class="input-field">
+                            <select name="contour_calcul" class="input-field">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="Lisse">Lisse</option>
+                                <option value="Irregulier">Irrégulier</option>
+                                <option value="Spicule">Spiculé</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -311,6 +323,57 @@
                     <div>
                         <label class="block text-sm font-medium mb-2">🧮 Autres calcifications</label>
                         <textarea name="calcifications_autres" rows="2" class="input-field" placeholder="Calcifications vasculaires, ganglions, paroi vésicale..."></textarea>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 pt-4 mt-4">
+                        <h4 class="text-md font-semibold text-gray-700 mb-3">Retentissement haut appareil</h4>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Épaisseur cortex rénal (mm)</label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <input type="number" step="0.1" name="epaisseur_cortex_renal_gauche" class="input-field" placeholder="Rein gauche">
+                                    <input type="number" step="0.1" name="epaisseur_cortex_renal_droit" class="input-field" placeholder="Rein droit">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Diamètre pyélon (mm)</label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <input type="number" step="0.1" name="diametre_pyelon_gauche" class="input-field" placeholder="Côté gauche">
+                                    <input type="number" step="0.1" name="diametre_pyelon_droit" class="input-field" placeholder="Côté droit">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Diamètre uretère en amont (mm)</label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <input type="number" step="0.1" name="diametre_uretere_amont_gauche" class="input-field" placeholder="Côté gauche">
+                                    <input type="number" step="0.1" name="diametre_uretere_amont_droit" class="input-field" placeholder="Côté droit">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Malformations urinaires ou obstacles</label>
+                                <select name="malformations_urinaires" class="input-field">
+                                    <option value="">-- Sélectionner --</option>
+                                    <option value="Aucune">Aucune</option>
+                                    <option value="Stenose JPU">Sténose de la jonction pyélo-urétérale (JPU)</option>
+                                    <option value="Syndrome JUV">Syndrome de la jonction urétéro-vésicale</option>
+                                    <option value="Megauretere">Mégauretère</option>
+                                    <option value="Reflux vesico-ureteral">Reflux vésico-urétéral</option>
+                                    <option value="Rein fer cheval">Rein en fer à cheval</option>
+                                    <option value="Ectopie renale">Ectopie rénale</option>
+                                    <option value="Duplicite ureterale">Duplicité urétérale</option>
+                                    <option value="Ureterocele">Urétérocèle</option>
+                                    <option value="Valve uretre posterieur">Valve de l'urètre postérieur</option>
+                                    <option value="Diverticule caliciel">Diverticule caliciel</option>
+                                    <option value="Kyste renal">Kyste rénal</option>
+                                    <option value="Polykystose renale">Polykystose rénale</option>
+                                    <option value="Autre malformation">Autre malformation</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="flex justify-end space-x-3 pt-4">
@@ -406,9 +469,28 @@
                         </div>
                     </div>
                     
-                    <div class="flex items-center">
-                        <input type="checkbox" name="infection_urinaire" id="bio_infection" class="mr-2">
-                        <label for="bio_infection">🦠 Infection urinaire</label>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <input type="checkbox" name="infection_urinaire" id="bio_infection" class="mr-2">
+                            <label for="bio_infection">🦠 Infection urinaire</label>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Germe à uréase identifié</label>
+                            <select name="germe_urease" class="input-field">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="Aucun">Aucun</option>
+                                <option value="Proteus mirabilis">Proteus mirabilis (uréase +)</option>
+                                <option value="Proteus vulgaris">Proteus vulgaris (uréase +)</option>
+                                <option value="Klebsiella pneumoniae">Klebsiella pneumoniae (uréase +)</option>
+                                <option value="Pseudomonas aeruginosa">Pseudomonas aeruginosa (uréase +)</option>
+                                <option value="Staphylococcus saprophyticus">Staphylococcus saprophyticus (uréase +)</option>
+                                <option value="Ureaplasma urealyticum">Ureaplasma urealyticum (uréase +)</option>
+                                <option value="Morganella morganii">Morganella morganii (uréase +)</option>
+                                <option value="Providencia rettgeri">Providencia rettgeri (uréase +)</option>
+                                <option value="Autre germe urease+">Autre germe à uréase</option>
+                            </select>
+                        </div>
                     </div>
                     
                     <div class="flex justify-end space-x-3 pt-4">

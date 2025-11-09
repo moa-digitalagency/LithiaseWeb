@@ -3,8 +3,8 @@ from flask_login import login_required
 from backend import db
 from backend.models import Patient, Episode, Biologie
 from backend.services import calculate_metabolic_booleans
+from backend.utils.patient_code import generate_unique_patient_code
 from datetime import datetime, date
-import uuid
 
 bp = Blueprint('patients', __name__, url_prefix='/api/patients')
 
@@ -20,7 +20,11 @@ def patients():
             return jsonify({'error': 'Date de naissance invalide'}), 400
         
         patient = Patient()
-        patient.code_patient = str(uuid.uuid4())
+        
+        def code_exists(code):
+            return Patient.query.filter_by(code_patient=code).first() is not None
+        
+        patient.code_patient = generate_unique_patient_code(code_exists)
         patient.nom = data['nom']
         patient.prenom = data['prenom']
         patient.date_naissance = date_naissance

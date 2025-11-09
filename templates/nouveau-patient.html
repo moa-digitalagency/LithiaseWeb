@@ -86,7 +86,21 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">🌍 Groupe ethnique</label>
-                            <input type="text" name="groupe_ethnique" class="input-field" placeholder="Ex: Caucasien, Africain, Asiatique...">
+                            <select name="groupe_ethnique" class="input-field">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="Luba">Luba</option>
+                                <option value="Mongo">Mongo</option>
+                                <option value="Kongo">Kongo</option>
+                                <option value="Rwanda">Rwanda</option>
+                                <option value="Azande">Azande</option>
+                                <option value="Bangi">Bangi et Ngale</option>
+                                <option value="Rundi">Rundi</option>
+                                <option value="Teke">Teke</option>
+                                <option value="Boa">Boa</option>
+                                <option value="Chokwe">Chokwe</option>
+                                <option value="Autre">Autre</option>
+                                <option value="Non precise">Non précisé</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">📞 Téléphone</label>
@@ -272,11 +286,23 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">🔶 Forme du calcul</label>
-                                        <input type="text" name="forme_calcul" class="input-field" placeholder="Ex: Rond, ovale, irrégulier, coralliforme...">
+                                        <select name="forme_calcul" class="input-field">
+                                            <option value="">-- Sélectionner --</option>
+                                            <option value="Arrondie">Arrondie</option>
+                                            <option value="Ovale">Ovale</option>
+                                            <option value="Irreguliere">Irrégulière</option>
+                                            <option value="Coralliforme">Coralliforme</option>
+                                            <option value="Spiculee">Spiculée</option>
+                                        </select>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-2">⭕ Contour du calcul</label>
-                                        <input type="text" name="contour_calcul" class="input-field" placeholder="Ex: Régulier, irrégulier, lisse, spiculé...">
+                                        <select name="contour_calcul" class="input-field">
+                                            <option value="">-- Sélectionner --</option>
+                                            <option value="Lisse">Lisse</option>
+                                            <option value="Irregulier">Irrégulier</option>
+                                            <option value="Spicule">Spiculé</option>
+                                        </select>
                                     </div>
                                 </div>
                                 
@@ -352,26 +378,71 @@
                                         </div>
                                     </div>
                                     
-                                    <!-- Autres mesures -->
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                                        <div>
-                                            <label class="block text-xs font-medium text-gray-700 mb-2">Épaisseur minimale cortex rénal (mm)</label>
-                                            <input type="number" step="0.1" name="epaisseur_cortex_renal" class="input-field" placeholder="Ex: 7">
+                                    <!-- Autres mesures - Épaisseur cortex rénal -->
+                                    <div class="mb-4">
+                                        <h6 class="text-sm font-semibold text-gray-700 mb-3">Épaisseur minimale cortex rénal (mm)</h6>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-2">Rein gauche</label>
+                                                <input type="number" step="0.1" name="epaisseur_cortex_renal_gauche" class="input-field" placeholder="Ex: 7">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-2">Rein droit</label>
+                                                <input type="number" step="0.1" name="epaisseur_cortex_renal_droit" class="input-field" placeholder="Ex: 7">
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="block text-xs font-medium text-gray-700 mb-2">Diamètre du pyelon (mm)</label>
-                                            <input type="number" step="0.1" name="diametre_pyelon" class="input-field" placeholder="Ex: 10">
+                                    </div>
+                                    
+                                    <!-- Diamètre du pyélon -->
+                                    <div class="mb-4">
+                                        <h6 class="text-sm font-semibold text-gray-700 mb-3">Diamètre du pyélon (mm)</h6>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-2">Côté gauche</label>
+                                                <input type="number" step="0.1" name="diametre_pyelon_gauche" class="input-field" placeholder="Ex: 10">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-2">Côté droit</label>
+                                                <input type="number" step="0.1" name="diametre_pyelon_droit" class="input-field" placeholder="Ex: 10">
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="block text-xs font-medium text-gray-700 mb-2">Diamètre uretère en amont (mm)</label>
-                                            <input type="number" step="0.1" name="diametre_uretere_amont" class="input-field" placeholder="Ex: 5">
+                                    </div>
+                                    
+                                    <!-- Diamètre uretère en amont -->
+                                    <div class="mb-4">
+                                        <h6 class="text-sm font-semibold text-gray-700 mb-3">Diamètre uretère en amont (mm)</h6>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-2">Côté gauche</label>
+                                                <input type="number" step="0.1" name="diametre_uretere_amont_gauche" class="input-field" placeholder="Ex: 5">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-medium text-gray-700 mb-2">Côté droit</label>
+                                                <input type="number" step="0.1" name="diametre_uretere_amont_droit" class="input-field" placeholder="Ex: 5">
+                                            </div>
                                         </div>
                                     </div>
                                     
                                     <!-- Malformations -->
                                     <div>
                                         <label class="block text-xs font-medium text-gray-700 mb-2">🏗️ Malformations urinaires ou obstacles</label>
-                                        <textarea name="malformations_urinaires" rows="2" class="input-field" placeholder="Décrivez les malformations ou obstacles éventuels..."></textarea>
+                                        <select name="malformations_urinaires" class="input-field">
+                                            <option value="">-- Sélectionner --</option>
+                                            <option value="Aucune">Aucune</option>
+                                            <option value="Stenose JPU">Sténose de la jonction pyélo-urétérale (JPU)</option>
+                                            <option value="Syndrome JUV">Syndrome de la jonction urétéro-vésicale</option>
+                                            <option value="Megauretere">Mégauretère</option>
+                                            <option value="Reflux vesico-ureteral">Reflux vésico-urétéral</option>
+                                            <option value="Rein fer cheval">Rein en fer à cheval</option>
+                                            <option value="Ectopie renale">Ectopie rénale</option>
+                                            <option value="Duplicite ureterale">Duplicité urétérale</option>
+                                            <option value="Ureterocele">Urétérocèle</option>
+                                            <option value="Valve uretre posterieur">Valve de l'urètre postérieur</option>
+                                            <option value="Diverticule caliciel">Diverticule caliciel</option>
+                                            <option value="Kyste renal">Kyste rénal</option>
+                                            <option value="Polykystose renale">Polykystose rénale</option>
+                                            <option value="Autre malformation">Autre malformation</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -472,11 +543,29 @@
                         <!-- Nouveau: Infection urinaire -->
                         <div class="border-l-4 border-red-400 pl-4 mt-4">
                             <h4 class="text-lg font-semibold text-red-800 mb-3">🦠 Infection urinaire</h4>
-                            <div class="flex items-center space-x-3">
-                                <label class="flex items-center cursor-pointer">
-                                    <input type="checkbox" name="infection_urinaire" value="true" class="mr-2 h-5 w-5 text-indigo-600 rounded">
-                                    <span class="text-sm font-medium text-gray-700">Présence d'infection urinaire associée</span>
-                                </label>
+                            <div class="space-y-3">
+                                <div class="flex items-center space-x-3">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="checkbox" name="infection_urinaire" value="true" class="mr-2 h-5 w-5 text-indigo-600 rounded">
+                                        <span class="text-sm font-medium text-gray-700">Présence d'infection urinaire associée</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Germe à uréase identifié</label>
+                                    <select name="germe_urease" class="input-field">
+                                        <option value="">-- Sélectionner --</option>
+                                        <option value="Aucun">Aucun</option>
+                                        <option value="Proteus mirabilis">Proteus mirabilis (uréase +)</option>
+                                        <option value="Proteus vulgaris">Proteus vulgaris (uréase +)</option>
+                                        <option value="Klebsiella pneumoniae">Klebsiella pneumoniae (uréase +)</option>
+                                        <option value="Pseudomonas aeruginosa">Pseudomonas aeruginosa (uréase +)</option>
+                                        <option value="Staphylococcus saprophyticus">Staphylococcus saprophyticus (uréase +)</option>
+                                        <option value="Ureaplasma urealyticum">Ureaplasma urealyticum (uréase +)</option>
+                                        <option value="Morganella morganii">Morganella morganii (uréase +)</option>
+                                        <option value="Providencia rettgeri">Providencia rettgeri (uréase +)</option>
+                                        <option value="Autre germe urease+">Autre germe à uréase</option>
+                                    </select>
+                                </div>
                             </div>
                             <p class="text-xs text-gray-500 mt-2">⚠️ Important pour déterminer le type de calcul (influence Struvite, Carbapatite, Urate d'ammonium)</p>
                         </div>
