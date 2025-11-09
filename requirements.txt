@@ -25,3 +25,15 @@ reportlab==4.0.7
 Werkzeug==3.0.1
 flask-wtf
 psycopg2-binary
+cryptography
+Flask
+Flask-Login
+Flask-SQLAlchemy
+flask-wtf
+pillow
+psycopg2-binary
+python-dateutil
+qrcode[pil]
+reportlab
+sqlalchemy
+Werkzeug
