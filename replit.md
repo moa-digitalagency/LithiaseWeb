@@ -84,6 +84,28 @@ The application uses a Flask (Python 3.11) backend with SQLAlchemy ORM for datab
   - Analysis results and inference justifications
   - Prevents text overflow in long addresses, medical narratives, and imaging descriptions
 
+#### PDF Export Enhancements (Nov 13 - Current Session)
+- **Professional PDF Header Redesign**: 
+  - Main title "DOSSIER MÉDICAL PATIENT" now prominently displayed at top (fontSize 20, centered, indigo color)
+  - Two-column layout below title: QR Code (4cm) + patient information (13cm)
+  - QR Code sized at 2.8cm to fit properly with padding (8pt)
+  - Patient info includes name, age, and latest inference result in green
+  - Complete bordered frame for professional appearance
+- **Standardized Table Widths**:
+  - All PDF tables now use consistent TABLE_WIDTH (17cm) for perfect alignment
+  - Uroscanner measurements table uses equal column distribution (17cm ÷ 3)
+  - Two-column tables maintain COL1_WIDTH (6cm) + COL2_WIDTH (11cm)
+- **Comprehensive Inference Justification Tables**:
+  - General justification table displays main reasoning (yellow background)
+  - Detailed Top 3 tables show complete reasoning for each stone type prediction
+  - Each Top 3 entry includes stone name, score, and bulleted list of all reasons
+  - Purple color-coded design for inference sections
+- **Always-Visible Fallback Tables**:
+  - "Malformations urinaires" table always displayed (moved outside uroscanner conditional)
+  - "Conseils de prévention" table always displayed regardless of data availability
+  - Both show "Information pas disponible" when data is missing
+  - Ensures complete and consistent PDF structure across all patient reports
+
 #### Demo Data & Documentation Enhancement (Nov 9 - Latest)
 - **Comprehensive Demo Dataset**: Created `init_demo_data.py` with 5 highly detailed patient cases
   - **Joseph Kabongo** - Whewellite (hyperoxalurie primaire, densité 1450 UH, pH 5.4)
