@@ -185,9 +185,27 @@ def export_patient_pdf(patient_id):
     COL1_WIDTH = 6*cm
     COL2_WIDTH = 11*cm
     
-    story.append(Paragraph("DOSSIER MÉDICAL PATIENT", title_style))
-    story.append(Paragraph(f"{patient.nom} {patient.prenom}", subtitle_style))
+    age = ''
+    age_years = 0
+    if patient.date_naissance:
+        from datetime import date
+        today = date.today()
+        age_years = today.year - patient.date_naissance.year - ((today.month, today.day) < (patient.date_naissance.month, patient.date_naissance.day))
+        age = f"{age_years} ans"
     
+    latest_inference = ""
+    if patient.episodes:
+        for episode in sorted(patient.episodes, key=lambda x: x.date_episode, reverse=True):
+            if episode.calculated_stone_type and episode.calculated_stone_type_data:
+                import json
+                result = json.loads(episode.calculated_stone_type_data)
+                composition_type = result.get('composition_type', 'Non déterminé')
+                composition_detail = result.get('composition_detail', result['top_1'])
+                score = result.get('top_1_score', 0)
+                latest_inference = f"{composition_detail}, Score: {score}/20"
+                break
+    
+    qr_col_content = []
     if patient.code_patient:
         qr = qrcode.QRCode(version=1, box_size=3, border=1)
         qr.add_data(patient.code_patient)
@@ -198,19 +216,42 @@ def export_patient_pdf(patient_id):
         qr_img.save(qr_buffer, format='PNG')
         qr_buffer.seek(0)
         
-        qr_image = Image(qr_buffer, width=2.5*cm, height=2.5*cm)
-        
-        qr_data = [[qr_image, [Paragraph(f"<b>Code Patient</b>", code_style), 
-                                Paragraph(f"{patient.code_patient}", code_style)]]]
-        qr_table = Table(qr_data, colWidths=[3*cm, TABLE_WIDTH-3*cm])
-        qr_table.setStyle(TableStyle([
-            ('ALIGN', (0, 0), (0, 0), 'CENTER'),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('ALIGN', (1, 0), (1, 0), 'LEFT')
-        ]))
-        story.append(qr_table)
+        qr_image = Image(qr_buffer, width=2.8*cm, height=2.8*cm)
+        qr_col_content.append(qr_image)
+        qr_col_content.append(Spacer(1, 0.2*cm))
+        qr_col_content.append(Paragraph(f"<b>{patient.code_patient}</b>", code_style))
+    else:
+        qr_col_content.append(Paragraph("", code_style))
     
-    story.append(Spacer(1, 0.3*cm))
+    header_style = ParagraphStyle('HeaderStyle', parent=styles['Normal'], fontSize=16, textColor=colors.HexColor('#4F46E5'), alignment=TA_LEFT, fontName='Helvetica-Bold', spaceAfter=4)
+    patient_info_style = ParagraphStyle('PatientInfoStyle', parent=styles['Normal'], fontSize=11, textColor=colors.HexColor('#1F2937'), alignment=TA_LEFT, spaceAfter=3)
+    inference_style = ParagraphStyle('InferenceStyle', parent=styles['Normal'], fontSize=10, textColor=colors.HexColor('#059669'), alignment=TA_LEFT, fontName='Helvetica-Bold')
+    
+    info_col_content = [
+        Paragraph("DOSSIER MÉDICAL PATIENT", header_style),
+        Paragraph(f"<b>{patient.nom} {patient.prenom}</b>", patient_info_style),
+        Paragraph(f"{age}", patient_info_style)
+    ]
+    
+    if latest_inference:
+        info_col_content.append(Spacer(1, 0.1*cm))
+        info_col_content.append(Paragraph(f"Résultat: {latest_inference}", inference_style))
+    
+    header_data = [[qr_col_content, info_col_content]]
+    header_table = Table(header_data, colWidths=[4*cm, TABLE_WIDTH-4*cm])
+    header_table.setStyle(TableStyle([
+        ('BOX', (0, 0), (-1, -1), 1.5, colors.HexColor('#4F46E5')),
+        ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+        ('VALIGN', (0, 0), (0, 0), 'MIDDLE'),
+        ('ALIGN', (1, 0), (1, 0), 'LEFT'),
+        ('VALIGN', (1, 0), (1, 0), 'MIDDLE'),
+        ('TOPPADDING', (0, 0), (-1, -1), 8),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+        ('LEFTPADDING', (0, 0), (0, -1), 8),
+        ('RIGHTPADDING', (1, 0), (1, -1), 8)
+    ]))
+    story.append(header_table)
+    story.append(Spacer(1, 0.5*cm))
     
     story.append(Paragraph("📋 INFORMATIONS PERSONNELLES", section_title_style))
     patient_data = [
@@ -460,7 +501,8 @@ def export_patient_pdf(patient_id):
                             reins_data.append([wrap_text('Diamètre uretère amont'), wrap_text(f"{imaging.diametre_uretere_amont_gauche or '-'} mm"), wrap_text(f"{imaging.diametre_uretere_amont_droit or '-'} mm")])
                         
                         if len(reins_data) > 1:
-                            t_reins = Table(reins_data, colWidths=[5*cm, 5*cm, 5*cm])
+                            col_width = TABLE_WIDTH / 3
+                            t_reins = Table(reins_data, colWidths=[col_width, col_width, col_width])
                             t_reins.setStyle(TableStyle([
                                 ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#A78BFA')),
                                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
@@ -469,7 +511,8 @@ def export_patient_pdf(patient_id):
                                 ('FONTSIZE', (0, 0), (-1, -1), 8),
                                 ('TOPPADDING', (0, 0), (-1, -1), 6),
                                 ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
-                                ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#C4B5FD'))
+                                ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#C4B5FD')),
+                                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')
                             ]))
                             story.append(Spacer(1, 0.1*cm))
                             story.append(t_reins)
@@ -586,6 +629,29 @@ def export_patient_pdf(patient_id):
                 story.append(t)
                 story.append(Spacer(1, 0.2*cm))
                 
+                if result.get('justifications'):
+                    story.append(Paragraph("<b>Justification de l'inférence:</b>", styles['Heading4']))
+                    story.append(Spacer(1, 0.2*cm))
+                    justif_data = []
+                    for justif in result['justifications']:
+                        justif_data.append([wrap_text(justif, table_cell_style)])
+                    
+                    if justif_data:
+                        t_justif = Table(justif_data, colWidths=[TABLE_WIDTH])
+                        t_justif.setStyle(TableStyle([
+                            ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#FEF3C7')),
+                            ('TEXTCOLOR', (0, 0), (-1, -1), colors.HexColor('#78350F')),
+                            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                            ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+                            ('FONTSIZE', (0, 0), (-1, -1), 8),
+                            ('TOPPADDING', (0, 0), (-1, -1), 6),
+                            ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#FDE68A')),
+                            ('VALIGN', (0, 0), (-1, -1), 'TOP')
+                        ]))
+                        story.append(t_justif)
+                        story.append(Spacer(1, 0.2*cm))
+                
                 if result.get('top_3'):
                     top3_data = [[wrap_text('Top 3 types probables', table_cell_bold_style), wrap_text('Score', table_cell_bold_style)]]
                     for type_calcul, score, reasons in result['top_3']:
@@ -601,9 +667,37 @@ def export_patient_pdf(patient_id):
                         ('FONTSIZE', (0, 0), (-1, -1), 9),
                         ('TOPPADDING', (0, 0), (-1, -1), 8),
                         ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
-                        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#C4B5FD'))
+                        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#C4B5FD')),
+                        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')
                     ]))
                     story.append(t2)
+                    story.append(Spacer(1, 0.2*cm))
+                    
+                    story.append(Paragraph("<b>Détails des justifications (Top 3):</b>", styles['Heading4']))
+                    story.append(Spacer(1, 0.2*cm))
+                    for i, (type_calcul, score, reasons) in enumerate(result['top_3'], 1):
+                        justif_top3_data = [[wrap_text(f"{i}. {type_calcul} ({score}/20)", table_cell_bold_style)]]
+                        if reasons:
+                            for reason in reasons:
+                                justif_top3_data.append([wrap_text(f"  • {reason}", table_cell_style)])
+                        
+                        t_top3_detail = Table(justif_top3_data, colWidths=[TABLE_WIDTH])
+                        t_top3_detail.setStyle(TableStyle([
+                            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#DDD6FE')),
+                            ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor('#F5F3FF')),
+                            ('TEXTCOLOR', (0, 0), (-1, -1), colors.HexColor('#5B21B6')),
+                            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                            ('FONTNAME', (0, 0), (0, 0), 'Helvetica-Bold'),
+                            ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+                            ('FONTSIZE', (0, 0), (-1, -1), 8),
+                            ('TOPPADDING', (0, 0), (-1, -1), 6),
+                            ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                            ('LEFTPADDING', (0, 1), (-1, -1), 15),
+                            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#C4B5FD')),
+                            ('VALIGN', (0, 0), (-1, -1), 'TOP')
+                        ]))
+                        story.append(t_top3_detail)
+                        story.append(Spacer(1, 0.15*cm))
                 
                 if result.get('prevention'):
                     story.append(Spacer(1, 0.2*cm))
