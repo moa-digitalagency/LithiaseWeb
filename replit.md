@@ -20,19 +20,38 @@ The application uses a Flask (Python 3.11) backend with SQLAlchemy ORM for datab
 - **Intelligent Metabolic Calculation**: Automatic derivation of metabolic abnormalities (hyperoxalurie, hypercalciurie, hypercalcemie) from numeric lab values using gender-specific medical thresholds.
 - **Enhanced Inference Algorithm**: 8 kidney stone type classification with Pure vs. Mixed composition distinction, detailed justification, and scoring bonuses based on metabolic and endocrine status.
 - **Advanced Search & Export**: Search functionality across patient data and generation of detailed PDF reports (with professional layout, color-coded sections, and radial structure information) and CSV exports.
-- **Automatic IMC Calculation**: Body Mass Index calculation with color-coded classification.
+- **Automatic Age & IMC Calculation**: Automatic calculation of patient age from date of birth and Body Mass Index with color-coded classification.
 - **Dashboard Analytics**: Real-time statistics including hypercalciuria prevalence tracking.
-- **Role-Based Access Control**: Three-tier user role system (Admin, Médecin, Assistant) with granular permissions, automatic role presets, and security features.
-- **Automated Database Management**: Automatic verification and initialization of the database schema, including auto-loading of comprehensive demo data in development mode.
+- **Role-Based Access Control**: Three-tier user role system (Admin, Médecin, Assistant) with granular permissions, automatic role presets, and security features. Admin users have full access to user management settings.
+- **Automated Database Management**: Automatic verification and initialization of the database schema with intelligent table detection and creation, including auto-loading of comprehensive demo data in development mode. Automatic admin privilege assignment and upgrade for existing users.
 - **Structured Field Input Infrastructure**: Centralized API for predefined medical options and client-side transformation of input fields into checkboxes/selects.
 - **Enhanced Production Security**: Secure handling of admin account creation and warnings for default credentials.
+- **Privacy-Focused Patient Display**: Patient information displays name and calculated age prominently while protecting sensitive demographic data (birth date and gender removed from main display).
 
 ## External Dependencies
 - **Flask**: Web framework
-- **SQLAlchemy**: ORM for database interaction
-- **Cryptography (Fernet)**: Data encryption
+- **SQLAlchemy**: ORM for database interaction with PostgreSQL
+- **Cryptography (Fernet)**: Data encryption for sensitive health data
 - **Tailwind CSS**: Frontend styling
 - **ReportLab**: PDF generation
-- **SQLite**: Database
+- **PostgreSQL (Neon)**: Production database
 - **Werkzeug**: Password hashing (PBKDF2)
 - **Flask-Login**: User authentication
+- **psycopg2-binary**: PostgreSQL adapter
+
+## Recent Changes (November 13, 2025)
+
+### UI/UX Improvements
+- **Patient Information Display**: Reorganized personal information section to prominently display full name and calculated age at the top
+- **Privacy Enhancement**: Removed gender and birth date from main patient information display for better privacy protection
+- **Age Calculation**: Implemented automatic age calculation from birth date with accurate leap year handling
+
+### Admin Access & Permissions
+- **Admin Privileges**: Fixed admin user creation to ensure `can_manage_users` permission is properly set
+- **Automatic Privilege Upgrade**: Added intelligent detection and upgrade of existing admin users who lack proper permissions
+- **User Management Access**: Admin users now have full access to user management settings in the application
+
+### Database Management
+- **Comprehensive Table Verification**: Enhanced `verify_and_init_db.py` to check all current tables and create missing ones automatically
+- **Smart Admin Management**: Improved admin user creation and privilege assignment across all initialization scripts
+- **Demo Data Enhancement**: Updated demo data loading to ensure proper admin role and permissions assignment

@@ -8,9 +8,25 @@ async function loadPatient() {
     document.getElementById('patientName').textContent = `👤 ${patient.nom} ${patient.prenom}`;
     
     const bmi = patient.poids && patient.taille ? (patient.poids / Math.pow(patient.taille / 100, 2)).toFixed(1) : null;
+    
+    const calculateAge = (birthDate) => {
+        if (!birthDate) return null;
+        const today = new Date();
+        const birth = new Date(birthDate);
+        if (isNaN(birth.getTime())) return null;
+        let age = today.getFullYear() - birth.getFullYear();
+        const monthDiff = today.getMonth() - birth.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+            age--;
+        }
+        return age;
+    };
+    
+    const age = calculateAge(patient.date_naissance);
+    
     document.getElementById('patientInfo').innerHTML = `
-        <div class="info-card"><strong>📅 Date de naissance:</strong> ${new Date(patient.date_naissance).toLocaleDateString('fr-FR')}</div>
-        <div class="info-card"><strong>⚧ Sexe:</strong> ${patient.sexe === 'M' ? 'Masculin' : 'Féminin'}</div>
+        <div class="info-card"><strong>👤 Nom complet:</strong> ${patient.nom} ${patient.prenom}</div>
+        ${age !== null ? `<div class="info-card"><strong>🎂 Âge:</strong> ${age} ans</div>` : ''}
         <div class="info-card"><strong>📞 Téléphone:</strong> ${patient.telephone || '-'}</div>
         <div class="info-card"><strong>📧 Email:</strong> ${patient.email || '-'}</div>
         ${patient.poids ? `<div class="info-card"><strong>⚖️ Poids:</strong> ${patient.poids} kg</div>` : ''}

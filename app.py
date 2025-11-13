@@ -2,17 +2,11 @@ from backend import create_app
 import os
 import sys
 
-# Importer et exécuter la vérification automatique de la base de données
-# SEULEMENT en mode développement (jamais en production pour sécurité)
-if os.environ.get('FLASK_ENV') == 'development' or os.environ.get('ENABLE_AUTO_DEMO_DATA') == 'true':
-    try:
-        import verify_and_init_db
-        if not verify_and_init_db.main():
-            print("⚠️  La vérification de la base de données a échoué, mais l'application continue...")
-    except Exception as e:
-        print(f"⚠️  Erreur lors de la vérification automatique de la base de données: {e}")
-        print("L'application continue malgré cette erreur...")
-else:
+# Note: La vérification et l'initialisation de la base de données
+# sont gérées automatiquement par backend/__init__.py dans create_app()
+# via initialize_database() et verify_and_init_db est appelé de là si nécessaire
+
+if os.environ.get('FLASK_ENV') != 'development' and os.environ.get('ENABLE_AUTO_DEMO_DATA') != 'true':
     print("ℹ️  Chargement automatique des données demo désactivé (mode production)")
 
 app = create_app()

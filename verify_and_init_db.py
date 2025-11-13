@@ -14,14 +14,23 @@ from backend.models import User, Patient, Episode, Imagerie, Biologie, Document
 from sqlalchemy import inspect
 from datetime import datetime
 
-def verify_database_schema():
-    """Vérifie que tous les champs requis existent dans les tables"""
+def verify_database_schema(app=None):
+    """Vérifie que tous les champs requis existent dans les tables
+    
+    Args:
+        app: Instance Flask existante (optionnel). Si None, crée une nouvelle app.
+    """
     print("=" * 80)
     print("VÉRIFICATION DU SCHÉMA DE LA BASE DE DONNÉES")
     print("=" * 80)
     
-    app = create_app()
-    with app.app_context():
+    if app is None:
+        app = create_app()
+        use_app_context = True
+    else:
+        use_app_context = False
+    
+    def run_verification():
         inspector = inspect(db.engine)
         
         # Vérifier que toutes les tables existent
@@ -70,11 +79,26 @@ def verify_database_schema():
         
         print("=" * 80)
         return True
+    
+    if use_app_context:
+        with app.app_context():
+            return run_verification()
+    else:
+        return run_verification()
 
-def check_if_database_empty():
-    """Vérifie si la base de données contient des données"""
-    app = create_app()
-    with app.app_context():
+def check_if_database_empty(app=None):
+    """Vérifie si la base de données contient des données
+    
+    Args:
+        app: Instance Flask existante (optionnel). Si None, crée une nouvelle app.
+    """
+    if app is None:
+        app = create_app()
+        use_app_context = True
+    else:
+        use_app_context = False
+    
+    def run_check():
         user_count = User.query.count()
         patient_count = Patient.query.count()
         
@@ -82,10 +106,20 @@ def check_if_database_empty():
         
         # Retourne True si pas de patients (même s'il y a un admin)
         return patient_count == 0
+    
+    if use_app_context:
+        with app.app_context():
+            return run_check()
+    else:
+        return run_check()
 
-def load_demo_data_if_empty():
-    """Charge les données de démonstration si la base est vide (MODE DÉVELOPPEMENT UNIQUEMENT)"""
-    if check_if_database_empty():
+def load_demo_data_if_empty(app=None):
+    """Charge les données de démonstration si la base est vide (MODE DÉVELOPPEMENT UNIQUEMENT)
+    
+    Args:
+        app: Instance Flask existante (optionnel). Si None, crée une nouvelle app.
+    """
+    if check_if_database_empty(app):
         print("\n" + "=" * 80)
         print("PAS DE PATIENTS - CHARGEMENT DES DONNÉES DE DÉMONSTRATION")
         print("⚠️  MODE DÉVELOPPEMENT - Ne jamais utiliser en production!")
@@ -95,34 +129,46 @@ def load_demo_data_if_empty():
         try:
             # Exécuter init_demo_data programmatiquement
             import init_demo_data
-            app = init_demo_data.app
             
-            with app.app_context():
-                # Vérifier si l'admin existe déjà
-                admin = User.query.filter_by(username='admin').first()
-                if not admin:
-                    print("\n📝 Création de l'utilisateur admin DE DÉVELOPPEMENT...")
-                    print("⚠️  SÉCURITÉ: Credentials par défaut utilisés (admin/admin123)")
-                    print("⚠️  NE JAMAIS utiliser ces credentials en production!")
-                    admin = User(username='admin')
-                    admin.set_password('admin123')
-                    db.session.add(admin)
+            # Vérifier si l'admin existe déjà
+            admin = User.query.filter_by(username='admin').first()
+            if not admin:
+                print("\n📝 Création de l'utilisateur admin DE DÉVELOPPEMENT...")
+                print("⚠️  SÉCURITÉ: Credentials par défaut utilisés (admin/admin123)")
+                print("⚠️  NE JAMAIS utiliser ces credentials en production!")
+                admin = User(username='admin')
+                admin.set_password('admin123')
+                admin.role = 'admin'
+                admin.can_manage_patients = True
+                admin.can_manage_episodes = True
+                admin.can_export_data = True
+                admin.can_manage_users = True
+                db.session.add(admin)
+                db.session.commit()
+                print("✓ Utilisateur admin créé avec tous les privilèges (username: admin, password: admin123)")
+            else:
+                print("\n✓ Utilisateur admin existe déjà")
+                if not admin.can_manage_users:
+                    print("⚠️  Mise à jour des privilèges admin...")
+                    admin.role = 'admin'
+                    admin.can_manage_users = True
+                    admin.can_manage_patients = True
+                    admin.can_manage_episodes = True
+                    admin.can_export_data = True
                     db.session.commit()
-                    print("✓ Utilisateur admin créé (username: admin, password: admin123)")
-                else:
-                    print("\n✓ Utilisateur admin existe déjà")
-                
-                # Créer les données demo
-                print("\n📝 Création des 5 patients de démonstration...")
-                init_demo_data.create_comprehensive_demo_data()
-                
-                print("\n" + "=" * 80)
-                print("✅ DONNÉES DE DÉMONSTRATION CHARGÉES AVEC SUCCÈS")
-                print("=" * 80)
-                print("• 5 patients avec données complètes créés")
-                print("• Connexion DEV: admin / admin123")
-                print("⚠️  PRODUCTION: Configurer ADMIN_USERNAME et ADMIN_PASSWORD!")
-                print("=" * 80)
+                    print("✓ Privilèges admin mis à jour")
+            
+            # Créer les données demo
+            print("\n📝 Création des 5 patients de démonstration...")
+            init_demo_data.create_comprehensive_demo_data()
+            
+            print("\n" + "=" * 80)
+            print("✅ DONNÉES DE DÉMONSTRATION CHARGÉES AVEC SUCCÈS")
+            print("=" * 80)
+            print("• 5 patients avec données complètes créés")
+            print("• Connexion DEV: admin / admin123")
+            print("⚠️  PRODUCTION: Configurer ADMIN_USERNAME et ADMIN_PASSWORD!")
+            print("=" * 80)
         
         except Exception as e:
             print(f"\n❌ Erreur lors du chargement des données de démonstration: {str(e)}")

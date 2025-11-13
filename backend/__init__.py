@@ -70,9 +70,14 @@ def create_app():
                 admin_password = os.environ.get('ADMIN_PASSWORD', 'admin123')
                 admin = User(username=admin_username)
                 admin.set_password(admin_password)
+                admin.role = 'admin'
+                admin.can_manage_patients = True
+                admin.can_manage_episodes = True
+                admin.can_export_data = True
+                admin.can_manage_users = True
                 db.session.add(admin)
                 db.session.commit()
-                print(f"✓ Utilisateur admin DE DÉVELOPPEMENT créé (username: {admin_username})")
+                print(f"✓ Utilisateur admin DE DÉVELOPPEMENT créé avec tous les privilèges (username: {admin_username})")
                 if admin_password == 'admin123':
                     print("⚠️  ATTENTION: Credentials par défaut utilisés! En production, définir ADMIN_USERNAME et ADMIN_PASSWORD")
             else:
