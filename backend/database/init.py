@@ -1,4 +1,5 @@
 from backend import db
+import os
 
 def initialize_database(app):
     """
@@ -44,3 +45,18 @@ def initialize_database(app):
     table_count = len(db.metadata.tables)
     print(f"📊 Total: {table_count} tables créées dans la base de données")
     print("================================================================================")
+    
+    # Vérifier et corriger les permissions admin à chaque démarrage
+    try:
+        from verify_and_init_db import verify_and_fix_admin_permissions
+        verify_and_fix_admin_permissions(app)
+    except Exception as e:
+        print(f"⚠️  Impossible de vérifier les permissions admin: {e}")
+    
+    # Charger les données de démo si nécessaire et en mode développement
+    if os.environ.get('FLASK_ENV') == 'development' or os.environ.get('ENABLE_AUTO_DEMO_DATA') == 'true':
+        try:
+            from verify_and_init_db import load_demo_data_if_empty
+            load_demo_data_if_empty(app)
+        except Exception as e:
+            print(f"⚠️  Impossible de charger les données demo: {e}")
