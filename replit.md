@@ -41,6 +41,16 @@ The application uses a Flask (Python 3.11) backend with SQLAlchemy ORM for datab
 
 ## Recent Changes (November 13, 2025)
 
+### Algorithme d'inférence amélioré - Analyse multicouche ⭐ NOUVEAU
+- **Analyse des structures radiaires**: Détection et analyse détaillée des lithiases à plusieurs couches
+- **Identification par couche**: Chaque couche (noyau + couches périphériques) est analysée individuellement
+- **Composition multicouche**: Identification automatique de la composition probable de chaque couche basée sur la densité UH
+- **Scoring amélioré**: Bonus de +2 points pour les compositions détectées dans les structures multicouches
+- **Classification enrichie**: Type de composition "Mixte multicouche" pour les pierres complexes
+- **Détails structurels**: Affichage complet de l'analyse (Noyau: X UH → Type A | Couche 1: Y UH → Type B)
+- **Support multi-noyaux**: Gestion des lithiases avec plusieurs noyaux distincts
+- **Parsing flexible**: Traitement des densités de couches en format texte (CSV) ou liste
+
 ### UI/UX Improvements
 - **Patient Information Display**: Reorganized personal information section to prominently display full name and calculated age at the top
 - **Privacy Enhancement**: Removed gender and birth date from main patient information display for better privacy protection

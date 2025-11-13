@@ -279,130 +279,19 @@ class InferenceEngine:
             return 0, f"Radio-opacité non concordante"
     
     @staticmethod
+    def analyze_multilayer_structure(densite_noyau, densites_couches):
+        from backend.services.inference_service import InferenceEngine as IE
+        return IE.analyze_multilayer_structure(densite_noyau, densites_couches)
+    
+    @staticmethod
+    def _identify_layer_composition(densite_uh):
+        from backend.services.inference_service import InferenceEngine as IE
+        return IE._identify_layer_composition(densite_uh)
+    
+    @staticmethod
     def infer_stone_type(imaging_data, biology_data):
-        results = {}
-        
-        # Extraction des données d'imagerie
-        uh = imaging_data.get('densite_uh') or imaging_data.get('densite_noyau')
-        densite_noyau = imaging_data.get('densite_noyau')
-        densites_couches = imaging_data.get('densites_couches')
-        morphology = imaging_data.get('morphologie')
-        radio_opacity = imaging_data.get('radio_opacite')
-        taille = imaging_data.get('taille_mm') or imaging_data.get('diametre_longitudinal')
-        forme_calcul = imaging_data.get('forme_calcul')
-        contour_calcul = imaging_data.get('contour_calcul')
-        nombre_calculs = imaging_data.get('nombre_calculs')
-        topographie = imaging_data.get('topographie_calcul')
-        
-        # Extraction des données biologiques
-        ph = biology_data.get('ph_urinaire')
-        infection = biology_data.get('infection_urinaire')
-        sediment = biology_data.get('sediment_urinaire')
-        ecbu = biology_data.get('ecbu_resultats')
-        
-        markers = {
-            'hyperoxalurie': biology_data.get('hyperoxalurie', False),
-            'hypercalciurie': biology_data.get('hypercalciurie', False),
-            'hyperuricurie': biology_data.get('hyperuricurie', False),
-            'cystinurie': biology_data.get('cystinurie', False)
-        }
-        
-        thyroid_data = {
-            't3': biology_data.get('t3'),
-            't4': biology_data.get('t4'),
-            'tsh': biology_data.get('tsh')
-        }
-        calciemie = biology_data.get('calciemie_valeur')
-        
-        for stone_type in InferenceEngine.STONE_TYPES.keys():
-            score = 0
-            reasons = []
-            
-            density_score, density_reason = InferenceEngine.score_density(uh, stone_type)
-            score += density_score
-            if density_score > 0 and density_reason:
-                reasons.append(density_reason)
-            
-            morpho_score, morpho_reason = InferenceEngine.score_morphology(morphology, stone_type)
-            score += morpho_score
-            if morpho_score > 0 and morpho_reason:
-                reasons.append(morpho_reason)
-            
-            ph_score, ph_reason = InferenceEngine.score_ph(ph, stone_type)
-            score += ph_score
-            if ph_score > 0 and ph_reason:
-                reasons.append(ph_reason)
-            
-            metabolic_score, metabolic_reason = InferenceEngine.score_metabolic(
-                markers, stone_type, thyroid_data, calciemie
-            )
-            score += metabolic_score
-            if metabolic_score > 0:
-                reasons.append(metabolic_reason)
-            
-            infection_score, infection_reason = InferenceEngine.score_infection(infection, stone_type)
-            score += infection_score
-            if infection_score != 0:
-                reasons.append(infection_reason)
-            
-            opacity_score, opacity_reason = InferenceEngine.score_radio_opacity(radio_opacity, stone_type)
-            score += opacity_score
-            if opacity_score > 0:
-                reasons.append(opacity_reason)
-            
-            results[stone_type] = {
-                'score': score,
-                'reasons': reasons
-            }
-        
-        sorted_results = sorted(results.items(), key=lambda x: x[1]['score'], reverse=True)
-        top_3 = sorted_results[:3]
-        
-        top_1_type, top_1_data = top_3[0]
-        top_2_type, top_2_data = top_3[1] if len(top_3) > 1 else (None, {'score': 0})
-        top_3_type, top_3_data = top_3[2] if len(top_3) > 2 else (None, {'score': 0})
-        
-        score_diff = top_1_data['score'] - top_2_data['score']
-        uncertain = score_diff < 2
-        
-        if score_diff > 4:
-            composition_type = "Pur"
-            composition_detail = f"{top_1_type} pur"
-        else:
-            composition_type = "Mixte"
-            mixed_components = [top_1_type]
-            if top_2_type and top_2_data['score'] > 0:
-                mixed_components.append(top_2_type)
-            if top_3_type and top_3_data['score'] > 0 and score_diff < 3:
-                mixed_components.append(top_3_type)
-            composition_detail = " + ".join(mixed_components) + " (mixte)"
-            
-            if densite_noyau or densites_couches:
-                structure_radiaire = "Structure radiaire détectée: "
-                if densite_noyau:
-                    structure_radiaire += f"noyau {densite_noyau} UH"
-                if densites_couches:
-                    structure_radiaire += f", couches périphériques ({densites_couches})"
-                top_1_data['reasons'].append(structure_radiaire)
-        
-        lec_eligible = InferenceEngine.LEC_ELIGIBILITY.get(top_1_type, False)
-        
-        voie_traitement = InferenceEngine._determine_treatment_route(taille, top_1_type, uh, lec_eligible)
-        
-        prevention = InferenceEngine.PREVENTION_ADVICE.get(top_1_type, [])
-        
-        return {
-            'top_3': [(t, d['score'], d['reasons']) for t, d in top_3],
-            'top_1': top_1_type,
-            'top_1_score': top_1_data['score'],
-            'top_1_reasons': top_1_data['reasons'],
-            'uncertain': uncertain,
-            'composition_type': composition_type,
-            'composition_detail': composition_detail,
-            'lec_eligible': lec_eligible,
-            'voie_traitement': voie_traitement,
-            'prevention': prevention
-        }
+        from backend.services.inference_service import InferenceEngine as IE
+        return IE.infer_stone_type(imaging_data, biology_data)
     
     @staticmethod
     def _determine_treatment_route(taille, stone_type, uh, lec_eligible):

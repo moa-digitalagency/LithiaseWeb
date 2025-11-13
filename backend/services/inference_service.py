@@ -304,6 +304,92 @@ class InferenceEngine:
         return 0, None
     
     @staticmethod
+    def analyze_multilayer_structure(densite_noyau, densites_couches):
+        layer_analysis = []
+        
+        if densite_noyau is not None:
+            noyaux_list = []
+            if isinstance(densite_noyau, str):
+                noyaux_list = [n.strip() for n in densite_noyau.split(',') if n.strip()]
+            elif isinstance(densite_noyau, list):
+                noyaux_list = densite_noyau
+            else:
+                noyaux_list = [densite_noyau]
+            
+            for idx, noyau in enumerate(noyaux_list):
+                try:
+                    if isinstance(noyau, str):
+                        densite_val = float(noyau.replace('UH', '').replace('uh', '').strip())
+                    else:
+                        densite_val = float(noyau)
+                    
+                    nucleus_type = InferenceEngine._identify_layer_composition(densite_val)
+                    position = 'Noyau central' if len(noyaux_list) == 1 else f'Noyau {idx + 1}'
+                    layer_analysis.append({
+                        'position': position,
+                        'densite': densite_val,
+                        'composition_probable': nucleus_type,
+                        'layer_number': 0
+                    })
+                except (ValueError, AttributeError, TypeError):
+                    continue
+        
+        if densites_couches:
+            if isinstance(densites_couches, str):
+                couches_list = [c.strip() for c in densites_couches.split(',') if c.strip()]
+            elif isinstance(densites_couches, list):
+                couches_list = densites_couches
+            else:
+                couches_list = []
+            
+            for i, couche in enumerate(couches_list, 1):
+                try:
+                    if isinstance(couche, str):
+                        densite_val = float(couche.replace('UH', '').replace('uh', '').strip())
+                    else:
+                        densite_val = float(couche)
+                    
+                    couche_type = InferenceEngine._identify_layer_composition(densite_val)
+                    layer_analysis.append({
+                        'position': f'Couche périphérique {i}',
+                        'densite': densite_val,
+                        'composition_probable': couche_type,
+                        'layer_number': i
+                    })
+                except (ValueError, AttributeError, TypeError):
+                    continue
+        
+        return layer_analysis
+    
+    @staticmethod
+    def _identify_layer_composition(densite_uh):
+        best_match = None
+        best_score = -1
+        
+        for stone_type, config in InferenceEngine.STONE_TYPES.items():
+            min_uh, max_uh = config['uh_range']
+            
+            if min_uh <= densite_uh <= max_uh:
+                mid_point = (min_uh + max_uh) / 2
+                score = 100 - abs(densite_uh - mid_point)
+                if score > best_score:
+                    best_score = score
+                    best_match = stone_type
+        
+        if best_match is None:
+            for stone_type, config in InferenceEngine.STONE_TYPES.items():
+                min_uh, max_uh = config['uh_range']
+                delta = min(abs(densite_uh - min_uh), abs(densite_uh - max_uh))
+                
+                if delta <= 200:
+                    score = 200 - delta
+                    if score > best_score:
+                        best_score = score
+                        best_match = stone_type
+        
+        return best_match if best_match else f"Indéterminé ({densite_uh} UH)"
+    
+    @staticmethod
     def infer_stone_type(imaging_data, biology_data):
         results = {}
         
@@ -386,6 +472,23 @@ class InferenceEngine:
                 'reasons': reasons
             }
         
+        layer_analysis = InferenceEngine.analyze_multilayer_structure(densite_noyau, densites_couches)
+        
+        if layer_analysis and len(layer_analysis) > 1:
+            layer_compositions = {}
+            for layer in layer_analysis:
+                comp = layer['composition_probable']
+                if comp and 'Indéterminé' not in comp:
+                    layer_compositions[comp] = layer_compositions.get(comp, 0) + 1
+            
+            for comp_type in layer_compositions.keys():
+                if comp_type in results:
+                    bonus = 2
+                    results[comp_type]['score'] += bonus
+                    results[comp_type]['reasons'].append(
+                        f"Composition détectée dans structure multicouche (bonus +{bonus})"
+                    )
+        
         sorted_results = sorted(results.items(), key=lambda x: x[1]['score'], reverse=True)
         top_3 = sorted_results[:3]
         
@@ -396,7 +499,33 @@ class InferenceEngine:
         score_diff = top_1_data['score'] - top_2_data['score']
         uncertain = score_diff < 2
         
-        if score_diff > 4:
+        if layer_analysis and len(layer_analysis) > 1:
+            composition_type = "Mixte multicouche"
+            
+            unique_compositions = []
+            seen = set()
+            for layer in layer_analysis:
+                comp = layer['composition_probable']
+                if comp and 'Indéterminé' not in comp and comp not in seen:
+                    unique_compositions.append(comp)
+                    seen.add(comp)
+            
+            if len(unique_compositions) > 1:
+                composition_detail = " + ".join(unique_compositions) + " (structure multicouche)"
+            elif len(unique_compositions) == 1:
+                composition_detail = f"{unique_compositions[0]} (structure homogène multicouche)"
+            else:
+                composition_detail = f"{top_1_type} (multicouche, composition à préciser)"
+            
+            structure_details = []
+            for layer in layer_analysis:
+                structure_details.append(
+                    f"{layer['position']}: {layer['densite']} UH → {layer['composition_probable']}"
+                )
+            top_1_data['reasons'].append(
+                "Analyse multicouche: " + " | ".join(structure_details)
+            )
+        elif score_diff > 4:
             composition_type = "Pur"
             composition_detail = f"{top_1_type} pur"
         else:

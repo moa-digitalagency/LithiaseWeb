@@ -111,9 +111,11 @@ python app.py
 
 ### Moteur d'Inférence Intelligent
 - ✅ **8 types de calculs** couverts
-- ✅ **Système de scoring** transparent (0-20 points)
+- ✅ **Analyse multicouche** ⭐ NOUVEAU: Détection et analyse des structures radiaires (noyau + couches périphériques)
+- ✅ **Identification par couche**: Composition probable de chaque couche basée sur la densité UH
+- ✅ **Système de scoring** transparent (0-20 points) avec bonus multicouche (+2 pts)
 - ✅ **Top 3** des types les plus probables
-- ✅ **Justification détaillée** avec règles explicites
+- ✅ **Justification détaillée** avec règles explicites et analyse structurelle
 - ✅ **Badge d'incertitude** si scores proches
 - ✅ **Éligibilité LEC** (lithotripsie)
 - ✅ **Voie de traitement** recommandée
@@ -150,6 +152,27 @@ Le score final (sur 20 points) est calculé selon:
 - **Marqueurs métaboliques** (0-4 pts): Hyperoxalurie, hypercalciurie, etc.
 - **Infection** (-1 à +3 pts): Présence/absence selon le type
 - **Radio-opacité** (0-1 pt): Opaque ou transparent
+- **Bonus multicouche** (+2 pts): Pour chaque type détecté dans les couches analysées ⭐ NOUVEAU
+
+### Analyse Multicouche ⭐ NOUVEAU
+
+Pour les lithiases mixtes avec structure radiaire (noyau + couches périphériques):
+
+**Détection automatique:**
+- Le système analyse automatiquement le `densite_noyau` et les `densites_couches`
+- Chaque couche est scorée individuellement pour identifier sa composition probable
+- Exemple: Noyau 600 UH → Acide urique, Couche 1300 UH → Weddellite
+
+**Types de composition:**
+- **Pur**: Un seul type dominant (score_diff > 4)
+- **Mixte**: Plusieurs types sans structure radiaire détectée
+- **Mixte multicouche**: Structure radiaire avec compositions différentes par couche
+
+**Affichage détaillé:**
+```
+Composition: Acide urique + Weddellite (structure multicouche)
+Analyse multicouche: Noyau central: 600 UH → Acide urique | Couche périphérique 1: 1300 UH → Weddellite
+```
 
 ## 🧪 Tests d'Acceptation
 

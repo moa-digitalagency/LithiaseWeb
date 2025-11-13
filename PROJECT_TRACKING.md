@@ -113,6 +113,33 @@ Application web médicale de gestion des calculs rénaux (lithiase) pour médeci
   - Acide urique
   - Urate d'ammonium
 
+#### 4.1.5 Analyse multicouche ⭐ NOUVEAU (13 novembre 2025)
+- [x] **Détection structure radiaire**:
+  - Analyse automatique du noyau central (densite_noyau)
+  - Analyse de toutes les couches périphériques (densites_couches)
+  - Support format texte CSV: "600, 1300, 1450"
+  - Support format liste numérique
+
+- [x] **Identification par couche**:
+  - Fonction `_identify_layer_composition(densite_uh)` pour chaque couche
+  - Matching optimal avec les plages UH de chaque type
+  - Scoring de proximité si hors plage typique (delta ≤ 200 UH)
+
+- [x] **Composition multicouche**:
+  - Détection automatique de compositions différentes par couche
+  - Type "Mixte multicouche" pour les structures complexes
+  - Affichage détaillé: "Noyau: 600 UH → Acide urique | Couche 1: 1300 UH → Weddellite"
+
+- [x] **Scoring amélioré**:
+  - Bonus de +2 points pour chaque type détecté dans une couche
+  - Message explicite: "Composition détectée dans structure multicouche (bonus +2)"
+  - Amélioration de la précision pour les lithiases mixtes complexes
+
+- [x] **Support multi-noyaux**:
+  - Gestion des pierres avec plusieurs noyaux distincts
+  - Analyse séparée de chaque noyau
+  - Préservation de l'ordre des couches (noyau → périphérie)
+
 #### 4.2 Système de scoring (score sur 20)
 - [x] **Densité UH** (0-6 pts)
   - Plages de référence pour chaque type
