@@ -50,6 +50,12 @@ The application uses a Flask (Python 3.11) backend with SQLAlchemy ORM for datab
 - **Privacy-Focused Export**: Removed "Date de naissance" and "Sexe" fields from PDF "INFORMATIONS PERSONNELLES" section
 - **Header Optimization**: Increased spacing between patient name/age and result section (0.4cm spacer) for better readability
 - **Streamlined Layout**: Personal information section now focuses on contact details (phone, email, address) and medical metrics (weight, height, BMI)
+- **Professional Footer** (November 13, 2025):
+  - Custom footer on every page with platform name, patient name, and page numbering (x/y)
+  - Format: "KALONJI - Algorithme Lithiase | Patient: [Nom Prénom] | Page x/y"
+  - Implemented with custom `NumberedCanvas` class for accurate page counting
+  - Discreet gray color (Helvetica 8pt) centered at bottom of each page
+  - Bottom margin increased to 2cm to accommodate footer
 
 ### Algorithme d'inférence amélioré - Analyse multicouche ⭐ NOUVEAU
 - **Analyse des structures radiaires**: Détection et analyse détaillée des lithiases à plusieurs couches
@@ -88,3 +94,10 @@ The application uses a Flask (Python 3.11) backend with SQLAlchemy ORM for datab
 - **Automatic Privilege Enforcement**: Admin permissions are now verified and corrected at every application startup
 - **Permission Visibility**: All admin permissions are logged at startup for transparency and debugging
 - **Robust Initialization**: Multi-step verification process ensures database schema, admin privileges, and demo data are all correctly configured
+
+### Documentation Updates (November 13, 2025)
+- **API_DOCUMENTATION.md**: Added "Mixte multicouche" composition type and radial_structure_analysis response field with detailed layer information
+- **ARCHITECTURE.md**: Updated with Replit Secrets encryption key management, multilayer stone analysis details, and PDF footer implementation
+- **README.md**: Enhanced with thyroid hormones tracking, multilayer classification explanation, and PDF footer feature
+- **TECHNIQUE.md**: Updated versions (Flask 3.0.0, SQLAlchemy 3.1.1, PostgreSQL), encryption key management, and PDF footer details
+- **All documentation files**: Synchronized and coherent with latest system architecture and feature set
