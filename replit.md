@@ -54,4 +54,17 @@ The application uses a Flask (Python 3.11) backend with SQLAlchemy ORM for datab
 ### Database Management
 - **Comprehensive Table Verification**: Enhanced `verify_and_init_db.py` to check all current tables and create missing ones automatically
 - **Smart Admin Management**: Improved admin user creation and privilege assignment across all initialization scripts
+- **Startup Permission Check**: Added `verify_and_fix_admin_permissions()` function that runs at every startup to ensure admin privileges are always correct
 - **Demo Data Enhancement**: Updated demo data loading to ensure proper admin role and permissions assignment
+- **Schema Flexibility**: Made `date_naissance` and `sexe` fields nullable in the database to support privacy-focused data collection
+
+### Security & Encryption
+- **Encryption Key Migration**: Migrated encryption key management from file-based (`.encryption_key`) to Replit Secrets
+- **Secure Key Storage**: Application now uses `ENCRYPTION_KEY` secret from Replit for production-ready security
+- **Migration Support**: Temporary file backup during migration to prevent data loss
+- **Clear Instructions**: Enhanced startup messages guide users through secret configuration process
+
+### Deployment Improvements
+- **Automatic Privilege Enforcement**: Admin permissions are now verified and corrected at every application startup
+- **Permission Visibility**: All admin permissions are logged at startup for transparency and debugging
+- **Robust Initialization**: Multi-step verification process ensures database schema, admin privileges, and demo data are all correctly configured

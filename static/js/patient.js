@@ -27,11 +27,11 @@ async function loadPatient() {
     document.getElementById('patientInfo').innerHTML = `
         <div class="info-card"><strong>👤 Nom complet:</strong> ${patient.nom} ${patient.prenom}</div>
         ${age !== null ? `<div class="info-card"><strong>🎂 Âge:</strong> ${age} ans</div>` : ''}
-        <div class="info-card"><strong>📞 Téléphone:</strong> ${patient.telephone || '-'}</div>
-        <div class="info-card"><strong>📧 Email:</strong> ${patient.email || '-'}</div>
         ${patient.poids ? `<div class="info-card"><strong>⚖️ Poids:</strong> ${patient.poids} kg</div>` : ''}
         ${patient.taille ? `<div class="info-card"><strong>📏 Taille:</strong> ${patient.taille} cm</div>` : ''}
         ${bmi ? `<div class="info-card"><strong>📊 IMC:</strong> ${bmi}</div>` : ''}
+        <div class="info-card"><strong>📞 Téléphone:</strong> ${patient.telephone || '-'}</div>
+        <div class="info-card"><strong>📧 Email:</strong> ${patient.email || '-'}</div>
         ${patient.groupe_ethnique ? `<div class="info-card"><strong>🌍 Groupe ethnique:</strong> ${patient.groupe_ethnique}</div>` : ''}
         ${patient.adresse ? `<div class="info-card col-span-2"><strong>📍 Adresse:</strong> ${patient.adresse}</div>` : ''}
     `;
@@ -259,8 +259,6 @@ async function showEditPatientModal() {
     
     document.getElementById('edit_nom').value = patient.nom || '';
     document.getElementById('edit_prenom').value = patient.prenom || '';
-    document.getElementById('edit_date_naissance').value = patient.date_naissance || '';
-    document.getElementById('edit_sexe').value = patient.sexe || 'M';
     document.getElementById('edit_groupe_ethnique').value = patient.groupe_ethnique || '';
     document.getElementById('edit_telephone').value = patient.telephone || '';
     document.getElementById('edit_email').value = patient.email || '';

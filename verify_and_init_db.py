@@ -14,6 +14,59 @@ from backend.models import User, Patient, Episode, Imagerie, Biologie, Document
 from sqlalchemy import inspect
 from datetime import datetime
 
+def verify_and_fix_admin_permissions(app=None):
+    """Vérifie et corrige les permissions de l'utilisateur admin
+    
+    Args:
+        app: Instance Flask existante (optionnel). Si None, crée une nouvelle app.
+    """
+    print("\n" + "=" * 80)
+    print("VÉRIFICATION DES PERMISSIONS ADMIN")
+    print("=" * 80)
+    
+    if app is None:
+        app = create_app()
+        use_app_context = True
+    else:
+        use_app_context = False
+    
+    def run_check():
+        admin = User.query.filter_by(username='admin').first()
+        if admin:
+            print(f"✓ Utilisateur admin trouvé (ID: {admin.id})")
+            needs_update = False
+            if not admin.can_manage_users or not admin.can_manage_patients or not admin.can_manage_episodes or not admin.can_export_data or admin.role != 'admin':
+                print("⚠️  Correction des privilèges admin nécessaire...")
+                admin.role = 'admin'
+                admin.can_manage_users = True
+                admin.can_manage_patients = True
+                admin.can_manage_episodes = True
+                admin.can_export_data = True
+                needs_update = True
+            if needs_update:
+                db.session.commit()
+                print("✓ Privilèges admin corrigés - TOUS les privilèges activés")
+            else:
+                print("✓ Privilèges admin déjà corrects")
+            
+            # Afficher l'état de tous les privilèges à chaque démarrage
+            print(f"  - role: {admin.role}")
+            print(f"  - can_manage_users: {admin.can_manage_users}")
+            print(f"  - can_manage_patients: {admin.can_manage_patients}")
+            print(f"  - can_manage_episodes: {admin.can_manage_episodes}")
+            print(f"  - can_export_data: {admin.can_export_data}")
+        else:
+            print("ℹ️  Aucun utilisateur admin trouvé (sera créé au chargement des données demo)")
+        
+        print("=" * 80)
+        return True
+    
+    if use_app_context:
+        with app.app_context():
+            return run_check()
+    else:
+        return run_check()
+
 def verify_database_schema(app=None):
     """Vérifie que tous les champs requis existent dans les tables
     
@@ -148,15 +201,20 @@ def load_demo_data_if_empty(app=None):
                 print("✓ Utilisateur admin créé avec tous les privilèges (username: admin, password: admin123)")
             else:
                 print("\n✓ Utilisateur admin existe déjà")
-                if not admin.can_manage_users:
+                needs_update = False
+                if not admin.can_manage_users or not admin.can_manage_patients or not admin.can_manage_episodes or not admin.can_export_data or admin.role != 'admin':
                     print("⚠️  Mise à jour des privilèges admin...")
                     admin.role = 'admin'
                     admin.can_manage_users = True
                     admin.can_manage_patients = True
                     admin.can_manage_episodes = True
                     admin.can_export_data = True
+                    needs_update = True
+                if needs_update:
                     db.session.commit()
-                    print("✓ Privilèges admin mis à jour")
+                    print("✓ Privilèges admin mis à jour - TOUS les privilèges activés")
+                else:
+                    print("✓ Privilèges admin déjà corrects")
             
             # Créer les données demo
             print("\n📝 Création des 5 patients de démonstration...")
@@ -195,7 +253,12 @@ def main():
             print("\n❌ Échec de la vérification du schéma")
             return False
         
-        # Étape 2: Charger les données de démo si nécessaire
+        # Étape 2: Vérifier et corriger les permissions admin (exécuté à chaque démarrage)
+        if not verify_and_fix_admin_permissions():
+            print("\n❌ Échec de la vérification des permissions admin")
+            return False
+        
+        # Étape 3: Charger les données de démo si nécessaire
         if not load_demo_data_if_empty():
             print("\n❌ Échec du chargement des données de démonstration")
             return False

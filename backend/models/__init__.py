@@ -35,8 +35,8 @@ class Patient(db.Model):
     
     _nom = db.Column('nom', db.Text, nullable=False)
     _prenom = db.Column('prenom', db.Text, nullable=False)
-    date_naissance = db.Column(db.Date, nullable=False)
-    sexe = db.Column(db.String(1), nullable=False)
+    date_naissance = db.Column(db.Date, nullable=True)
+    sexe = db.Column(db.String(1), nullable=True)
     _telephone = db.Column('telephone', db.Text)
     _email = db.Column('email', db.Text)
     _adresse = db.Column('adresse', db.Text)
