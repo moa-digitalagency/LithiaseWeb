@@ -204,6 +204,20 @@ Lance le calcul d'inférence pour déterminer le type de calcul
   ],
   "composition_type": "Pur|Mixte|Mixte multicouche",
   "composition_detail": "string",
+  "structure_radiaire": boolean,
+  "analyse_couches": {
+    "noyau": {
+      "densite_uh": number,
+      "type_probable": "string",
+      "interpretation": "string"
+    },
+    "couches_peripheriques": {
+      "densite_uh": number,
+      "type_probable": "string",
+      "interpretation": "string"
+    },
+    "bonus_multicouche": number
+  },
   "radial_structure_analysis": [
     {
       "position": "Noyau central|Couche périphérique N",
@@ -220,9 +234,17 @@ Lance le calcul d'inférence pour déterminer le type de calcul
 ```
 
 **Types de composition:**
-- **Pur**: Différence de score >4 entre le premier et le deuxième type
-- **Mixte**: Différence de score 2-4 entre le premier et le deuxième type
-- **Mixte multicouche**: Présence de structure radiaire (noyau + couches périphériques) avec bonus de +2 points
+- **Pur**: Différence de score >4 entre le premier et le deuxième type ET absence de structure radiaire
+- **Mixte**: Différence de score ≤4 entre le premier et le deuxième type ET absence de structure radiaire
+- **Mixte multicouche** ⭐: Présence de structure radiaire (noyau + couches périphériques) avec bonus de +2 points
+
+**Analyse structure multicouche** ⭐:
+- Détecte automatiquement les calculs avec structure radiaire (variation densité > 100 UH entre noyau et périphérie)
+- Identifie le type probable du noyau central (conditions initiales de formation)
+- Identifie le type probable des couches périphériques (évolution temporelle)
+- Supporte plusieurs noyaux (calculs coalescents)
+- Bonus de +2 points appliqué à tous les types de calculs présentant cette structure
+- Interprétation clinique de l'évolution des facteurs lithogènes dans le temps
 
 ---
 

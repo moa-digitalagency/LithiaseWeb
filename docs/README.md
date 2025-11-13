@@ -55,12 +55,26 @@
 - Détection d'infections urinaires
 
 ### Moteur d'inférence
-- Classification automatique du type de calcul sur un système de notation sur 20 points
-- **Nature morpho-constitutionnelle** : Spécifie si le calcul est **Pur**, **Mixte** ou **Mixte multicouche**
-  - **Pur** : Un seul type dominant (différence de score > 4 points)
-  - **Mixte** : Combinaison de plusieurs types (différence de score 2-4 points)
-  - **Mixte multicouche** : Structure radiaire (noyau + couches périphériques) avec bonus +2 points
-- **Analyse structure multicouche** : Détection et identification de la composition de chaque couche
+- Classification automatique du type de calcul sur un système de notation sur **20 à 25 points** (avec bonus)
+- **8 critères de scoring** :
+  1. Densité scanner (0-6 points)
+  2. Morphologie (0-3 points)
+  3. pH urinaire (0-3 points)
+  4. Marqueurs métaboliques (0-4 points base + bonus)
+  5. Infection urinaire (0-3 points)
+  6. Radio-opacité (0-1 point)
+  7. Malformations urinaires (+1 point bonus pour calculs infectieux)
+  8. **Structure multicouche (+2 points bonus)** ⭐
+- **Nature morpho-constitutionnelle** : Spécifie si le calcul est **Pur**, **Mixte** ou **Mixte multicouche** ⭐
+  - **Pur** : Un seul type dominant (différence de score > 4 points, pas de structure radiaire)
+  - **Mixte** : Combinaison de plusieurs types (différence de score ≤ 4 points, pas de structure radiaire)
+  - **Mixte multicouche** ⭐ : Structure radiaire détectée (noyau + couches périphériques) avec bonus +2 points
+- **Analyse structure multicouche** ⭐ : 
+  - Détection automatique de la structure radiaire (variation densité > 100 UH)
+  - Identification du type du noyau central (conditions initiales)
+  - Identification du type des couches périphériques (évolution temporelle)
+  - Support de plusieurs noyaux (calculs coalescents)
+  - Interprétation clinique de l'évolution des facteurs lithogènes
 - 8 types de calculs couverts :
   - Oxalate de calcium (Whewellite, Weddellite)
   - Phosphates calciques (Carbapatite, Brushite)
@@ -77,7 +91,9 @@
 - **Recherche avancée** : filtrage par critères médicaux (pH, densité UH, infection, etc.)
 - **Export PDF** : rapport patient complet avec toutes les données et résultats d'inférence
   - Footer personnalisé avec nom plateforme, patient et numérotation x/y
-  - Sections détaillées avec analyse multicouche
+  - Sections détaillées avec analyse multicouche ⭐
+  - Affichage de la structure radiaire (noyau + couches) si détectée ⭐
+  - Interprétation clinique de l'évolution temporelle ⭐
 - **Export CSV** : données filtrées pour analyse statistique
 
 ### Sécurité

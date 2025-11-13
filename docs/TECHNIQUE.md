@@ -174,9 +174,27 @@ class Patient(db.Model):
 Le moteur d'inférence est documenté en détail dans [ALGORITHME.md](ALGORITHME.md).
 
 Principe :
-- Système de notation sur 20 points
+- Système de notation sur **20 à 25 points** (avec bonus applicables)
+- **8 critères de scoring** :
+  1. Densité scanner (0-6 points)
+  2. Morphologie (0-3 points)
+  3. pH urinaire (0-3 points)
+  4. Marqueurs métaboliques (0-4 points base)
+  5. Infection urinaire (0-3 points)
+  6. Radio-opacité (0-1 point)
+  7. Malformations urinaires (+1 point bonus pour calculs infectieux)
+  8. **Structure multicouche (+2 points bonus)** ⭐
+- **Bonus applicables** :
+  - Métaboliques : +2 points (hyperthyroïdie +1, hypercalcémie +1)
+  - Malformations : +1 point (calculs infectieux uniquement)
+  - **Multicouche : +2 points (tous types)** ⭐
 - Comparaison avec 8 types de calculs
 - Top 3 résultats retournés
+- **Classification de composition** :
+  - **Pur** : Différence de score > 4 points, pas de structure radiaire
+  - **Mixte** : Différence de score ≤ 4 points, pas de structure radiaire
+  - **Mixte multicouche** : Structure radiaire détectée (noyau + couches) ⭐
+- **Analyse couche par couche** : Identification du type du noyau et des couches périphériques ⭐
 - Indication d'incertitude si scores proches
 
 ## 🌐 API REST
@@ -237,6 +255,9 @@ Principe :
     "pH 5.5 dans la plage préférentielle [5.0-5.8]",
     "Marqueur signature présent (hyperoxalurie)"
   ],
+  "composition_type": "Pur|Mixte|Mixte multicouche",
+  "structure_radiaire": false,
+  "analyse_couches": null,
   "top_3": [
     ["Whewellite", 14, ["Densité OK", "pH OK", "Hyperoxalurie"]],
     ["Weddellite", 9, ["Densité proche", "pH OK"]],
@@ -250,6 +271,43 @@ Principe :
     "Réduire les aliments riches en oxalates",
     "Apport calcique normal avec les repas",
     "Traiter l'hyperoxalurie si présente"
+  ]
+}
+```
+
+### Résultat d'inférence avec structure multicouche ⭐
+```json
+{
+  "top_1": "Acide urique + Whewellite",
+  "top_1_score": 15,
+  "composition_type": "Mixte multicouche",
+  "structure_radiaire": true,
+  "analyse_couches": {
+    "noyau": {
+      "densite_uh": 450,
+      "type_probable": "Acide urique",
+      "interpretation": "Formation initiale en milieu acide"
+    },
+    "couches_peripheriques": {
+      "densite_uh": 1250,
+      "type_probable": "Whewellite",
+      "interpretation": "Évolution vers pH neutre avec dépôts calciques"
+    },
+    "bonus_multicouche": 2
+  },
+  "top_3": [
+    ["Acide urique + Whewellite", 15, ["Structure multicouche +2 pts", "Noyau acide urique", "Couches whewellite"]],
+    ["Whewellite", 11, ["Densité périphérique OK"]],
+    ["Acide urique", 9, ["Densité noyau OK"]]
+  ],
+  "uncertain": false,
+  "lec_eligible": false,
+  "voie_traitement": "URS (calcul multicouche)",
+  "prevention": [
+    "Hydratation très abondante (>3L/jour)",
+    "Alcalinisation modérée des urines (pH cible 6.5-7.0)",
+    "Éviter alcalinisation excessive (risque dépôts calciques)",
+    "Surveillance pH urinaire régulière"
   ]
 }
 ```

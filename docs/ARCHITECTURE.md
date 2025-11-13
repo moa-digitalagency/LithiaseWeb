@@ -111,22 +111,27 @@ project/
 ### Inference Service
 Moteur d'inférence pour déterminer le type de calcul rénal:
 - **8 types de calculs** supportés (Whewellite, Weddellite, Carbapatite, Brushite, Struvite, Cystine, Acide urique, Urate ammonium)
-- **Système de scoring** multi-critères:
-  - Densité UH (0-6 points)
-  - Morphologie (0-3 points)
-  - pH urinaire (0-3 points)
-  - Marqueurs métaboliques (0-5 points avec bonus thyroïde/calcium)
-  - Infection (0-3 points)
-  - Radio-opacité (0-1 point)
+- **Système de scoring** multi-critères (20-25 points maximum):
+  1. Densité UH (0-6 points)
+  2. Morphologie (0-3 points)
+  3. pH urinaire (0-3 points)
+  4. Marqueurs métaboliques (0-6 points : 4 base + 2 bonus thyroïde/calcium)
+  5. Infection (0-3 points)
+  6. Radio-opacité (0-1 point)
+  7. Malformations urinaires (+1 point bonus pour calculs infectieux)
+  8. **Structure multicouche (+2 points bonus pour tous types)** ⭐
 - **Classification de composition** (Mise à jour Novembre 2025):
-  - **Pur**: Différence de score >4 entre le premier et le deuxième type
-  - **Mixte**: Différence de score 2-4 entre le premier et le deuxième type
-  - **Mixte multicouche**: Présence de structure radiaire avec bonus +2 points
-- **Analyse structure multicouche**:
-  - Détection et analyse des noyaux (densite_noyau)
-  - Identification des couches périphériques (densites_couches)
+  - **Pur**: Différence de score >4 entre le premier et le deuxième type ET absence de structure radiaire
+  - **Mixte**: Différence de score ≤4 entre le premier et le deuxième type ET absence de structure radiaire
+  - **Mixte multicouche** ⭐: Présence de structure radiaire (noyau + couches périphériques) avec bonus +2 points
+- **Analyse structure multicouche** ⭐:
+  - Détection automatique de la structure radiaire (variation densité > 100 UH)
+  - Analyse du noyau central (densite_noyau) : type probable et conditions initiales
+  - Analyse des couches périphériques (densite_uh) : type probable et évolution temporelle
+  - Support de plusieurs noyaux (calculs coalescents)
   - Composition probable par couche basée sur densité UH
-  - Affichage détaillé: "Noyau: X UH → Type A | Couche 1: Y UH → Type B"
+  - Affichage détaillé: "Noyau: X UH → Type A | Couches: Y UH → Type B"
+  - Interprétation clinique de l'évolution temporelle
 - **Recommandations**: voie de traitement (LEC/URS/PCNL) et prévention personnalisée
 
 ### Biology Service

@@ -1746,7 +1746,7 @@ L'algorithme KALONJI offre une **approche prédictive non-invasive** de la class
 
 ✓ **Précocité diagnostique**: Orientation avant récupération du calcul  
 ✓ **Approche multiparamétrique**: Triangulation de 7 critères indépendants  
-✓ **Quantification objective**: Score sur 20-23 points (selon le type), reproductible  
+✓ **Quantification objective**: Score sur 20-25 points (selon le type), reproductible  
 ✓ **Applicabilité universelle**: Utilisable manuellement sans logiciel  
 ✓ **Recommandations actionnables**: Thérapeutique et préventive personnalisées  
 
