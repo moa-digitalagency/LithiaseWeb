@@ -25,12 +25,12 @@
             <!-- Barre de recherche et actions -->
             <div class="flex justify-between items-center mb-6">
                 <div class="flex-1 max-w-md">
-                    <input type="text" id="searchInput" placeholder="🔍 Rechercher par nom, prénom..." 
+                    <input type="text" id="searchInput" placeholder="🔍 Rechercher par nom, prénom, code..." 
                            class="input-field w-full" onkeyup="filterPatients()">
                 </div>
                 <div class="space-x-2">
-                    <button onclick="printList()" class="btn btn-secondary">
-                        🖨️ Imprimer la liste
+                    <button onclick="exportPDF()" class="btn btn-danger">
+                        📄 Exporter PDF
                     </button>
                     <button onclick="exportCSV()" class="btn btn-info">
                         📥 Exporter CSV
@@ -44,13 +44,19 @@
                     <thead>
                         <tr>
                             <th class="text-left cursor-pointer" onclick="sortTable(0)">
-                                📝 Nom ⬍
+                                🔖 Code ⬍
                             </th>
                             <th class="text-left cursor-pointer" onclick="sortTable(1)">
-                                👤 Prénom ⬍
+                                📝 Nom ⬍
                             </th>
                             <th class="text-left cursor-pointer" onclick="sortTable(2)">
+                                👤 Prénom ⬍
+                            </th>
+                            <th class="text-left cursor-pointer" onclick="sortTable(3)">
                                 🎂 Date naissance ⬍
+                            </th>
+                            <th class="text-center cursor-pointer" onclick="sortTable(4)">
+                                📅 Âge ⬍
                             </th>
                             <th class="text-center">
                                 ⚥ Sexe
@@ -58,7 +64,10 @@
                             <th class="text-left">
                                 📞 Téléphone
                             </th>
-                            <th class="text-center cursor-pointer" onclick="sortTable(5)">
+                            <th class="text-left">
+                                📧 Email
+                            </th>
+                            <th class="text-center cursor-pointer" onclick="sortTable(8)">
                                 📊 Épisodes ⬍
                             </th>
                             <th class="text-center">
@@ -114,13 +123,23 @@
             
             noResults.classList.add('hidden');
             
-            tbody.innerHTML = data.map(p => `
+            tbody.innerHTML = data.map(p => {
+                const birthDate = new Date(p.date_naissance);
+                const today = new Date();
+                const age = today.getFullYear() - birthDate.getFullYear() - 
+                    ((today.getMonth() < birthDate.getMonth() || 
+                      (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate())) ? 1 : 0);
+                
+                return `
                 <tr class="hover:bg-purple-50 transition-colors">
+                    <td class="font-mono text-xs">${p.code_patient || '-'}</td>
                     <td class="font-semibold">${p.nom}</td>
                     <td>${p.prenom}</td>
-                    <td>${new Date(p.date_naissance).toLocaleDateString('fr-FR')}</td>
+                    <td>${birthDate.toLocaleDateString('fr-FR')}</td>
+                    <td class="text-center font-semibold">${age} ans</td>
                     <td class="text-center">${p.sexe === 'M' ? '♂️' : '♀️'}</td>
                     <td>${p.telephone || '-'}</td>
+                    <td class="text-sm">${p.email || '-'}</td>
                     <td class="text-center">
                         <span class="badge badge-info">${p.nb_episodes || 0}</span>
                     </td>
@@ -134,7 +153,7 @@
                         </button>
                     </td>
                 </tr>
-            `).join('');
+            `;}).join('');
         }
 
         function filterPatients() {
@@ -142,7 +161,9 @@
             const filtered = patients.filter(p => 
                 p.nom.toLowerCase().includes(search) || 
                 p.prenom.toLowerCase().includes(search) ||
-                (p.telephone && p.telephone.includes(search))
+                (p.telephone && p.telephone.includes(search)) ||
+                (p.email && p.email.toLowerCase().includes(search)) ||
+                (p.code_patient && p.code_patient.toLowerCase().includes(search))
             );
             renderPatients(filtered);
         }
@@ -159,10 +180,16 @@
                 let aVal, bVal;
                 
                 switch(columnIndex) {
-                    case 0: aVal = a.nom; bVal = b.nom; break;
-                    case 1: aVal = a.prenom; bVal = b.prenom; break;
-                    case 2: aVal = a.date_naissance; bVal = b.date_naissance; break;
-                    case 5: aVal = a.nb_episodes || 0; bVal = b.nb_episodes || 0; break;
+                    case 0: aVal = a.code_patient || ''; bVal = b.code_patient || ''; break;
+                    case 1: aVal = a.nom; bVal = b.nom; break;
+                    case 2: aVal = a.prenom; bVal = b.prenom; break;
+                    case 3: aVal = a.date_naissance; bVal = b.date_naissance; break;
+                    case 4: 
+                        const ageA = new Date().getFullYear() - new Date(a.date_naissance).getFullYear();
+                        const ageB = new Date().getFullYear() - new Date(b.date_naissance).getFullYear();
+                        aVal = ageA; bVal = ageB;
+                        break;
+                    case 8: aVal = a.nb_episodes || 0; bVal = b.nb_episodes || 0; break;
                     default: return 0;
                 }
 
@@ -205,8 +232,27 @@
             }
         }
 
-        function printList() {
-            window.print();
+        async function exportPDF() {
+            try {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+                const response = await fetch('/api/export/patients-list-pdf', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                });
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `liste_patients_${new Date().toISOString().split('T')[0]}.pdf`;
+                a.click();
+            } catch (error) {
+                console.error('Erreur lors de l\'export PDF:', error);
+                alert('Erreur lors de l\'export PDF');
+            }
         }
 
         async function exportCSV() {

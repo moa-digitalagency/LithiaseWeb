@@ -77,6 +77,86 @@ def export_patients_csv():
         download_name=f'patients_liste_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
     )
 
+@bp.route('/api/export/patients-list-pdf', methods=['POST'])
+@login_required
+def export_patients_list_pdf():
+    patients = Patient.query.all()
+    
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=1.5*cm, leftMargin=1.5*cm, topMargin=1.5*cm, bottomMargin=1.5*cm)
+    
+    story = []
+    styles = getSampleStyleSheet()
+    
+    title_style = ParagraphStyle('ListTitle', parent=styles['Heading1'], fontSize=18, textColor=colors.HexColor('#4F46E5'), spaceAfter=12, alignment=TA_CENTER)
+    subtitle_style = ParagraphStyle('ListSubtitle', parent=styles['Normal'], fontSize=10, textColor=colors.HexColor('#6B7280'), spaceAfter=16, alignment=TA_CENTER)
+    table_cell_style = ParagraphStyle('ListTableCell', parent=styles['Normal'], fontSize=8, leading=10, wordWrap='CJK')
+    
+    def wrap_text(text, style=table_cell_style):
+        if text is None or text == '':
+            return Paragraph('-', style)
+        return Paragraph(str(text), style)
+    
+    story.append(Paragraph("📊 LISTE DES PATIENTS", title_style))
+    story.append(Paragraph(f"Généré le {datetime.now().strftime('%d/%m/%Y à %H:%M')}", subtitle_style))
+    story.append(Paragraph(f"Total: {len(patients)} patients", subtitle_style))
+    story.append(Spacer(1, 0.5*cm))
+    
+    table_data = [[
+        wrap_text('Code', table_cell_style),
+        wrap_text('Nom', table_cell_style),
+        wrap_text('Prénom', table_cell_style),
+        wrap_text('Date naissance', table_cell_style),
+        wrap_text('Sexe', table_cell_style),
+        wrap_text('Téléphone', table_cell_style),
+        wrap_text('Épisodes', table_cell_style)
+    ]]
+    
+    for patient in patients:
+        age = ''
+        if patient.date_naissance:
+            from datetime import date
+            today = date.today()
+            age_years = today.year - patient.date_naissance.year - ((today.month, today.day) < (patient.date_naissance.month, patient.date_naissance.day))
+            age = f"{patient.date_naissance.strftime('%d/%m/%Y')} ({age_years} ans)"
+        
+        table_data.append([
+            wrap_text(patient.code_patient or '-'),
+            wrap_text(patient.nom),
+            wrap_text(patient.prenom),
+            wrap_text(age),
+            wrap_text('♂' if patient.sexe == 'M' else '♀'),
+            wrap_text(patient.telephone or '-'),
+            wrap_text(str(len(patient.episodes)))
+        ])
+    
+    t = Table(table_data, colWidths=[2.5*cm, 3.5*cm, 3.5*cm, 3.5*cm, 1*cm, 3*cm, 1.5*cm])
+    t.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#4F46E5')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('ALIGN', (4, 0), (4, -1), 'CENTER'),
+        ('ALIGN', (6, 0), (6, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, -1), 8),
+        ('TOPPADDING', (0, 0), (-1, -1), 6),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#C7D2FE')),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#F5F3FF')]),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')
+    ]))
+    story.append(t)
+    
+    doc.build(story)
+    buffer.seek(0)
+    
+    return send_file(
+        buffer,
+        mimetype='application/pdf',
+        as_attachment=True,
+        download_name=f'liste_patients_{datetime.now().strftime("%Y%m%d_%H%M%S")}.pdf'
+    )
+
 @bp.route('/api/patients/<int:patient_id>/export/pdf', methods=['GET'])
 @login_required
 def export_patient_pdf(patient_id):
@@ -100,6 +180,10 @@ def export_patient_pdf(patient_id):
         if text is None or text == '':
             return Paragraph('-', style)
         return Paragraph(str(text), style)
+    
+    TABLE_WIDTH = 17*cm
+    COL1_WIDTH = 6*cm
+    COL2_WIDTH = 11*cm
     
     story.append(Paragraph("DOSSIER MÉDICAL PATIENT", title_style))
     story.append(Paragraph(f"{patient.nom} {patient.prenom}", subtitle_style))
@@ -147,10 +231,6 @@ def export_patient_pdf(patient_id):
             patient_data.append([wrap_text('IMC', table_cell_bold_style), wrap_text(f"{bmi:.1f}")])
     if patient.groupe_ethnique:
         patient_data.append([wrap_text('Groupe ethnique', table_cell_bold_style), wrap_text(patient.groupe_ethnique)])
-    
-    TABLE_WIDTH = 17*cm
-    COL1_WIDTH = 6*cm
-    COL2_WIDTH = 11*cm
     
     t = Table(patient_data, colWidths=[COL1_WIDTH, COL2_WIDTH])
     t.setStyle(TableStyle([

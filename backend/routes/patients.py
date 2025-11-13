@@ -133,6 +133,7 @@ def patients():
         
         return jsonify([{
             'id': p.id,
+            'code_patient': p.code_patient,
             'nom': p.nom,
             'prenom': p.prenom,
             'date_naissance': p.date_naissance.isoformat(),
