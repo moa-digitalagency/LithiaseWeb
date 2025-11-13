@@ -229,7 +229,7 @@ def export_patient_pdf(patient_id):
         qr_col_content.append(Paragraph("", code_style))
     
     main_title_style = ParagraphStyle('MainTitleStyle', parent=styles['Normal'], fontSize=20, textColor=colors.HexColor('#4F46E5'), alignment=TA_CENTER, fontName='Helvetica-Bold', spaceAfter=10, spaceBefore=5)
-    patient_name_style = ParagraphStyle('PatientNameStyle', parent=styles['Normal'], fontSize=18, textColor=colors.HexColor('#1F2937'), alignment=TA_LEFT, spaceAfter=4, fontName='Helvetica-Bold')
+    patient_name_style = ParagraphStyle('PatientNameStyle', parent=styles['Normal'], fontSize=18, textColor=colors.HexColor('#1F2937'), alignment=TA_LEFT, spaceAfter=10, fontName='Helvetica-Bold')
     patient_info_style = ParagraphStyle('PatientInfoStyle', parent=styles['Normal'], fontSize=11, textColor=colors.HexColor('#1F2937'), alignment=TA_LEFT, spaceAfter=3)
     inference_style = ParagraphStyle('InferenceStyle', parent=styles['Normal'], fontSize=10, textColor=colors.HexColor('#059669'), alignment=TA_LEFT, fontName='Helvetica-Bold')
     

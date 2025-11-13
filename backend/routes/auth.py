@@ -9,6 +9,11 @@ bp = Blueprint('auth', __name__)
 def index():
     return render_template('dashboard.html')
 
+@bp.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
+
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
