@@ -2,7 +2,7 @@
 
 ## 📊 Vue d'ensemble
 
-Le moteur d'inférence de l'application **Algorithme Lithiase KALONJI** est basé sur la **classification morpho-constitutionnelle de Daudon**, référence internationale pour l'analyse des calculs rénaux. L'algorithme utilise un système de notation sur **21 points maximum** (incluant 1 point bonus pour les malformations urinaires) pour déterminer le type de calcul le plus probable parmi 8 types couverts.
+Le moteur d'inférence de l'application **Algorithme Lithiase KALONJI** est basé sur la **classification morpho-constitutionnelle de Daudon**, référence internationale pour l'analyse des calculs rénaux. L'algorithme utilise un système de notation sur **20 à 23 points maximum** (selon le type de calcul et les bonus applicables) pour déterminer le type de calcul le plus probable parmi 8 types couverts.
 
 ## 🎯 Objectifs médicaux
 
@@ -12,7 +12,7 @@ Le moteur d'inférence de l'application **Algorithme Lithiase KALONJI** est bas�
 4. Détecter les calculs éligibles à la lithotripsie extracorporelle (LEC)
 5. Identifier les infections lithogènes (Struvite, Carbapatite)
 
-## 🧮 Système de notation (21 points)
+## 🧮 Système de notation (score variable selon le type)
 
 ### Distribution des points
 
@@ -21,11 +21,19 @@ Le moteur d'inférence de l'application **Algorithme Lithiase KALONJI** est bas�
 | **Densité scanner (UH)** | 6 | Plage typique pour chaque type |
 | **Morphologie** | 3 | Forme caractéristique ou compatible |
 | **pH urinaire** | 3 | Plage préférentielle selon le type |
-| **Marqueurs métaboliques** | 4 | Hyperoxalurie, hypercalciurie, etc. |
+| **Marqueurs métaboliques (base)** | 4 | Hyperoxalurie, hypercalciurie, hyperuricurie, cystinurie |
+| **Marqueurs métaboliques (bonus)** | +2 | Hyperthyroïdie (+1), Hypercalcémie (+1) - **seulement pour Weddellite, Brushite, Carbapatite** |
 | **Infection urinaire** | 3 | Favorable ou défavorable selon le type |
 | **Radio-opacité** | 1 | Opaque ou transparent |
-| **Malformations urinaires** | 1 | Facteur de risque lithogène |
-| **TOTAL** | 21 | Score maximum (20 + 1 bonus) |
+| **Malformations urinaires** | 1 | Bonus pour calculs infectieux **seulement** (Struvite, Carbapatite, Urate ammonium) |
+| **TOTAL BASE** | 20 | Score de base sans bonus |
+| **TOTAL MAXIMUM** | 21-23 | Variable selon le type de calcul |
+
+**Scores maximums par type de calcul :**
+- **Carbapatite** : 23 points maximum (20 base + 2 bonus métaboliques + 1 malformations)
+- **Weddellite, Brushite** : 22 points maximum (20 base + 2 bonus métaboliques, malformations non applicable)
+- **Struvite, Urate ammonium** : 21 points maximum (20 base + 1 malformations, pas de marqueur métabolique)
+- **Whewellite, Cystine, Acide urique** : 20 points maximum (pas de bonus applicable)
 
 ### 1. Densité scanner (6 points)
 
@@ -91,10 +99,20 @@ Présence de troubles métaboliques spécifiques.
 - **Cystinurie** → Cystine
 
 **Points bonus (jusqu'à +2 points supplémentaires) :**
-- **Hyperthyroïdie détectée** : +1 point si calcul calcique (favorise hypercalciurie)
-  - TSH < 0.4 mUI/L ET (T3 > 2.0 pg/mL OU T4 > 12.0 ng/dL)
-- **Hypercalcémie** : +1 point si marqueur = hypercalciurie
-  - Calciémie > 2.6 mmol/L
+
+**Conditions d'application:** Les bonus métaboliques s'appliquent uniquement aux types de calculs dont le marqueur signature est l'hypercalciurie.
+
+- **Hyperthyroïdie détectée** : +1 point supplémentaire
+  - Critères : TSH < 0.4 mUI/L ET (T3 > 2.0 pg/mL OU T4 > 12.0 ng/dL)
+  - **Applicable uniquement à** : Weddellite, Brushite, Carbapatite
+  - **Non applicable à** : Whewellite (marqueur = hyperoxalurie), Cystine, Acide urique, Struvite, Urate ammonium
+
+- **Hypercalcémie détectée** : +1 point supplémentaire
+  - Critères : Calciémie > 2.6 mmol/L
+  - **Applicable uniquement à** : Weddellite, Brushite, Carbapatite
+  - **Non applicable à** : Whewellite (marqueur = hyperoxalurie), Cystine, Acide urique, Struvite, Urate ammonium
+
+**Note importante:** Ces bonus peuvent se cumuler (+2 maximum) pour les types Weddellite, Brushite et Carbapatite uniquement.
 
 ### 5. Infection urinaire (3 points)
 
@@ -127,7 +145,9 @@ Visibilité du calcul à la radiographie simple (ASP).
 Les malformations des voies urinaires favorisent la stase urinaire et les infections récurrentes, augmentant le risque de calculs infectieux.
 
 **Attribution des points :**
-- **+1 point** : Présence d'une malformation lithogène ET calcul de type infectieux (Struvite, Carbapatite, Urate d'ammonium)
+- **+1 point** : Présence d'une malformation lithogène ET calcul de type infectieux
+  - **Types éligibles** : Struvite, Carbapatite, Urate d'ammonium
+  - **Types non éligibles** : Whewellite, Weddellite, Brushite, Cystine, Acide urique
 - **0 point** : Absence de malformation ou type de calcul non infectieux
 
 **Malformations lithogènes reconnues :**
@@ -371,8 +391,9 @@ score_total = (
     score_radio_opacite + # 0-1 point
     score_malformations   # 0-1 point (bonus pour calculs infectieux)
 )
-# Score maximum de base : 21 points (20 + 1 bonus malformations)
-# Score maximum théorique avec tous les bonus métaboliques : 23 points
+# Score maximum de base : 20 points (sans aucun bonus)
+# Score maximum avec malformations : 21 points (20 + 1)
+# Score maximum théorique avec tous les bonus : 23 points (20 + 2 métaboliques + 1 malformations)
 ```
 
 ### Étape 3 : Classement

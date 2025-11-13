@@ -158,12 +158,24 @@ L'algorithme KALONJI utilise une approche **multifactorielle quantitative** int�
 
 Cette triangulation permet de compenser les limites de chaque examen isolé et d'améliorer la spécificité diagnostique.
 
-### 3.2 Système de scoring sur 21 points
+### 3.2 Système de scoring (score variable selon le type)
 
 Le score total est calculé par addition pondérée de 7 critères:
 
+```
+Score Total = Score_Densité(6) + Score_Morphologie(3) + Score_pH(3) + 
+              Score_Métabolique(4+bonus) + Score_Infection(3) + 
+              Score_Radioopacité(1) + Score_Malformations(1)
+```
 
-**Score maximum théorique**: 21 points (20 points de base + 1 point bonus malformations)
+**Scores maximums par type de calcul**:
+- **Score de base (tous types)**: 20 points
+- **Weddellite, Brushite**: 22 points maximum (20 + 2 bonus métaboliques)
+- **Carbapatite**: 23 points maximum (20 + 2 bonus métaboliques + 1 malformations)
+- **Struvite, Urate ammonium**: 21 points maximum (20 + 1 malformations)
+- **Whewellite, Cystine, Acide urique**: 20 points maximum (aucun bonus applicable)
+
+**Remarque clinique importante**: Les bonus métaboliques (hyperthyroïdie, hypercalcémie) ne s'appliquent qu'aux calculs dont le marqueur signature est l'hypercalciurie. Le bonus malformations ne concerne que les calculs infectieux.
 
 Le calcul est répété **pour chacun des 8 types de calculs**, générant un profil de compatibilité multidimensionnel.
 
@@ -252,9 +264,28 @@ Le calcul est répété **pour chacun des 8 types de calculs**, générant un pr
 
 #### Points bonus (0-2 points supplémentaires)
 
-**Hyperthyroïdie** (+2 points pour calculs calciques):
+**Condition préalable:** Les bonus métaboliques s'appliquent **uniquement** aux types de calculs dont le marqueur signature est l'hypercalciurie (Weddellite, Brushite, Carbapatite).
 
-**Hypercalcémie** (+1 point pour calculs calciques):
+**Hyperthyroïdie** (+1 point):
+```
+Si TSH < 0.4 mUI/L ET (T3 > 2.0 pg/mL OU T4 > 12.0 ng/dL):
+    Hyperthyroïdie détectée
+    Si marqueur_signature[Type] == 'hypercalciurie':
+        Points_bonus = +1  # Types éligibles: Weddellite, Brushite, Carbapatite
+    Sinon:
+        Points_bonus = 0   # Types non éligibles: Whewellite, Cystine, Acide urique, etc.
+```
+
+**Hypercalcémie** (+1 point):
+```
+Si Calciémie > 2.60 mmol/L:
+    Si marqueur_signature[Type] == 'hypercalciurie':
+        Points_bonus = +1  # Types éligibles: Weddellite, Brushite, Carbapatite
+    Sinon:
+        Points_bonus = 0   # Types non éligibles: Whewellite, Cystine, Acide urique, etc.
+```
+
+**Note**: Les deux bonus peuvent se cumuler pour un maximum de +2 points supplémentaires, mais uniquement pour **Weddellite, Brushite et Carbapatite**.
 
 ### 4.5 Critère 5 - Infection urinaire (-1 à +3 points)
 
@@ -281,6 +312,19 @@ Le calcul est répété **pour chacun des 8 types de calculs**, générant un pr
 
 #### Attribution des points
 
+```
+Si Malformations_urinaires présentes:
+    Si type_infectieux[Type] == True:
+        # Types éligibles: Struvite, Carbapatite, Urate ammonium
+        Points = +1
+    Sinon:
+        # Types non éligibles: Whewellite, Weddellite, Brushite, Cystine, Acide urique
+        Points = 0
+Sinon:
+    Points = 0
+```
+
+**Types éligibles**: Struvite, Carbapatite, Urate ammonium uniquement.
 
 ---
 
@@ -900,7 +944,7 @@ L'algorithme KALONJI offre une **approche prédictive non-invasive** de la class
 
 ✓ **Précocité diagnostique**: Orientation avant récupération du calcul  
 ✓ **Approche multiparamétrique**: Triangulation de 7 critères indépendants  
-✓ **Quantification objective**: Score sur 21 points, reproductible  
+✓ **Quantification objective**: Score sur 20-23 points (selon le type), reproductible  
 ✓ **Applicabilité universelle**: Utilisable manuellement sans logiciel  
 ✓ **Recommandations actionnables**: Thérapeutique et préventive personnalisées  
 
