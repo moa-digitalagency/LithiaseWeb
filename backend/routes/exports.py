@@ -354,10 +354,12 @@ def export_patient_pdf(patient_id):
         for episode in sorted(patient.episodes, key=lambda x: x.date_episode, reverse=True):
             story.append(Paragraph(f"<b>Épisode du {episode.date_episode.strftime('%d/%m/%Y')}</b>", styles['Heading3']))
             story.append(Spacer(1, 0.2*cm))
+            
+            episode_data = []
             if episode.motif:
-                story.append(wrap_text(f"<b>Motif:</b> {episode.motif}"))
+                episode_data.append([wrap_text('Motif:', table_cell_bold_style), wrap_text(episode.motif)])
             if episode.diagnostic:
-                story.append(wrap_text(f"<b>Diagnostic:</b> {episode.diagnostic}"))
+                episode_data.append([wrap_text('Diagnostic:', table_cell_bold_style), wrap_text(episode.diagnostic)])
             
             if episode.douleur or episode.fievre or episode.infection_urinaire:
                 symptoms = []
@@ -367,43 +369,80 @@ def export_patient_pdf(patient_id):
                     symptoms.append("Fièvre")
                 if episode.infection_urinaire:
                     symptoms.append("Infection urinaire")
-                story.append(wrap_text(f"<b>Symptômes:</b> {', '.join(symptoms)}"))
+                episode_data.append([wrap_text('Symptômes:', table_cell_bold_style), wrap_text(', '.join(symptoms))])
+            
+            if episode_data:
+                t = Table(episode_data, colWidths=[COL1_WIDTH, COL2_WIDTH])
+                t.setStyle(TableStyle([
+                    ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#DBEAFE')),
+                    ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor('#1E40AF')),
+                    ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+                    ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+                    ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+                    ('FONTSIZE', (0, 0), (-1, -1), 9),
+                    ('TOPPADDING', (0, 0), (-1, -1), 8),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+                    ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#93C5FD')),
+                    ('VALIGN', (0, 0), (-1, -1), 'TOP')
+                ]))
+                story.append(t)
+                story.append(Spacer(1, 0.3*cm))
             
             if episode.imageries:
-                story.append(wrap_text("<b>Imageries:</b>"))
+                story.append(Paragraph("<b>Imageries:</b>", styles['Heading4']))
+                story.append(Spacer(1, 0.2*cm))
                 for imaging in episode.imageries:
-                    story.append(wrap_text(f"  • Date: {imaging.date_examen.strftime('%d/%m/%Y')}"))
+                    imaging_data = []
+                    imaging_data.append([wrap_text('Date examen:', table_cell_bold_style), wrap_text(imaging.date_examen.strftime('%d/%m/%Y'))])
                     if imaging.asp_resultats:
-                        story.append(wrap_text(f"    ASP: {imaging.asp_resultats}"))
+                        imaging_data.append([wrap_text('ASP:', table_cell_bold_style), wrap_text(imaging.asp_resultats)])
                     if imaging.echographie_resultats:
-                        story.append(wrap_text(f"    Échographie: {imaging.echographie_resultats}"))
+                        imaging_data.append([wrap_text('Échographie:', table_cell_bold_style), wrap_text(imaging.echographie_resultats)])
                     if imaging.uroscanner_resultats:
-                        story.append(wrap_text(f"    Uro-scanner: {imaging.uroscanner_resultats}"))
+                        imaging_data.append([wrap_text('Uro-scanner:', table_cell_bold_style), wrap_text(imaging.uroscanner_resultats)])
                     if imaging.nombre_calculs:
-                        story.append(wrap_text(f"    Nombre de calculs: {imaging.nombre_calculs}"))
+                        imaging_data.append([wrap_text('Nombre de calculs:', table_cell_bold_style), wrap_text(str(imaging.nombre_calculs))])
                     if imaging.topographie_calcul:
-                        story.append(wrap_text(f"    Topographie: {imaging.topographie_calcul}"))
+                        imaging_data.append([wrap_text('Topographie:', table_cell_bold_style), wrap_text(imaging.topographie_calcul)])
                     if imaging.diametre_longitudinal or imaging.diametre_transversal:
-                        story.append(wrap_text(f"    Dimensions: {imaging.diametre_longitudinal or '-'} x {imaging.diametre_transversal or '-'} mm"))
+                        imaging_data.append([wrap_text('Dimensions:', table_cell_bold_style), wrap_text(f"{imaging.diametre_longitudinal or '-'} x {imaging.diametre_transversal or '-'} mm")])
                     if imaging.taille_mm:
-                        story.append(wrap_text(f"    Taille: {imaging.taille_mm} mm"))
+                        imaging_data.append([wrap_text('Taille:', table_cell_bold_style), wrap_text(f"{imaging.taille_mm} mm")])
                     if imaging.forme_calcul:
-                        story.append(wrap_text(f"    Forme: {imaging.forme_calcul}"))
+                        imaging_data.append([wrap_text('Forme:', table_cell_bold_style), wrap_text(imaging.forme_calcul)])
                     if imaging.contour_calcul:
-                        story.append(wrap_text(f"    Contour: {imaging.contour_calcul}"))
+                        imaging_data.append([wrap_text('Contour:', table_cell_bold_style), wrap_text(imaging.contour_calcul)])
                     if imaging.densite_uh:
-                        story.append(wrap_text(f"    Densité: {imaging.densite_uh} UH"))
+                        imaging_data.append([wrap_text('Densité:', table_cell_bold_style), wrap_text(f"{imaging.densite_uh} UH")])
                     if imaging.densite_noyau:
-                        story.append(wrap_text(f"    Densité noyau: {imaging.densite_noyau} UH"))
+                        imaging_data.append([wrap_text('Densité noyau:', table_cell_bold_style), wrap_text(f"{imaging.densite_noyau} UH")])
                     if imaging.densites_couches:
-                        story.append(wrap_text(f"    Densités couches: {imaging.densites_couches}"))
+                        imaging_data.append([wrap_text('Densités couches:', table_cell_bold_style), wrap_text(imaging.densites_couches)])
                     if imaging.morphologie:
-                        story.append(wrap_text(f"    Morphologie: {imaging.morphologie}"))
+                        imaging_data.append([wrap_text('Morphologie:', table_cell_bold_style), wrap_text(imaging.morphologie)])
                     if imaging.radio_opacite:
-                        story.append(wrap_text(f"    Radio-opacité: {imaging.radio_opacite}"))
+                        imaging_data.append([wrap_text('Radio-opacité:', table_cell_bold_style), wrap_text(imaging.radio_opacite)])
+                    
+                    if imaging_data:
+                        t = Table(imaging_data, colWidths=[COL1_WIDTH, COL2_WIDTH])
+                        t.setStyle(TableStyle([
+                            ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#FEF3C7')),
+                            ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor('#92400E')),
+                            ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+                            ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+                            ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+                            ('FONTSIZE', (0, 0), (-1, -1), 8),
+                            ('TOPPADDING', (0, 0), (-1, -1), 6),
+                            ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#FDE68A')),
+                            ('VALIGN', (0, 0), (-1, -1), 'TOP')
+                        ]))
+                        story.append(t)
+                        story.append(Spacer(1, 0.2*cm))
                     
                     if any([imaging.rein_gauche_cranio_caudal, imaging.rein_gauche_volume, imaging.rein_droit_cranio_caudal, imaging.rein_droit_volume, imaging.epaisseur_cortex_renal_gauche, imaging.epaisseur_cortex_renal_droit, imaging.diametre_pyelon_gauche, imaging.diametre_pyelon_droit, imaging.diametre_uretere_amont_gauche, imaging.diametre_uretere_amont_droit]):
-                        story.append(wrap_text("<b>    Mesures uroscanner - Retentissement haut appareil:</b>"))
+                        story.append(Paragraph("<b>Mesures uroscanner - Retentissement haut appareil:</b>", styles['Heading4']))
+                        story.append(Spacer(1, 0.1*cm))
                         reins_data = [[wrap_text('Paramètre', table_cell_bold_style), wrap_text('Rein gauche', table_cell_bold_style), wrap_text('Rein droit', table_cell_bold_style)]]
                         if imaging.rein_gauche_cranio_caudal or imaging.rein_droit_cranio_caudal:
                             reins_data.append([wrap_text('Cranio-caudal'), wrap_text(f"{imaging.rein_gauche_cranio_caudal or '-'} mm"), wrap_text(f"{imaging.rein_droit_cranio_caudal or '-'} mm")])
@@ -439,17 +478,19 @@ def export_patient_pdf(patient_id):
                             story.append(wrap_text(f"    Malformations: {imaging.malformations_urinaires}"))
             
             if episode.biologies:
-                story.append(wrap_text("<b>Biologies:</b>"))
+                story.append(Paragraph("<b>Biologies:</b>", styles['Heading4']))
+                story.append(Spacer(1, 0.2*cm))
                 for biology in episode.biologies:
-                    story.append(wrap_text(f"  • Date: {biology.date_examen.strftime('%d/%m/%Y')}"))
+                    biology_data = []
+                    biology_data.append([wrap_text('Date examen:', table_cell_bold_style), wrap_text(biology.date_examen.strftime('%d/%m/%Y'))])
                     if biology.ph_urinaire:
-                        story.append(wrap_text(f"    pH urinaire: {biology.ph_urinaire}"))
+                        biology_data.append([wrap_text('pH urinaire:', table_cell_bold_style), wrap_text(str(biology.ph_urinaire))])
                     if biology.densite_urinaire:
-                        story.append(wrap_text(f"    Densité urinaire: {biology.densite_urinaire}"))
+                        biology_data.append([wrap_text('Densité urinaire:', table_cell_bold_style), wrap_text(str(biology.densite_urinaire))])
                     if biology.sediment_urinaire:
-                        story.append(wrap_text(f"    Sédiment: {biology.sediment_urinaire}"))
+                        biology_data.append([wrap_text('Sédiment:', table_cell_bold_style), wrap_text(biology.sediment_urinaire)])
                     if biology.ecbu_resultats:
-                        story.append(wrap_text(f"    ECBU: {biology.ecbu_resultats}"))
+                        biology_data.append([wrap_text('ECBU:', table_cell_bold_style), wrap_text(biology.ecbu_resultats)])
                     
                     markers = []
                     if biology.hyperoxalurie:
@@ -463,7 +504,7 @@ def export_patient_pdf(patient_id):
                     if biology.hypercalcemie:
                         markers.append(f"Hypercalcémie{' (' + str(biology.calciemie_valeur) + ' mmol/L)' if biology.calciemie_valeur else ''}")
                     if markers:
-                        story.append(wrap_text(f"    Marqueurs métaboliques: {', '.join(markers)}"))
+                        biology_data.append([wrap_text('Marqueurs métaboliques:', table_cell_bold_style), wrap_text(', '.join(markers))])
                     
                     thyroid = []
                     if biology.tsh is not None:
@@ -473,7 +514,7 @@ def export_patient_pdf(patient_id):
                     if biology.t4:
                         thyroid.append(f"T4: {biology.t4} ng/dL")
                     if thyroid:
-                        story.append(wrap_text(f"    Hormones thyroïdiennes: {', '.join(thyroid)}"))
+                        biology_data.append([wrap_text('Hormones thyroïdiennes:', table_cell_bold_style), wrap_text(', '.join(thyroid))])
                     
                     renal = []
                     if biology.uree is not None:
@@ -481,15 +522,32 @@ def export_patient_pdf(patient_id):
                     if biology.creatinine is not None:
                         renal.append(f"Créatinine: {biology.creatinine} mg/L")
                     if renal:
-                        story.append(wrap_text(f"    Fonction rénale: {', '.join(renal)}"))
+                        biology_data.append([wrap_text('Fonction rénale:', table_cell_bold_style), wrap_text(', '.join(renal))])
                     
                     if biology.infection_urinaire:
-                        infection_text = "    Infection urinaire: Oui"
+                        infection_parts = ["Oui"]
                         if biology.germe:
-                            infection_text += f" (Germe: {biology.germe})"
+                            infection_parts.append(f"Germe: {biology.germe}")
                         if biology.germe_urease:
-                            infection_text += f" (Germe à uréase: {biology.germe_urease})"
-                        story.append(wrap_text(infection_text))
+                            infection_parts.append(f"Germe à uréase: {biology.germe_urease}")
+                        biology_data.append([wrap_text('Infection urinaire:', table_cell_bold_style), wrap_text(' - '.join(infection_parts))])
+                    
+                    if biology_data:
+                        t = Table(biology_data, colWidths=[COL1_WIDTH, COL2_WIDTH])
+                        t.setStyle(TableStyle([
+                            ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#D1FAE5')),
+                            ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor('#065F46')),
+                            ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+                            ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+                            ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+                            ('FONTSIZE', (0, 0), (-1, -1), 8),
+                            ('TOPPADDING', (0, 0), (-1, -1), 6),
+                            ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#6EE7B7')),
+                            ('VALIGN', (0, 0), (-1, -1), 'TOP')
+                        ]))
+                        story.append(t)
+                        story.append(Spacer(1, 0.3*cm))
             
             if episode.calculated_stone_type and episode.calculated_stone_type_data:
                 import json
