@@ -26,14 +26,17 @@ Le moteur d'inférence de l'application **Algorithme Lithiase KALONJI** est bas�
 | **Infection urinaire** | 3 | Favorable ou défavorable selon le type |
 | **Radio-opacité** | 1 | Opaque ou transparent |
 | **Malformations urinaires** | 1 | Bonus pour calculs infectieux **seulement** (Struvite, Carbapatite, Urate ammonium) |
+| **Structure multicouche (bonus)** ⭐ | +2 | Structure radiaire avec noyau + couches périphériques |
 | **TOTAL BASE** | 20 | Score de base sans bonus |
-| **TOTAL MAXIMUM** | 21-23 | Variable selon le type de calcul |
+| **TOTAL MAXIMUM** | 21-25 | Variable selon le type de calcul et bonus applicables |
 
 **Scores maximums par type de calcul :**
-- **Carbapatite** : 23 points maximum (20 base + 2 bonus métaboliques + 1 malformations)
-- **Weddellite, Brushite** : 22 points maximum (20 base + 2 bonus métaboliques, malformations non applicable)
-- **Struvite, Urate ammonium** : 21 points maximum (20 base + 1 malformations, pas de marqueur métabolique)
-- **Whewellite, Cystine, Acide urique** : 20 points maximum (pas de bonus applicable)
+- **Carbapatite** : 25 points maximum (20 base + 2 bonus métaboliques + 1 malformations + 2 multicouche)
+- **Weddellite, Brushite** : 24 points maximum (20 base + 2 bonus métaboliques + 2 multicouche)
+- **Struvite, Urate ammonium** : 23 points maximum (20 base + 1 malformations + 2 multicouche)
+- **Whewellite, Cystine, Acide urique** : 22 points maximum (20 base + 2 multicouche)
+
+**Note importante :** Le bonus multicouche (+2 points) s'applique à tous les types de calculs présentant une structure radiaire (noyau central + couches périphériques).
 
 ### 1. Densité scanner (6 points)
 
@@ -167,13 +170,48 @@ Les malformations urinaires créent des zones de stase où l'urine stagne, favor
 3. Les infections urinaires récidivantes
 4. La formation de calculs infectieux (Struvite notamment)
 
-## 🔀 Détermination : Calcul Pur ou Mixte
+### 8. Structure multicouche (2 points bonus) ⭐
 
-Après le calcul du score pour chaque type de calcul, l'algorithme détermine si la composition est **Pure** ou **Mixte** :
+Les calculs multicouches présentent une **structure radiaire** avec un noyau central et des couches périphériques de composition différente, témoignant d'une évolution dans le temps des conditions physico-chimiques.
+
+**Attribution des points :**
+- **+2 points** : Présence d'une structure radiaire détectée
+  - Noyau central identifiable (densité différente)
+  - Couches périphériques concentriques
+  - Peut s'appliquer à **tous les types de calculs**
+- **0 point** : Structure homogène sans stratification
+
+**Critères de détection :**
+- **Analyse tomodensitométrique** :
+  - Densité du noyau (densite_noyau) différente de la densité globale
+  - Variation de densité entre centre et périphérie > 100 UH
+  - Structure concentrique visible en coupes fines
+  
+- **Analyse morphologique** :
+  - Aspect stratifié ou laminé
+  - Plusieurs noyaux possibles (calculs multiples fusionnés)
+  - Surface interne vs externe de composition différente
+
+**Signification clinique :**
+La structure multicouche indique une **évolution temporelle** des facteurs lithogènes :
+1. **Phase initiale** : Formation du noyau (premier type de calcul)
+2. **Phase secondaire** : Dépôt de couches périphériques (changement de pH, infection, modification métabolique)
+3. **Diagnostic différentiel** : Permet de retracer l'histoire naturelle du calcul
+
+**Exemples de structures multicouches fréquentes :**
+- Noyau d'acide urique + couches d'oxalate de calcium (pH acide → neutre)
+- Noyau de whewellite + couches de carbapatite (infection secondaire)
+- Noyau de weddellite + couches de struvite (surinfection à germe uréasique)
+
+**Note :** L'analyse couche par couche nécessite des coupes scanner fines (1-2 mm) ou une analyse spectroscopique infrarouge du calcul après extraction.
+
+## 🔀 Détermination : Calcul Pur, Mixte ou Mixte Multicouche ⭐
+
+Après le calcul du score pour chaque type de calcul, l'algorithme détermine si la composition est **Pure**, **Mixte** ou **Mixte Multicouche** :
 
 ### Calcul Pur
 Un calcul est considéré comme **Pur** lorsqu'un type domine clairement :
-- **Critère** : La différence de score entre le type le plus probable et le deuxième type > 4 points
+- **Critère** : La différence de score entre le type le plus probable et le deuxième type > 4 points **ET** absence de structure radiaire
 - **Interprétation** : Le calcul est composé principalement d'un seul type
 - **Affichage** : "Whewellite pur", "Struvite pur", etc.
 
@@ -182,15 +220,16 @@ Un calcul est considéré comme **Pur** lorsqu'un type domine clairement :
 Score de base Whewellite : 14/20
 Score de base Weddellite : 8/20
 Différence : 6 points → Calcul PUR (Whewellite pur)
+Structure radiaire : Absente
 
-Note: Scores de base (hors bonus malformations)
-Avec bonus malformations si applicable: +1 point possible
+Note: Scores de base (hors bonus)
+Avec bonus si applicable: jusqu'à +5 points possible (métabolique + malformations + multicouche)
 ```
 
 ### Calcul Mixte
 Un calcul est considéré comme **Mixte** lorsque plusieurs types ont des scores proches :
-- **Critère** : La différence de score entre le type le plus probable et le deuxième type ≤ 4 points
-- **Interprétation** : Le calcul est composé d'un mélange de plusieurs types
+- **Critère** : La différence de score entre le type le plus probable et le deuxième type ≤ 4 points **ET** absence de structure radiaire
+- **Interprétation** : Le calcul est composé d'un mélange homogène de plusieurs types
 - **Affichage** : "Whewellite + Weddellite (mixte)", "Carbapatite + Struvite (mixte)", etc.
 
 **Exemple :**
@@ -199,10 +238,50 @@ Score de base Whewellite : 12/20
 Score de base Weddellite : 10/20
 Score de base Brushite : 9/20
 Différence : 2 points → Calcul MIXTE (Whewellite + Weddellite + Brushite)
+Structure radiaire : Absente
 
-Note: Scores de base (hors bonus malformations)
-Avec bonus malformations si applicable: +1 point possible pour types infectieux
+Note: Scores de base (hors bonus)
+Avec bonus si applicable: +1 à +3 points possible (métabolique + malformations)
 ```
+
+### Calcul Mixte Multicouche ⭐
+Un calcul est considéré comme **Mixte Multicouche** lorsqu'il présente une structure radiaire stratifiée :
+- **Critère** : Présence d'une **structure radiaire** (noyau + couches périphériques) détectée au scanner
+- **Bonus** : +2 points ajoutés au score total
+- **Interprétation** : Le calcul a évolué dans le temps avec changement de composition
+- **Affichage** : "Whewellite + Carbapatite (mixte multicouche)", "Acide urique + Weddellite (mixte multicouche)", etc.
+
+**Exemple :**
+```
+Structure radiaire détectée :
+- Noyau central : Densité 450 UH (compatible acide urique)
+- Couches périphériques : Densité 1250 UH (compatible whewellite)
+Bonus multicouche : +2 points
+
+Score Acide urique : 11/20 (base) + 2 (multicouche) = 13/22
+Score Whewellite : 9/20 (base) + 2 (multicouche) = 11/22
+
+→ Calcul MIXTE MULTICOUCHE (Acide urique + Whewellite)
+Composition : Noyau d'acide urique, couches périphériques de whewellite
+```
+
+**Analyse couche par couche ⭐ :**
+
+L'algorithme identifie :
+1. **Noyau central** :
+   - Densité mesurée (densite_noyau)
+   - Type probable du noyau
+   - Conditions initiales de formation
+
+2. **Couches périphériques** :
+   - Densité globale (densite_uh)
+   - Type probable des couches
+   - Évolution des conditions (pH, infection, métabolisme)
+
+3. **Plusieurs noyaux** :
+   - Calculs multiples coalescents
+   - Chaque noyau analysé séparément
+   - Fusion progressive avec dépôts communs
 
 ### Signification clinique
 
@@ -216,6 +295,16 @@ Avec bonus malformations si applicable: +1 point possible pour types infectieux
 - Traitement préventif doit couvrir plusieurs facteurs
 - Indication d'un déséquilibre métabolique complexe
 - Nécessite un suivi métabolique approfondi
+
+**Calculs mixtes multicouches ⭐ :**
+- **Évolution temporelle** : Changement des facteurs lithogènes dans le temps
+- **Histoire naturelle** : Le noyau représente les conditions initiales, les couches l'évolution ultérieure
+- **Pronostic** : Risque de récidive élevé (facteurs multiples successifs)
+- **Traitement** : Doit adresser les facteurs historiques ET actuels
+- **Exemples cliniques** :
+  - Noyau acide urique (pH acide initial) + couches calciques (alcalinisation iatrogène)
+  - Noyau calcique (hypercalciurie) + couches infectieuses (surinfection)
+  - Noyau unique → multiples noyaux (récidive avec coalescence)
 
 ## 📋 Types de calculs couverts
 

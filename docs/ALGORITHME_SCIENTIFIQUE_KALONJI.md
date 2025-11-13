@@ -162,17 +162,18 @@ Le score total est calculé par addition pondérée de 7 critères:
 ```
 Score Total = Score_Densité(6) + Score_Morphologie(3) + Score_pH(3) + 
               Score_Métabolique(4+bonus) + Score_Infection(3) + 
-              Score_Radioopacité(1) + Score_Malformations(1)
+              Score_Radioopacité(1) + Score_Malformations(1) + 
+              Score_Multicouche(2) ⭐
 ```
 
 **Scores maximums par type de calcul**:
 - **Score de base (tous types)**: 20 points (sans aucun bonus)
-- **Weddellite, Brushite**: 22 points maximum (20 base + 2 bonus métaboliques, malformations non applicable)
-- **Carbapatite**: 23 points maximum (20 base + 2 bonus métaboliques + 1 bonus malformations)
-- **Struvite, Urate ammonium**: 21 points maximum (20 base + 1 bonus malformations, pas de marqueur métabolique)
-- **Whewellite, Cystine, Acide urique**: 20 points maximum (pas de bonus applicable)
+- **Carbapatite**: 25 points maximum (20 base + 2 bonus métaboliques + 1 malformations + 2 multicouche)
+- **Weddellite, Brushite**: 24 points maximum (20 base + 2 bonus métaboliques + 2 multicouche)
+- **Struvite, Urate ammonium**: 23 points maximum (20 base + 1 malformations + 2 multicouche)
+- **Whewellite, Cystine, Acide urique**: 22 points maximum (20 base + 2 multicouche)
 
-**Note importante**: Les bonus ne s'appliquent pas uniformément à tous les types. Le score maximum dépend du type de calcul et de ses caractéristiques spécifiques.
+**Note importante**: Les bonus ne s'appliquent pas uniformément à tous les types. Le score maximum dépend du type de calcul et de ses caractéristiques spécifiques. Le bonus multicouche (+2 points) s'applique à tous les types présentant une structure radiaire.
 
 Le calcul est répété **pour chacun des 8 types de calculs**, générant un profil de compatibilité multidimensionnel.
 
@@ -401,6 +402,50 @@ Sinon:
 - Struvite (calcul infectieux, formation favorisée par stase)
 - Carbapatite (calcul infectieux/phosphocalcique)
 - Urate ammonium (calcul infectieux)
+
+### 4.8 Critère 8 - Structure multicouche (0-2 points bonus) ⭐
+
+**Justification scientifique**: Les calculs multicouches présentent une structure radiaire stratifiée (noyau + couches périphériques) témoignant d'une évolution temporelle des conditions physico-chimiques de formation.
+
+#### Attribution des points
+
+```
+Si Structure_radiaire détectée:
+    Si Variation_densité(noyau, périphérie) > 100 UH:
+        Points = +2  # Structure multicouche confirmée
+    Sinon:
+        Points = 0
+Sinon:
+    Points = 0  # Structure homogène
+```
+
+**Critères de détection**:
+
+1. **Analyse tomodensitométrique**:
+   - Mesure densité du noyau (densite_noyau en UH)
+   - Mesure densité globale (densite_uh en UH)
+   - Variation > 100 UH entre noyau et périphérie
+   - Coupes fines 1-2 mm requises
+
+2. **Analyse morphologique**:
+   - Aspect concentrique ou laminé
+   - Stratification visible
+   - Plusieurs noyaux possibles (coalescence)
+
+**Interprétation physiopathologique**:
+
+| Configuration | Interprétation | Exemple clinique |
+|---------------|----------------|------------------|
+| Noyau dense + périphérie moins dense | Formation calcique → infection | Whewellite → Struvite (surinfection) |
+| Noyau peu dense + périphérie dense | Formation urique → alcalinisation | Acide urique → Weddellite (traitement) |
+| Multiples noyaux coalescents | Récidive avec fusion | Calculs multiples → calcul unique |
+
+**Signification clinique**:
+- **Évolution temporelle**: Changement des facteurs lithogènes (pH, infection, métabolisme)
+- **Pronostic**: Risque de récidive élevé (facteurs multiples successifs)
+- **Traitement**: Doit cibler les facteurs historiques ET actuels
+
+**Note**: Le bonus multicouche (+2 points) s'applique à **tous les types de calculs** présentant une structure radiaire, indépendamment du type chimique.
 
 ---
 
@@ -758,10 +803,33 @@ SINON:
     Resultat_incertain = FAUX
 ```
 
-### 6.5 Étape 5 - Détermination du type de composition
+### 6.5 Étape 5 - Détermination du type de composition (Pur, Mixte, ou Mixte Multicouche) ⭐
 
 ```python
-SI Score_total[Top_1] ≥ 12 ET Delta_score ≥ 4:
+# Vérifier d'abord la présence d'une structure multicouche
+SI Structure_radiaire_detectee == VRAI:
+    Type_composition = "MIXTE MULTICOUCHE"
+    Bonus_multicouche = +2  # Appliqué à tous les types
+    
+    # Identifier noyau et couches
+    SI densite_noyau < densite_uh - 100:
+        Noyau_type = type_compatible_avec_densite(densite_noyau)
+        Couches_type = type_compatible_avec_densite(densite_uh)
+        Explication = f"Structure radiaire : Noyau {Noyau_type} + Couches {Couches_type}"
+        Composition_detail = f"{Noyau_type} + {Couches_type} (mixte multicouche)"
+    
+    SINON SI densite_noyau > densite_uh + 100:
+        Noyau_type = type_compatible_avec_densite(densite_noyau)
+        Couches_type = type_compatible_avec_densite(densite_uh)
+        Explication = f"Structure radiaire : Noyau dense {Noyau_type} + Couches {Couches_type}"
+        Composition_detail = f"{Noyau_type} + {Couches_type} (mixte multicouche)"
+    
+    SINON:
+        Explication = f"Structure multicouche stratifiée détectée (+2 pts bonus)"
+        Composition_detail = f"{Top_1} + {Top_2} (mixte multicouche)"
+
+# Sinon, détermination classique
+SINON SI Score_total[Top_1] ≥ 12 ET Delta_score ≥ 4:
     Type_composition = "PURE"
     Explication = "Score élevé (≥12) et écart significatif (≥4) → Composition probablement pure"
 
@@ -780,6 +848,8 @@ SINON:
     Explication = "Score modéré mais type dominant clair"
     Composition_detail = Top_1
 ```
+
+**Note importante ⭐**: La détection d'une structure radiaire (noyau + couches périphériques) entraîne automatiquement la classification en "MIXTE MULTICOUCHE", indépendamment des scores. L'analyse couche par couche permet d'identifier la composition du noyau et des couches périphériques séparément.
 
 ### 6.6 Étape 6 - Génération des recommandations thérapeutiques
 

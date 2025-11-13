@@ -165,17 +165,18 @@ Le score total est calculé par addition pondérée de 7 critères:
 ```
 Score Total = Score_Densité(6) + Score_Morphologie(3) + Score_pH(3) + 
               Score_Métabolique(4+bonus) + Score_Infection(3) + 
-              Score_Radioopacité(1) + Score_Malformations(1)
+              Score_Radioopacité(1) + Score_Malformations(1) + 
+              Score_Multicouche(2) ⭐
 ```
 
 **Scores maximums par type de calcul**:
 - **Score de base (tous types)**: 20 points
-- **Weddellite, Brushite**: 22 points maximum (20 + 2 bonus métaboliques)
-- **Carbapatite**: 23 points maximum (20 + 2 bonus métaboliques + 1 malformations)
-- **Struvite, Urate ammonium**: 21 points maximum (20 + 1 malformations)
-- **Whewellite, Cystine, Acide urique**: 20 points maximum (aucun bonus applicable)
+- **Carbapatite**: 25 points maximum (20 + 2 bonus métaboliques + 1 malformations + 2 multicouche)
+- **Weddellite, Brushite**: 24 points maximum (20 + 2 bonus métaboliques + 2 multicouche)
+- **Struvite, Urate ammonium**: 23 points maximum (20 + 1 malformations + 2 multicouche)
+- **Whewellite, Cystine, Acide urique**: 22 points maximum (20 + 2 multicouche)
 
-**Remarque clinique importante**: Les bonus métaboliques (hyperthyroïdie, hypercalcémie) ne s'appliquent qu'aux calculs dont le marqueur signature est l'hypercalciurie. Le bonus malformations ne concerne que les calculs infectieux.
+**Remarque clinique importante**: Les bonus métaboliques (hyperthyroïdie, hypercalcémie) ne s'appliquent qu'aux calculs dont le marqueur signature est l'hypercalciurie. Le bonus malformations ne concerne que les calculs infectieux. Le bonus multicouche (+2 points) s'applique à tous les types présentant une structure radiaire (noyau + couches périphériques).
 
 Le calcul est répété **pour chacun des 8 types de calculs**, générant un profil de compatibilité multidimensionnel.
 
@@ -325,6 +326,47 @@ Sinon:
 ```
 
 **Types éligibles**: Struvite, Carbapatite, Urate ammonium uniquement.
+
+### 4.8 Critère 8 - Structure multicouche (0-2 points bonus) ⭐
+
+**Justification scientifique**: Les calculs multicouches présentent une structure radiaire stratifiée (noyau central + couches périphériques concentriques) témoignant d'une évolution temporelle des conditions physico-chimiques urinaires.
+
+#### Critères de détection
+
+**Analyse tomodensitométrique**:
+- Mesure de la densité du noyau (densite_noyau en UH)
+- Mesure de la densité globale (densite_uh en UH)
+- Variation significative > 100 UH entre noyau et périphérie
+- Coupes fines (1-2 mm) permettant de visualiser la stratification
+
+**Analyse morphologique**:
+- Aspect concentrique ou laminé visible
+- Structure radiaire avec couches successives
+- Possibilité de plusieurs noyaux (calculs coalescents)
+
+#### Attribution des points
+
+Si structure radiaire confirmée → **+2 points bonus**
+Si structure homogène → **0 point**
+
+**Note clinique**: Ce bonus s'applique à **tous les types de calculs** présentant une structure multicouche, indépendamment de leur composition chimique.
+
+#### Signification clinique
+
+La présence d'une structure multicouche indique une **évolution temporelle** des facteurs lithogènes:
+
+1. **Noyau central**: Reflète les conditions initiales de formation (premier événement lithogène)
+2. **Couches périphériques**: Témoignent de l'évolution ultérieure (changement de pH, infection secondaire, modification métabolique)
+
+**Exemples cliniques fréquents**:
+
+| Configuration | Interprétation médicale | Conduite à tenir |
+|---------------|-------------------------|------------------|
+| Noyau acide urique + Couches calciques | pH acide initial → Alcalinisation iatrogène excessive | Ajuster traitement alcalinisant |
+| Noyau calcique + Couches struvite | Calcul initial → Surinfection à germe uréasique | Antibiothérapie + extraction complète |
+| Multiples noyaux coalescents | Récidive lithiasique avec fusion progressive | Bilan étiologique approfondi |
+
+**Pronostic**: Les calculs multicouches présentent un risque de récidive élevé car ils témoignent de facteurs lithogènes multiples et évolutifs.
 
 ---
 
@@ -529,8 +571,57 @@ Vérifier les incohérences flagrantes:
 ### 6.4 Étape 4 - Détection d'incertitude diagnostique
 
 
-### 6.5 Étape 5 - Détermination du type de composition
+### 6.5 Étape 5 - Détermination du type de composition (Pur, Mixte, ou Mixte Multicouche) ⭐
 
+L'algorithme détermine trois catégories de composition en fonction des scores et de la présence d'une structure radiaire:
+
+#### Calcul PUR
+**Critères**:
+- Différence de score ≥ 4 points entre le 1er et le 2ème type
+- Score du 1er type ≥ 12 points
+- Absence de structure radiaire multicouche
+
+**Interprétation clinique**: Étiologie unique bien identifiée, traitement préventif ciblé possible.
+
+**Exemple**: Whewellite 17/20 vs Weddellite 9/20 (Δ=8) → "Whewellite pur"
+
+#### Calcul MIXTE
+**Critères**:
+- Différence de score ≤ 4 points entre le 1er et le 2ème type
+- Absence de structure radiaire multicouche
+
+**Interprétation clinique**: Étiologies multiples, nécessite traitement préventif global couvrant plusieurs facteurs.
+
+**Exemple**: Whewellite 12/20 vs Weddellite 10/20 (Δ=2) → "Whewellite + Weddellite (mixte)"
+
+#### Calcul MIXTE MULTICOUCHE ⭐
+**Critères**:
+- Présence d'une structure radiaire détectée au scanner
+- Variation de densité > 100 UH entre noyau et périphérie
+- Bonus de +2 points appliqué
+
+**Interprétation clinique**: Évolution temporelle des facteurs lithogènes. Le noyau représente les conditions initiales, les couches l'évolution ultérieure.
+
+**Exemples cliniques**:
+1. **Noyau acide urique (450 UH) + Couches calciques (1250 UH)**:
+   - Interprétation: pH acide initial → Alcalinisation iatrogène excessive
+   - Conduite: Ajuster traitement, éviter alcalinisation trop agressive
+
+2. **Noyau calcique (1300 UH) + Couches struvite (700 UH)**:
+   - Interprétation: Calcul initial → Surinfection secondaire à germe uréasique
+   - Conduite: Antibiothérapie + extraction complète du calcul
+
+3. **Multiples noyaux coalescents**:
+   - Interprétation: Récidive lithiasique avec fusion progressive
+   - Conduite: Bilan étiologique approfondi, prévention renforcée
+
+**Analyse couche par couche**:
+L'algorithme identifie:
+- Type probable du noyau (basé sur densite_noyau)
+- Type probable des couches périphériques (basé sur densite_uh)
+- Facteurs lithogènes successifs (chronologie des événements)
+
+**Pronostic**: Risque de récidive très élevé car facteurs multiples et évolutifs. Nécessite traitement préventif ciblant les facteurs historiques ET actuels.
 
 ### 6.6 Étape 6 - Génération des recommandations thérapeutiques
 
