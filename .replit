@@ -1,4 +1,4 @@
-modules = ["python-3.12", "web", "nodejs-20"]
+modules = ["web", "nodejs-20", "python-3.11"]
 [agent]
 expertMode = true
 integrations = ["python_database:1.0.0"]
@@ -23,25 +23,17 @@ args = "Server"
 name = "Server"
 author = "agent"
 
+[workflows.workflow.metadata]
+outputType = "webview"
+
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python app.py"
 waitForPort = 5000
 
-[workflows.workflow.metadata]
-outputType = "webview"
-
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 33745
-externalPort = 5000
-
-[[ports]]
-localPort = 33801
-externalPort = 4200
 
 [[ports]]
 localPort = 34457
@@ -50,6 +42,10 @@ externalPort = 6000
 [[ports]]
 localPort = 35785
 externalPort = 3002
+
+[[ports]]
+localPort = 37909
+externalPort = 4200
 
 [[ports]]
 localPort = 41491
