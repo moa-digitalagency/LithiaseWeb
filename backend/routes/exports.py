@@ -3,6 +3,7 @@ from flask_login import login_required
 from backend.models import Patient
 from backend.services import InferenceEngine
 from backend.routes.search import search_patients
+from backend.routes.users import require_permission
 from datetime import datetime
 import csv
 import io
@@ -18,6 +19,7 @@ bp = Blueprint('exports', __name__)
 
 @bp.route('/api/export/csv', methods=['POST'])
 @login_required
+@require_permission('can_export_data')
 def export_csv():
     filters = request.json
     response = search_patients()
@@ -49,6 +51,7 @@ def export_csv():
 
 @bp.route('/api/export/patients-csv', methods=['POST'])
 @login_required
+@require_permission('can_export_data')
 def export_patients_csv():
     patients = Patient.query.all()
     
@@ -79,6 +82,7 @@ def export_patients_csv():
 
 @bp.route('/api/export/patients-list-pdf', methods=['POST'])
 @login_required
+@require_permission('can_export_data')
 def export_patients_list_pdf():
     patients = Patient.query.all()
     
@@ -159,6 +163,7 @@ def export_patients_list_pdf():
 
 @bp.route('/api/patients/<int:patient_id>/export/pdf', methods=['GET'])
 @login_required
+@require_permission('can_export_data')
 def export_patient_pdf(patient_id):
     patient = Patient.query.get_or_404(patient_id)
     

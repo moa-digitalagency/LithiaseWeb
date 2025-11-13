@@ -447,6 +447,39 @@
             document.getElementById('userModal').classList.add('hidden');
         }
         
+        const rolePresets = {
+            'admin': {
+                can_manage_patients: true,
+                can_manage_episodes: true,
+                can_export_data: true,
+                can_manage_users: true
+            },
+            'medecin': {
+                can_manage_patients: true,
+                can_manage_episodes: true,
+                can_export_data: true,
+                can_manage_users: false
+            },
+            'assistant': {
+                can_manage_patients: false,
+                can_manage_episodes: false,
+                can_export_data: false,
+                can_manage_users: false
+            }
+        };
+        
+        function applyRolePreset(role) {
+            const preset = rolePresets[role] || rolePresets['medecin'];
+            document.getElementById('canManagePatients').checked = preset.can_manage_patients;
+            document.getElementById('canManageEpisodes').checked = preset.can_manage_episodes;
+            document.getElementById('canExportData').checked = preset.can_export_data;
+            document.getElementById('canManageUsers').checked = preset.can_manage_users;
+        }
+        
+        document.getElementById('userRole').addEventListener('change', (e) => {
+            applyRolePreset(e.target.value);
+        });
+        
         document.getElementById('userForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             

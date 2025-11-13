@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_login import login_required
+from flask_login import login_required, current_user
 from backend import db
 from backend.models import Patient, Episode
 from backend.services import InferenceEngine
@@ -13,6 +13,8 @@ def episodes(patient_id):
     patient = Patient.query.get_or_404(patient_id)
     
     if request.method == 'POST':
+        if not current_user.has_permission('can_manage_episodes'):
+            return jsonify({'error': 'Permission refusée'}), 403
         data = request.json
         
         try:
@@ -147,6 +149,9 @@ def episode_detail(episode_id):
         })
     
     elif request.method == 'PUT':
+        if not current_user.has_permission('can_manage_episodes'):
+            return jsonify({'error': 'Permission refusée'}), 403
+            
         data = request.json
         
         if 'date_episode' in data:
@@ -190,6 +195,9 @@ def episode_detail(episode_id):
         return jsonify({'message': 'Épisode mis à jour avec succès'})
     
     elif request.method == 'DELETE':
+        if not current_user.has_permission('can_manage_episodes'):
+            return jsonify({'error': 'Permission refusée'}), 403
+            
         db.session.delete(episode)
         db.session.commit()
         return jsonify({'message': 'Épisode supprimé avec succès'})

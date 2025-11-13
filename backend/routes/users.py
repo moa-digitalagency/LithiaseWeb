@@ -16,6 +16,34 @@ def require_permission(permission):
         return decorated_function
     return decorator
 
+ROLE_PRESETS = {
+    'admin': {
+        'can_manage_patients': True,
+        'can_manage_episodes': True,
+        'can_export_data': True,
+        'can_manage_users': True
+    },
+    'medecin': {
+        'can_manage_patients': True,
+        'can_manage_episodes': True,
+        'can_export_data': True,
+        'can_manage_users': False
+    },
+    'assistant': {
+        'can_manage_patients': False,
+        'can_manage_episodes': False,
+        'can_export_data': False,
+        'can_manage_users': False
+    }
+}
+
+def apply_role_preset(user, role):
+    preset = ROLE_PRESETS.get(role, ROLE_PRESETS['medecin'])
+    user.can_manage_patients = preset['can_manage_patients']
+    user.can_manage_episodes = preset['can_manage_episodes']
+    user.can_export_data = preset['can_export_data']
+    user.can_manage_users = preset['can_manage_users']
+
 @bp.route('/api/users', methods=['GET'])
 @login_required
 @require_permission('can_manage_users')
@@ -41,15 +69,23 @@ def create_user():
     if User.query.filter_by(username=data['username']).first():
         return jsonify({'error': 'Ce nom d\'utilisateur existe déjà'}), 400
     
+    role = data.get('role', 'medecin')
     user = User(
         username=data['username'],
-        role=data.get('role', 'medecin'),
-        can_manage_patients=data.get('can_manage_patients', True),
-        can_manage_episodes=data.get('can_manage_episodes', True),
-        can_export_data=data.get('can_export_data', True),
-        can_manage_users=data.get('can_manage_users', False)
+        role=role
     )
     user.set_password(data['password'])
+    
+    apply_role_preset(user, role)
+    
+    if 'can_manage_patients' in data:
+        user.can_manage_patients = data['can_manage_patients']
+    if 'can_manage_episodes' in data:
+        user.can_manage_episodes = data['can_manage_episodes']
+    if 'can_export_data' in data:
+        user.can_export_data = data['can_export_data']
+    if 'can_manage_users' in data:
+        user.can_manage_users = data['can_manage_users']
     
     db.session.add(user)
     db.session.commit()
@@ -82,13 +118,18 @@ def update_user(user_id):
     if 'password' in data and data['password']:
         user.set_password(data['password'])
     
-    if 'role' in data:
+    if 'role' in data and data['role'] != user.role:
         user.role = data['role']
+        apply_role_preset(user, data['role'])
     
-    user.can_manage_patients = data.get('can_manage_patients', user.can_manage_patients)
-    user.can_manage_episodes = data.get('can_manage_episodes', user.can_manage_episodes)
-    user.can_export_data = data.get('can_export_data', user.can_export_data)
-    user.can_manage_users = data.get('can_manage_users', user.can_manage_users)
+    if 'can_manage_patients' in data:
+        user.can_manage_patients = data['can_manage_patients']
+    if 'can_manage_episodes' in data:
+        user.can_manage_episodes = data['can_manage_episodes']
+    if 'can_export_data' in data:
+        user.can_export_data = data['can_export_data']
+    if 'can_manage_users' in data:
+        user.can_manage_users = data['can_manage_users']
     
     db.session.commit()
     

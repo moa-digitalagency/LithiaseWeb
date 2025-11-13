@@ -1,9 +1,10 @@
 from flask import Blueprint, request, jsonify
-from flask_login import login_required
+from flask_login import login_required, current_user
 from backend import db
 from backend.models import Patient, Episode, Biologie
 from backend.services import calculate_metabolic_booleans
 from backend.utils.patient_code import generate_unique_patient_code
+from backend.routes.users import require_permission
 from datetime import datetime, date
 
 bp = Blueprint('patients', __name__, url_prefix='/api/patients')
@@ -12,6 +13,8 @@ bp = Blueprint('patients', __name__, url_prefix='/api/patients')
 @login_required
 def patients():
     if request.method == 'POST':
+        if not current_user.has_permission('can_manage_patients'):
+            return jsonify({'error': 'Permission refusée'}), 403
         data = request.json
         
         try:
@@ -199,6 +202,9 @@ def patient_detail(patient_id):
         })
     
     elif request.method == 'PUT':
+        if not current_user.has_permission('can_manage_patients'):
+            return jsonify({'error': 'Permission refusée'}), 403
+            
         data = request.json
         
         if 'date_naissance' in data:
@@ -288,6 +294,9 @@ def patient_detail(patient_id):
         return jsonify({'message': 'Patient mis à jour avec succès'})
     
     elif request.method == 'DELETE':
+        if not current_user.has_permission('can_manage_patients'):
+            return jsonify({'error': 'Permission refusée'}), 403
+            
         db.session.delete(patient)
         db.session.commit()
         return jsonify({'message': 'Patient supprimé avec succès'})

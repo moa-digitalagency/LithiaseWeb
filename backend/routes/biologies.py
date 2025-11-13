@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_login import login_required
+from flask_login import login_required, current_user
 from backend import db
 from backend.models import Episode, Biologie
 from backend.services import calculate_metabolic_booleans
@@ -13,6 +13,8 @@ def biologies(episode_id):
     episode = Episode.query.get_or_404(episode_id)
     
     if request.method == 'POST':
+        if not current_user.has_permission('can_manage_episodes'):
+            return jsonify({'error': 'Permission refusée'}), 403
         data = request.json
         
         try:
@@ -121,6 +123,9 @@ def biologie_detail(biologie_id):
         })
     
     elif request.method == 'PUT':
+        if not current_user.has_permission('can_manage_episodes'):
+            return jsonify({'error': 'Permission refusée'}), 403
+            
         data = request.json
         
         if 'date_examen' in data:
@@ -184,6 +189,9 @@ def biologie_detail(biologie_id):
         return jsonify({'message': 'Biologie mise à jour avec succès'})
     
     elif request.method == 'DELETE':
+        if not current_user.has_permission('can_manage_episodes'):
+            return jsonify({'error': 'Permission refusée'}), 403
+            
         db.session.delete(biologie)
         db.session.commit()
         return jsonify({'message': 'Biologie supprimée avec succès'})
