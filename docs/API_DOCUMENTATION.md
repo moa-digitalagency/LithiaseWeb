@@ -202,14 +202,27 @@ Lance le calcul d'inférence pour déterminer le type de calcul
     ["Type", score, ["raisons"]],
     ...
   ],
-  "composition_type": "Pur|Mixte",
+  "composition_type": "Pur|Mixte|Mixte multicouche",
   "composition_detail": "string",
+  "radial_structure_analysis": [
+    {
+      "position": "Noyau central|Couche périphérique N",
+      "densite": number,
+      "composition_probable": "Type de calcul",
+      "layer_number": number
+    }
+  ],
   "lec_eligible": boolean,
   "voie_traitement": "string",
   "prevention": ["conseil1", "conseil2"],
   "uncertain": boolean
 }
 ```
+
+**Types de composition:**
+- **Pur**: Différence de score >4 entre le premier et le deuxième type
+- **Mixte**: Différence de score 2-4 entre le premier et le deuxième type
+- **Mixte multicouche**: Présence de structure radiaire (noyau + couches périphériques) avec bonus de +2 points
 
 ---
 

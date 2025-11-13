@@ -14,6 +14,7 @@ from reportlab.lib.units import cm, mm
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, Image
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
+from reportlab.pdfgen import canvas
 
 bp = Blueprint('exports', __name__)
 
@@ -161,6 +162,41 @@ def export_patients_list_pdf():
         download_name=f'liste_patients_{datetime.now().strftime("%Y%m%d_%H%M%S")}.pdf'
     )
 
+class NumberedCanvas(canvas.Canvas):
+    """Canvas personnalisé pour la numérotation des pages"""
+    def __init__(self, *args, **kwargs):
+        self.patient_name = ''
+        canvas.Canvas.__init__(self, *args, **kwargs)
+        self._saved_page_states = []
+
+    def showPage(self):
+        self._saved_page_states.append(dict(self.__dict__))
+        self._startPage()
+
+    def save(self):
+        num_pages = len(self._saved_page_states)
+        for page_num, state in enumerate(self._saved_page_states, 1):
+            self.__dict__.update(state)
+            self.draw_footer(page_num, num_pages)
+            canvas.Canvas.showPage(self)
+        canvas.Canvas.save(self)
+
+    def draw_footer(self, page_num, page_count):
+        self.saveState()
+        self.setFont('Helvetica', 8)
+        self.setFillColor(colors.HexColor('#9CA3AF'))
+        footer_text = f"KALONJI - Algorithme Lithiase  |  Patient: {self.patient_name}  |  Page {page_num}/{page_count}"
+        self.drawCentredString(A4[0] / 2, 1*cm, footer_text)
+        self.restoreState()
+
+def create_numbered_canvas(patient_name):
+    """Crée une classe NumberedCanvas avec le nom du patient"""
+    class CustomNumberedCanvas(NumberedCanvas):
+        def __init__(self, *args, **kwargs):
+            NumberedCanvas.__init__(self, *args, **kwargs)
+            self.patient_name = patient_name
+    return CustomNumberedCanvas
+
 @bp.route('/api/patients/<int:patient_id>/export/pdf', methods=['GET'])
 @login_required
 @require_permission('can_export_data')
@@ -168,7 +204,7 @@ def export_patient_pdf(patient_id):
     patient = Patient.query.get_or_404(patient_id)
     
     buffer = io.BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=1.5*cm, leftMargin=1.5*cm, topMargin=1.5*cm, bottomMargin=1.5*cm)
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=1.5*cm, leftMargin=1.5*cm, topMargin=1.5*cm, bottomMargin=2*cm)
     
     story = []
     styles = getSampleStyleSheet()
@@ -749,7 +785,9 @@ def export_patient_pdf(patient_id):
             
             story.append(Spacer(1, 0.3*cm))
     
-    doc.build(story)
+    patient_full_name = f"{patient.nom} {patient.prenom}"
+    canvas_maker = create_numbered_canvas(patient_full_name)
+    doc.build(story, canvasmaker=canvas_maker)
     buffer.seek(0)
     
     return send_file(

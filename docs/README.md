@@ -46,17 +46,21 @@
 - Sédiment urinaire
 - ECBU (Examen Cytobactériologique Urinaire)
 - Marqueurs métaboliques :
-  - Hyperoxalurie
-  - Hypercalciurie
-  - Hyperuricurie
+  - Hyperoxalurie (avec valeur oxalurie)
+  - Hypercalciurie (avec valeur calciurie)
+  - Hyperuricurie (avec valeur uricurie)
+  - Hypercalcémie (avec valeur calcémie)
   - Cystinurie
+- Hormones thyroïdiennes : T3, T4, TSH (détection hyperthyroïdie)
 - Détection d'infections urinaires
 
 ### Moteur d'inférence
 - Classification automatique du type de calcul sur un système de notation sur 20 points
-- **Nature morpho-constitutionnelle** : Spécifie si le calcul est **Pur** ou **Mixte**
+- **Nature morpho-constitutionnelle** : Spécifie si le calcul est **Pur**, **Mixte** ou **Mixte multicouche**
   - **Pur** : Un seul type dominant (différence de score > 4 points)
-  - **Mixte** : Combinaison de plusieurs types (scores proches)
+  - **Mixte** : Combinaison de plusieurs types (différence de score 2-4 points)
+  - **Mixte multicouche** : Structure radiaire (noyau + couches périphériques) avec bonus +2 points
+- **Analyse structure multicouche** : Détection et identification de la composition de chaque couche
 - 8 types de calculs couverts :
   - Oxalate de calcium (Whewellite, Weddellite)
   - Phosphates calciques (Carbapatite, Brushite)
@@ -72,10 +76,13 @@
 ### Recherche et export
 - **Recherche avancée** : filtrage par critères médicaux (pH, densité UH, infection, etc.)
 - **Export PDF** : rapport patient complet avec toutes les données et résultats d'inférence
+  - Footer personnalisé avec nom plateforme, patient et numérotation x/y
+  - Sections détaillées avec analyse multicouche
 - **Export CSV** : données filtrées pour analyse statistique
 
 ### Sécurité
 - Chiffrement des données de santé (Fernet AES-128 + HMAC)
+- Clé de chiffrement stockée dans secret Replit (production-ready)
 - 25+ champs sensibles chiffrés en base de données
 - Conformité RGPD
 - Authentification sécurisée

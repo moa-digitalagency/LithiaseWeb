@@ -37,12 +37,13 @@ webapp-lithiase/
 ## 🛠️ Technologies
 
 ### Backend
-- **Framework** : Flask 2.3.x
-- **ORM** : SQLAlchemy 2.0
-- **Base de données** : SQLite 3
+- **Framework** : Flask 3.0.0
+- **ORM** : SQLAlchemy avec Flask-SQLAlchemy 3.1.1
+- **Base de données** : PostgreSQL (Replit Neon) / SQLite 3 (fallback dev)
 - **Chiffrement** : Cryptography (Fernet AES-128 + HMAC)
-- **Authentification** : Flask-Login
-- **PDF** : ReportLab
+  - Clé stockée dans secret Replit `ENCRYPTION_KEY` (production-ready)
+- **Authentification** : Flask-Login 0.6.3
+- **PDF** : ReportLab 4.0.7 avec footer personnalisé (numérotation x/y)
 - **Python** : 3.11
 
 ### Frontend

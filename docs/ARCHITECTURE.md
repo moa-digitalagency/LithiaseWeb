@@ -118,8 +118,15 @@ Moteur d'inférence pour déterminer le type de calcul rénal:
   - Marqueurs métaboliques (0-5 points avec bonus thyroïde/calcium)
   - Infection (0-3 points)
   - Radio-opacité (0-1 point)
-- **Distinction Pur vs Mixte**: basée sur l'écart de score entre les 3 premiers candidats
-- **Détection structure radiaire**: analyse noyau + couches périphériques
+- **Classification de composition** (Mise à jour Novembre 2025):
+  - **Pur**: Différence de score >4 entre le premier et le deuxième type
+  - **Mixte**: Différence de score 2-4 entre le premier et le deuxième type
+  - **Mixte multicouche**: Présence de structure radiaire avec bonus +2 points
+- **Analyse structure multicouche**:
+  - Détection et analyse des noyaux (densite_noyau)
+  - Identification des couches périphériques (densites_couches)
+  - Composition probable par couche basée sur densité UH
+  - Affichage détaillé: "Noyau: X UH → Type A | Couche 1: Y UH → Type B"
 - **Recommandations**: voie de traitement (LEC/URS/PCNL) et prévention personnalisée
 
 ### Biology Service
@@ -133,7 +140,11 @@ Calculs métaboliques automatiques:
 
 ### Chiffrement des données
 - **Algorithme**: Fernet (AES-128 en mode CBC + HMAC-SHA256)
-- **Clé**: Stockée dans `.encryption_key` (dev) ou variable d'environnement `ENCRYPTION_KEY` (prod)
+- **Gestion de clé** (Mise à jour Novembre 2025):
+  - **Production**: Clé stockée dans le secret Replit `ENCRYPTION_KEY` (recommandé)
+  - **Migration automatique**: Détection et migration depuis fichier `.encryption_key` si nécessaire
+  - **Fallback développement**: Génération automatique d'une clé temporaire si aucune n'existe
+  - **Messages de guidage**: Instructions claires pour configuration du secret Replit
 - **Champs chiffrés**: 25+ colonnes contenant des données sensibles (nom, prénom, antécédents, notes, etc.)
 - **Propriétés Python**: Chiffrement/déchiffrement transparent via properties
 
@@ -191,7 +202,16 @@ Voir [API_DOCUMENTATION.md](API_DOCUMENTATION.md) pour la documentation complèt
 - `GET|POST /api/patients/<id>/episodes` - CRUD épisodes
 - `POST /api/export/csv` - Export recherche CSV
 - `POST /api/export/patients-csv` - Export liste patients CSV
-- `GET /api/patients/<id>/export/pdf` - Export dossier patient PDF
+- `GET /api/patients/<id>/export/pdf` - Export dossier patient PDF avec footer personnalisé
+
+### Export PDF (Mise à jour Novembre 2025)
+L'export PDF génère un dossier médical complet avec:
+- **Header**: Nom patient, âge, sexe et QR code
+- **Sections**: Informations personnelles (sans date de naissance ni sexe pour confidentialité), épisodes médicaux, imageries, biologies, résultats d'inférence
+- **Footer personnalisé** (nouveau): 
+  - Format: "KALONJI - Algorithme Lithiase | Patient: [Nom Prénom] | Page x/y"
+  - Numérotation automatique avec classe `NumberedCanvas`
+  - Position: bas de page centré, police Helvetica 8pt, couleur grise discrète
 
 ## Déploiement
 
