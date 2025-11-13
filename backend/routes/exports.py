@@ -223,12 +223,14 @@ def export_patient_pdf(patient_id):
     else:
         qr_col_content.append(Paragraph("", code_style))
     
-    header_style = ParagraphStyle('HeaderStyle', parent=styles['Normal'], fontSize=16, textColor=colors.HexColor('#4F46E5'), alignment=TA_LEFT, fontName='Helvetica-Bold', spaceAfter=4)
+    main_title_style = ParagraphStyle('MainTitleStyle', parent=styles['Normal'], fontSize=20, textColor=colors.HexColor('#4F46E5'), alignment=TA_CENTER, fontName='Helvetica-Bold', spaceAfter=10, spaceBefore=5)
     patient_info_style = ParagraphStyle('PatientInfoStyle', parent=styles['Normal'], fontSize=11, textColor=colors.HexColor('#1F2937'), alignment=TA_LEFT, spaceAfter=3)
     inference_style = ParagraphStyle('InferenceStyle', parent=styles['Normal'], fontSize=10, textColor=colors.HexColor('#059669'), alignment=TA_LEFT, fontName='Helvetica-Bold')
     
+    story.append(Paragraph("DOSSIER MÉDICAL PATIENT", main_title_style))
+    story.append(Spacer(1, 0.3*cm))
+    
     info_col_content = [
-        Paragraph("DOSSIER MÉDICAL PATIENT", header_style),
         Paragraph(f"<b>{patient.nom} {patient.prenom}</b>", patient_info_style),
         Paragraph(f"{age}", patient_info_style)
     ]
@@ -516,9 +518,24 @@ def export_patient_pdf(patient_id):
                             ]))
                             story.append(Spacer(1, 0.1*cm))
                             story.append(t_reins)
-                        
-                        if imaging.malformations_urinaires:
-                            story.append(wrap_text(f"    Malformations: {imaging.malformations_urinaires}"))
+                    
+                    story.append(Spacer(1, 0.2*cm))
+                    malformation_text = imaging.malformations_urinaires if imaging.malformations_urinaires else "Information pas disponible"
+                    malformation_data = [[wrap_text('Malformations urinaires:', table_cell_bold_style), wrap_text(malformation_text)]]
+                    t_malformations = Table(malformation_data, colWidths=[COL1_WIDTH, COL2_WIDTH])
+                    t_malformations.setStyle(TableStyle([
+                        ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#FEF3C7')),
+                        ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor('#92400E')),
+                        ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+                        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+                        ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+                        ('FONTSIZE', (0, 0), (-1, -1), 8),
+                        ('TOPPADDING', (0, 0), (-1, -1), 6),
+                        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#FDE68A')),
+                        ('VALIGN', (0, 0), (-1, -1), 'TOP')
+                    ]))
+                    story.append(t_malformations)
             
             if episode.biologies:
                 story.append(Paragraph("<b>Biologies:</b>", styles['Heading4']))
@@ -699,11 +716,32 @@ def export_patient_pdf(patient_id):
                         story.append(t_top3_detail)
                         story.append(Spacer(1, 0.15*cm))
                 
-                if result.get('prevention'):
-                    story.append(Spacer(1, 0.2*cm))
-                    story.append(wrap_text("<b>Conseils de prévention:</b>"))
-                    for conseil in result['prevention'][:5]:
-                        story.append(wrap_text(f"  • {conseil}"))
+                story.append(Spacer(1, 0.2*cm))
+                story.append(Paragraph("<b>Conseils de prévention:</b>", styles['Heading4']))
+                story.append(Spacer(1, 0.2*cm))
+                
+                prevention_list = result.get('prevention', [])
+                prevention_data = []
+                
+                if prevention_list:
+                    for conseil in prevention_list[:5]:
+                        prevention_data.append([wrap_text(f"• {conseil}", table_cell_style)])
+                else:
+                    prevention_data.append([wrap_text("Information pas disponible", table_cell_style)])
+                
+                t_prevention = Table(prevention_data, colWidths=[TABLE_WIDTH])
+                t_prevention.setStyle(TableStyle([
+                    ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#D1FAE5')),
+                    ('TEXTCOLOR', (0, 0), (-1, -1), colors.HexColor('#065F46')),
+                    ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                    ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+                    ('FONTSIZE', (0, 0), (-1, -1), 8),
+                    ('TOPPADDING', (0, 0), (-1, -1), 6),
+                    ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                    ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#6EE7B7')),
+                    ('VALIGN', (0, 0), (-1, -1), 'TOP')
+                ]))
+                story.append(t_prevention)
             
             story.append(Spacer(1, 0.3*cm))
     
