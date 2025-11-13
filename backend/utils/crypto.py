@@ -48,10 +48,15 @@ class EncryptionManager:
                 with open(key_file, 'wb') as f:
                     f.write(encryption_key)
         else:
-            encryption_key = encryption_key.encode()
+            # La clé est déjà en base64, on la convertit en bytes
+            encryption_key = encryption_key.encode('utf-8')
             print("=" * 80)
             print("✓ Clé de chiffrement chargée depuis le secret Replit 'ENCRYPTION_KEY'")
             print("=" * 80)
+            # Supprimer le fichier temporaire s'il existe
+            if os.path.exists('.encryption_key'):
+                os.remove('.encryption_key')
+                print("✓ Fichier temporaire .encryption_key supprimé")
         
         self.fernet = Fernet(encryption_key)
     
