@@ -10,12 +10,23 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.String(20), default='medecin', nullable=False)
+    
+    can_manage_patients = db.Column(db.Boolean, default=True)
+    can_manage_episodes = db.Column(db.Boolean, default=True)
+    can_export_data = db.Column(db.Boolean, default=True)
+    can_manage_users = db.Column(db.Boolean, default=False)
+    
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
     
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def has_permission(self, permission):
+        return getattr(self, permission, False)
 
 class Patient(db.Model):
     __tablename__ = 'patients'

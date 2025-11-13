@@ -45,7 +45,7 @@ def create_app():
     
     with app.app_context():
         from backend.models import User
-        from backend.routes import auth, patients, episodes, imageries, biologies, search, exports, settings, field_options_api
+        from backend.routes import auth, patients, episodes, imageries, biologies, search, exports, settings, field_options_api, users
         from backend.database.init import initialize_database
         
         app.register_blueprint(auth.bp)
@@ -57,6 +57,7 @@ def create_app():
         app.register_blueprint(exports.bp)
         app.register_blueprint(settings.bp)
         app.register_blueprint(field_options_api.bp)
+        app.register_blueprint(users.bp)
         
         if os.environ.get('SKIP_DB_INIT') != 'true':
             initialize_database(app)
