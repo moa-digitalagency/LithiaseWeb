@@ -174,7 +174,7 @@
         }
 
         function viewPatient(id) {
-            window.location.href = `/patients/${id}`;
+            window.location.href = `/patient/${id}`;
         }
 
         async function deletePatient(id, name) {
@@ -183,16 +183,24 @@
             }
 
             try {
-                const response = await fetch(`/api/patients/${id}`, { method: 'DELETE' });
+                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+                const response = await fetch(`/api/patients/${id}`, { 
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'Content-Type': 'application/json'
+                    }
+                });
                 if (response.ok) {
                     alert('Patient supprimé avec succès');
                     loadPatients();
                 } else {
-                    alert('Erreur lors de la suppression');
+                    const errorData = await response.json().catch(() => ({}));
+                    alert('Erreur lors de la suppression: ' + (errorData.error || 'Erreur inconnue'));
                 }
             } catch (error) {
                 console.error('Erreur:', error);
-                alert('Erreur lors de la suppression');
+                alert('Erreur lors de la suppression: ' + error.message);
             }
         }
 
