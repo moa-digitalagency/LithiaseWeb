@@ -41,6 +41,16 @@ The application uses a Flask (Python 3.11) backend with SQLAlchemy ORM for datab
 
 ## Recent Changes (November 13, 2025)
 
+### Data Collection & Analysis Improvements ⭐ NOUVEAU
+- **Complete Biological Data Integration**: Added missing thyroid hormones (T3, T4, TSH) and calcium metabolism data (calciemia, oxaluria, calciuria values) to inference engine data collection
+- **Enhanced Metabolic Scoring**: Inference now properly receives and processes all biological markers for accurate stone type prediction
+- **Comprehensive Data Flow**: All imaging and biology data fields are now correctly passed to the inference algorithm
+
+### PDF Export Enhancements ⭐ NOUVEAU
+- **Privacy-Focused Export**: Removed "Date de naissance" and "Sexe" fields from PDF "INFORMATIONS PERSONNELLES" section
+- **Header Optimization**: Increased spacing between patient name/age and result section (0.4cm spacer) for better readability
+- **Streamlined Layout**: Personal information section now focuses on contact details (phone, email, address) and medical metrics (weight, height, BMI)
+
 ### Algorithme d'inférence amélioré - Analyse multicouche ⭐ NOUVEAU
 - **Analyse des structures radiaires**: Détection et analyse détaillée des lithiases à plusieurs couches
 - **Identification par couche**: Chaque couche (noyau + couches périphériques) est analysée individuellement

@@ -241,7 +241,13 @@ def infer(episode_id):
             'hyperoxalurie': latest_biology.hyperoxalurie,
             'hypercalciurie': latest_biology.hypercalciurie,
             'hyperuricurie': latest_biology.hyperuricurie,
-            'cystinurie': latest_biology.cystinurie
+            'cystinurie': latest_biology.cystinurie,
+            't3': latest_biology.t3,
+            't4': latest_biology.t4,
+            'tsh': latest_biology.tsh,
+            'calciemie_valeur': latest_biology.calciemie_valeur,
+            'oxalurie_valeur': latest_biology.oxalurie_valeur,
+            'calciurie_valeur': latest_biology.calciurie_valeur
         }
     
     result = InferenceEngine.infer_stone_type(imaging_data, biology_data)

@@ -243,7 +243,7 @@ def export_patient_pdf(patient_id):
     ]
     
     if latest_inference:
-        info_col_content.append(Spacer(1, 0.1*cm))
+        info_col_content.append(Spacer(1, 0.4*cm))
         info_col_content.append(Paragraph(f"Résultat: {latest_inference}", inference_style))
     
     header_data = [[qr_col_content, info_col_content]]
@@ -264,9 +264,6 @@ def export_patient_pdf(patient_id):
     
     story.append(Paragraph("📋 INFORMATIONS PERSONNELLES", section_title_style))
     patient_data = [
-        [wrap_text('Nom complet', table_cell_bold_style), wrap_text(f"{patient.nom} {patient.prenom}")],
-        [wrap_text('Date de naissance', table_cell_bold_style), wrap_text(patient.date_naissance.strftime('%d/%m/%Y'))],
-        [wrap_text('Sexe', table_cell_bold_style), wrap_text('Masculin' if patient.sexe == 'M' else 'Féminin')],
         [wrap_text('Téléphone', table_cell_bold_style), wrap_text(patient.telephone or '-')],
         [wrap_text('Email', table_cell_bold_style), wrap_text(patient.email or '-')],
         [wrap_text('Adresse', table_cell_bold_style), wrap_text(patient.adresse or '-')]
